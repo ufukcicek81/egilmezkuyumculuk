@@ -7,8 +7,8 @@
 <link rel="manifest" href="manifest.json">
 <script>
 if (window.location.search.indexOf('admin') !== -1) {
-  try { localStorage.removeItem('gp10_tv'); } catch(e) {}
-  try { sessionStorage.removeItem('gp10_tv'); } catch(e) {}
+  try { localStorage.removeItem('egilmez_tv_v1'); } catch(e) {}
+  try { sessionStorage.removeItem('egilmez_tv_v1'); } catch(e) {}
   document.addEventListener('DOMContentLoaded', function () {
     document.body.classList.remove('tv-mode');
   });
@@ -43,7 +43,7 @@ body {
     gap: 24px;
     text-align: left;
   }
-  .header .logo { width: 80px; height: 80px; margin-bottom: 0; }
+  .header .logo { width:240px; height:auto; max-height:84px; margin-bottom:0; border-radius:16px; object-fit:contain; }
   .header h1 { font-size: 28px; }
   .header .phone { font-size: 17px; border-top: none; padding-top: 0; margin-top: 4px; }
   .has-info { font-size: 14px; }
@@ -101,7 +101,7 @@ body {
   .price-row .alis, .price-row .satis { font-size: 18px; }
 }
 .header { text-align: center; padding: 16px 16px 10px; position: relative; background: #111; border-bottom: 2px solid #b8960c; }
-.header .logo { width: 90px; height: 90px; border-radius: 50%; margin-bottom: 8px; }
+.header .logo { width:min(290px,72vw); height:auto; max-height:92px; object-fit:contain; border-radius:18px; margin:0 auto 10px; display:block; box-shadow:0 8px 26px rgba(0,0,0,.18); }
 .header h1 { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: #f0d060; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
 .header .phone { font-size: 15px; color: #c8b88a; margin-top: 4px; padding-top: 5px; border-top: 1px solid #444; display: inline-block; min-width: 100px; }
 .has-info { font-size: 12px; color: #5dba6a; margin-top: 4px; display: block; font-weight: 500; }
@@ -201,11 +201,7 @@ body.tv-mode .header {
   padding-top: 12px;
   padding-bottom: 12px;
 }
-body.tv-mode .header .logo {
-  width: 72px;
-  height: 72px;
-  margin-bottom: 4px;
-}
+body.tv-mode .header .logo { width:min(320px,55vw); height:auto; max-height:88px; margin-bottom:6px; border-radius:16px; object-fit:contain; }
 body.tv-mode .header h1 { font-size: 28px; }
 body.tv-mode .header .phone { font-size: 18px; }
 body.tv-mode .has-info { font-size: 14px; }
@@ -336,6 +332,69 @@ body.light-mode .row-label{color:#4a4334}
 body.light-mode .admin-inp,body.light-mode .add-item-inp{background:#fff;border-color:#cfc5ae;color:#2a2720}
 body.light-mode .hint-box{background:#faf5e7;border-color:#ded0a6;color:#6e5a16}
 body.light-mode .logo-placeholder{background:#fffaf0;color:#8a6900;border-color:#b8960c}
+
+
+/* ── EĞİLMEZ PROFESYONEL TEMA v2 ───────────────────────────────────────── */
+:root{--gold:#b99a55;--gold2:#d7be80;--cream:#eee8dc;--brown:#5b493c;--red:#e46b63;--green:#49c987;--blue:#7fb7e8}
+body{background:#0f1112;color:#eee7d8}
+.header{background:linear-gradient(180deg,#151718 0%,#101213 100%);border-bottom:1px solid rgba(185,154,85,.65);padding:18px 16px 14px}
+.header .phone{color:#d6c7a6;border-top-color:#3a352c;font-weight:500;letter-spacing:.2px}
+.has-info{color:#66c983;font-weight:650}
+.top-switcher{background:#111314;border-bottom:1px solid #292b2c;padding:10px 12px 12px}
+.top-switch-btn{background:#1c1f20;color:#cfc8ba;border-color:#383b3c;padding:9px 18px}
+.top-switch-btn.active,body.portfolio-mode .top-switch-btn[data-view="portfolio"],body:not(.portfolio-mode) .top-switch-btn[data-view="prices"]{background:linear-gradient(180deg,#c6a85d,#a8873d);border-color:#d4b970;color:#17130c;box-shadow:0 4px 14px rgba(185,154,85,.2)}
+.doviz-bant{background:#121415;border-color:#2e3031}
+.doviz-item{color:#d8cfbf}.doviz-item .d-kur{color:#e4ca87}
+.table-header{background:#1b1e1f;border-color:#343637}
+.table-header span{color:#d8b85f}.table-header span:nth-child(4){color:#8bbbea}
+.price-row{border-color:#292c2d;background:#141718}
+.price-row:nth-child(even){background:#181b1c}
+.price-row .birim{color:#e7ddc9;font-weight:600}
+.price-row .alis,.price-row .satis{color:#f3ecdf;font-weight:700}
+.price-row .kk{color:#82b5e5;font-weight:700}
+.change-rate{font-size:11px;opacity:.95}.change-down{color:#ef7169}.change-up{color:#51d08c}.change-same{color:#a8a8a8}
+.update-bar,.bottom-nav{background:#111314;border-color:#2a2c2d}.upd-text{background:#1c1f20;color:#cfc5b0;border-color:#343738}
+.summary-card,.portfolio-card,.holding-card{background:#171a1b;border-color:#303334;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.summary-card .label,.portfolio-label,.holding-grid div{color:#bfb5a4}.summary-card .value,.portfolio-title,.holding-name{color:#e0c276}
+.portfolio-inp,.portfolio-select{background:#202324;color:#f2ecdf;border-color:#3a3e3f}.portfolio-inp:focus,.portfolio-select:focus{background:#242829;border-color:#b99a55}
+.admin-panel,.admin-header{background:#17191a}.admin-row{border-color:#2a2d2e}.row-label{color:#dfd4bf}.admin-inp,.add-item-inp{background:#222526;color:#f4eddf;border-color:#3b3f40}
+.theme-btn,.admin-btn,.mod-btn{background:#1d2021;border-color:#3b3e3f;color:#e3c36f}
+
+/* Soft ivory light mode: düşük parlaklık + yüksek okunabilirlik */
+body.light-mode{background:#e8e1d5;color:#302a25}
+body.light-mode .header{background:linear-gradient(180deg,#eee9df 0%,#e6ded0 100%);border-bottom-color:#b59658}
+body.light-mode .header .phone{color:#67584c;border-top-color:#cbbda7}
+body.light-mode .has-info{color:#27744d}
+body.light-mode .top-switcher{background:#ddd4c6;border-color:#c8baa6}
+body.light-mode .top-switch-btn{background:#eee8dc;color:#5a4c40;border-color:#c9baa2}
+body.light-mode .top-switch-btn.active,body.light-mode.portfolio-mode .top-switch-btn[data-view="portfolio"],body.light-mode:not(.portfolio-mode) .top-switch-btn[data-view="prices"]{background:linear-gradient(180deg,#b89b63,#9f814d);border-color:#8e7244;color:#fffaf0;box-shadow:none}
+body.light-mode .doviz-bant{background:#ddd5c9;border-color:#c6b9a6}
+body.light-mode .doviz-item{color:#4e433a}.light-mode .doviz-item .d-kur{color:#705625}
+body.light-mode .table-header{background:#d9cfbf;border-color:#c1b39f}
+body.light-mode .table-header span{color:#705826}.light-mode .table-header span:nth-child(4){color:#315f84}
+body.light-mode .price-row{background:#eee9df;border-color:#d0c4b2}
+body.light-mode .price-row:nth-child(even){background:#e4dccf}
+body.light-mode .price-row .birim{color:#302a25!important;font-weight:650}
+body.light-mode .price-row .alis,body.light-mode .price-row .satis{color:#2d2925!important;font-weight:750}
+body.light-mode .price-row .kk{color:#315f84!important;font-weight:750}
+body.light-mode .change-down{color:#b6423d!important}.light-mode .change-up{color:#1e7148!important}.light-mode .change-same{color:#6d665f!important}
+body.light-mode .update-bar,body.light-mode .bottom-nav{background:#ddd5c9;border-color:#c7baa7}
+body.light-mode .upd-text{background:#eee8dd;color:#51463c;border-color:#c7baa7}
+body.light-mode .summary-card,body.light-mode .portfolio-card,body.light-mode .holding-card{background:#eee8dd;border-color:#cbbda9;box-shadow:0 4px 14px rgba(77,58,38,.07)}
+body.light-mode .summary-card .label,body.light-mode .portfolio-label,body.light-mode .holding-grid div{color:#66584b}
+body.light-mode .summary-card .value,body.light-mode .portfolio-title,body.light-mode .holding-name{color:#6d5528}
+body.light-mode .holding-grid strong{color:#2e2925}
+body.light-mode .portfolio-inp,body.light-mode .portfolio-select{background:#f7f2e9;color:#2f2924;border-color:#bfae95}
+body.light-mode .portfolio-inp:focus,body.light-mode .portfolio-select:focus{background:#fffaf1;border-color:#9f814d}
+body.light-mode .admin-panel,body.light-mode .admin-header{background:#e9e2d6;color:#302a25}
+body.light-mode .admin-row{border-color:#cfc2af}.light-mode .row-label{color:#4a4037}
+body.light-mode .admin-inp,body.light-mode .add-item-inp{background:#f5efe5;color:#302a25;border-color:#bfae95}
+body.light-mode .theme-btn,body.light-mode .admin-btn,body.light-mode .mod-btn{background:#e7ded0;border-color:#bcae98;color:#664e21}
+body.light-mode .desktop-side{background:#e4dccf!important;border-color:#c6b8a4!important}
+
+/* Brand logo */
+.header #shopLogo{background:#eee8dc;padding:6px 14px;border:1px solid rgba(185,154,85,.35)}
+body.light-mode .header #shopLogo{background:#eee8dc;border-color:#bfae91;box-shadow:0 5px 18px rgba(78,58,35,.08)}
 
 </style>
 </head>
@@ -640,10 +699,11 @@ var ITEMS = [
   { id:'gremise',  label:'Gremise',     defA:0.9930, defS:1.0080 },
 ];
 
+var APP_ID = 'egilmez-kuyumculuk-v1';
 function makeDefaults() {
   var l = {};
   ITEMS.forEach(function(i) { l[i.id] = { a: i.defA, s: i.defS }; });
-  return { shopName:'EĞİLMEZ KUYUMCULUK', shopPhone:'', logoData:'', theme:'dark', labor:l, customItems:[], kkOran:0 };
+  return { appId:APP_ID, shopName:'EĞİLMEZ KUYUMCULUK', shopPhone:'', logoData:'egilmez-logo.png', theme:'dark', labor:l, customItems:[], kkOran:0 };
 }
 
 // Aktif urun listesini dondur (varsayilan + ozel, gizliler haric)
@@ -706,14 +766,14 @@ applyTVMode();
 updateModBtn();
 
 function checkAdminSession() {
-  return sessionStorage.getItem('gp10_admin') === '1';
+  return sessionStorage.getItem('egilmez_admin_v1') === '1';
 }
 
 function openAdminLogin() {
   var pass = prompt('Yönetici şifresi:');
   if (pass === null) return;
   if (pass === ADMIN_PASS) {
-    sessionStorage.setItem('gp10_admin', '1');
+    sessionStorage.setItem('egilmez_admin_v1', '1');
     IS_ADMIN = true;
     openAdmin();
   } else {
@@ -722,6 +782,7 @@ function openAdminLogin() {
 }
 
 function jsonbinSave(data, cb) {
+  try { data.appId = APP_ID; } catch(e) {}
   fetch(FIREBASE_URL, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -739,9 +800,12 @@ function jsonbinLoad(cb) {
 }
 
 function loadSettings() {
-  // Önce localStorage'dan yükle (hızlı başlangıç)
-  var local = JSON.parse(localStorage.getItem('gp10') || 'null');
+  // Bu uygulama kendi alanında saklanır; Asil veya başka kuyumcunun ayarları alınmaz.
+  var local = null;
+  try { local = JSON.parse(localStorage.getItem('egilmez_settings_v1') || 'null'); } catch(e) { local = null; }
+  if (!local || local.appId !== APP_ID) local = null;
   var s = local || makeDefaults();
+  s.appId = APP_ID;
   if (!s.customItems) s.customItems = [];
   if (!s.labor) s.labor = {};
   return s;
@@ -751,15 +815,15 @@ var settings = loadSettings();
 if (typeof settings.logoData !== 'string') settings.logoData = '';
 if (!settings.theme) settings.theme = 'dark';
 if (typeof settings.shopPhone !== 'string') settings.shopPhone = '';
-var hasAlis  = parseFloat(localStorage.getItem('gp10_ha') || '0') || null;
-var hasSatis = parseFloat(localStorage.getItem('gp10_hs') || '0') || null;
+var hasAlis  = parseFloat(localStorage.getItem('egilmez_ha_v1') || '0') || null;
+var hasSatis = parseFloat(localStorage.getItem('egilmez_hs_v1') || '0') || null;
 var prevPrices = {};
 var aktifMod = 'normal';
 var tvMode = FORCE_TV;
 
 function toggleMod() {
   aktifMod = aktifMod === 'normal' ? 'hareketli' : 'normal';
-  localStorage.setItem('gp10_mod', aktifMod);
+  localStorage.setItem('egilmez_mod_v1', aktifMod);
   try { settings.aktifMod = aktifMod; } catch(e) {}
   try {
     jsonbinSave(settings, function(){});
@@ -788,8 +852,8 @@ function applyTVMode() {
     document.body.classList.add('tv-mode');
   } else if (!isAdmin) {
     tvMode = false;
-    try { localStorage.removeItem('gp10_tv'); } catch(e) {}
-    try { sessionStorage.removeItem('gp10_tv'); } catch(e) {}
+    try { localStorage.removeItem('egilmez_tv_v1'); } catch(e) {}
+    try { sessionStorage.removeItem('egilmez_tv_v1'); } catch(e) {}
     document.body.classList.remove('tv-mode');
   } else {
     document.body.classList.remove('tv-mode');
@@ -927,8 +991,8 @@ function applyPrices(a, s) {
   s = s + (parseFloat(settings.hasDuzS) || 0);
   if (!a || a < 100) return false;
   hasAlis = a; hasSatis = s;
-  localStorage.setItem('gp10_ha', a);
-  localStorage.setItem('gp10_hs', s);
+  localStorage.setItem('egilmez_ha_v1', a);
+  localStorage.setItem('egilmez_hs_v1', s);
   setStatus(true);
   renderTable();
   return true;
@@ -1098,7 +1162,7 @@ function moveItem(id, direction) {
   list[idx] = list[newIdx];
   list[newIdx] = tmp;
   settings.itemOrder = list;
-  try { localStorage.setItem('gp10', JSON.stringify(settings)); } catch(e) {}
+  try { localStorage.setItem('egilmez_settings_v1', JSON.stringify(settings)); } catch(e) {}
   try { jsonbinSave(settings, function(){}); } catch(e) {}
   renderUrunList();
   document.getElementById('priceRows').innerHTML = '';
@@ -1123,7 +1187,7 @@ function toggleUrun(id) {
 
 
 function persistQuickSettings(msg) {
-  try { localStorage.setItem('gp10', JSON.stringify(settings)); } catch(e) {}
+  try { localStorage.setItem('egilmez_settings_v1', JSON.stringify(settings)); } catch(e) {}
   jsonbinSave(settings, function(ok) {
     if (msg) showToast(ok ? msg : (msg + ' (yerel kaydedildi)'));
   });
@@ -1183,10 +1247,11 @@ var pendingLogoData = null;
 function applyShopLogo() {
   var img = document.getElementById('shopLogo');
   var ph = document.getElementById('logoPlaceholder');
+  var title = document.getElementById('shopName');
   if (!img || !ph) return;
-  var logo = (typeof settings !== 'undefined' && settings.logoData) ? settings.logoData : '';
-  if (logo) { img.src = logo; img.style.display = ''; ph.style.display = 'none'; }
-  else { img.removeAttribute('src'); img.style.display = 'none'; ph.style.display = 'flex'; }
+  var logo = (typeof settings !== 'undefined' && settings.logoData) ? settings.logoData : 'egilmez-logo.png';
+  if (logo) { img.src = logo; img.style.display = ''; ph.style.display = 'none'; if (title) title.style.display='none'; }
+  else { img.removeAttribute('src'); img.style.display = 'none'; ph.style.display = 'flex'; if (title) title.style.display=''; }
 }
 function effectiveTheme() {
   try { var localTheme = localStorage.getItem('egilmez_theme_local'); if (localTheme) return localTheme; } catch(e) {}
@@ -1223,6 +1288,7 @@ function previewLogoUpload() {
 function removeLogo() { settings.logoData=''; pendingLogoData=''; applyShopLogo(); showToast('Logo kaldırıldı. Kaydet butonuna basın.'); }
 
 function saveAdmin() {
+  settings.appId = APP_ID;
   settings.shopName  = document.getElementById('aName').value  || settings.shopName;
   settings.shopPhone = document.getElementById('aPhone').value.trim();
   var themeSel = document.getElementById('aTheme'); if (themeSel) settings.theme = themeSel.value || 'dark';
@@ -1263,7 +1329,7 @@ function saveAdmin() {
     settings.hurdaCarp[h.id+'A'] = parseFloat(document.getElementById('hurdaA_'+h.id).value) || h.oran;
     settings.hurdaCarp[h.id+'S'] = parseFloat(document.getElementById('hurdaS_'+h.id).value) || h.oran;
   });
-  localStorage.setItem('gp10', JSON.stringify(settings));
+  localStorage.setItem('egilmez_settings_v1', JSON.stringify(settings));
   try { localStorage.removeItem('egilmez_theme_local'); } catch(e) {}
   applyTheme(); applyShopLogo();
   renderTable();
@@ -1277,7 +1343,7 @@ function saveAdmin() {
 function resetAdmin() {
   if (!confirm('Sıfırlansın mı?')) return;
   settings = makeDefaults();
-  localStorage.removeItem('gp10');
+  localStorage.removeItem('egilmez_settings_v1');
   document.getElementById('priceRows').innerHTML = '';
   renderTable(); closeAdmin();
   showToast('↺ Sıfırlandı');
@@ -1360,7 +1426,7 @@ jsonbinLoad(function(cloud) {
   if (cloudLoaded) return; // zaten timeout oldu
   cloudLoaded = true;
   clearTimeout(cloudTimeout);
-  if (cloud && cloud.shopName) {
+  if (cloud && cloud.appId === APP_ID && cloud.shopName) {
     settings = cloud;
     if (typeof settings.logoData !== 'string') settings.logoData = '';
     if (!settings.theme) settings.theme = 'dark';
@@ -1368,10 +1434,18 @@ jsonbinLoad(function(cloud) {
     if (settings.adminPass) ADMIN_PASS = settings.adminPass;
     if (settings.aktifMod) aktifMod = settings.aktifMod;
     updateModBtn();
-    localStorage.setItem('gp10', JSON.stringify(settings));
+    localStorage.setItem('egilmez_settings_v1', JSON.stringify(settings));
     document.getElementById('priceRows').innerHTML = '';
     renderTable();
     refreshAdminDataViews();
+  } else if (cloud && cloud.appId !== APP_ID) {
+    // Yeni Firebase'e başka uygulamadan taşınmış/eski veri geldiyse temiz Eğilmez ayarını başlat.
+    settings = makeDefaults();
+    try { localStorage.setItem('egilmez_settings_v1', JSON.stringify(settings)); } catch(e) {}
+    try { jsonbinSave(settings, function(){}); } catch(e) {}
+    document.getElementById('priceRows').innerHTML = '';
+    renderTable();
+    try { applyShopLogo(); applyTheme(); } catch(e) {}
   }
 });
 
@@ -1623,7 +1697,7 @@ setInterval(function() {
         if (isAdminEditing()) return;
         if (data.aktifMod && data.aktifMod !== aktifMod) {
           aktifMod = data.aktifMod;
-          try { localStorage.setItem('gp10_mod', aktifMod); } catch(e) {}
+          try { localStorage.setItem('egilmez_mod_v1', aktifMod); } catch(e) {}
           updateModBtn();
           try { document.getElementById('priceRows').innerHTML = ''; } catch(e) {}
           try { renderTable(); } catch(e) {}
@@ -1638,7 +1712,7 @@ setInterval(function() {
 <script>
 (function(){
   try {
-    var aktifMod = localStorage.getItem('gp10_mod') || 'normal';
+    var aktifMod = localStorage.getItem('egilmez_mod_v1') || 'normal';
 
     window.updateModBtn = function() {
       var btn = document.getElementById('modBtn');
@@ -1654,7 +1728,7 @@ setInterval(function() {
 
     window.toggleMod = function() {
       aktifMod = aktifMod === 'normal' ? 'hareketli' : 'normal';
-      localStorage.setItem('gp10_mod', aktifMod);
+      localStorage.setItem('egilmez_mod_v1', aktifMod);
       if (typeof settings !== 'undefined') {
         settings.aktifMod = aktifMod;
         try { jsonbinSave(settings, function(){}); } catch(e){}
@@ -1681,7 +1755,7 @@ setInterval(function() {
   var lastRemoteText = "";
 
   function applyRemoteSettings(data) {
-    if (!data) return;
+    if (!data || data.appId !== APP_ID) return;
 
     try {
       var newText = JSON.stringify(data);
@@ -1700,7 +1774,7 @@ setInterval(function() {
 
       if (typeof aktifMod !== "undefined" && data.aktifMod) {
         aktifMod = data.aktifMod;
-        try { localStorage.setItem("gp10_mod", aktifMod); } catch(e) {}
+        try { localStorage.setItem("egilmez_mod_v1", aktifMod); } catch(e) {}
         if (typeof updateModBtn === "function") updateModBtn();
       }
 
@@ -1755,7 +1829,7 @@ setInterval(function() {
     var day = String(d.getDate()).padStart(2,'0');
     return y + '-' + m + '-' + day;
   }
-  function getBaseStorageKey(priceKey){ return 'gp10_pct_base_' + getTradingDayKey() + '_' + priceKey; }
+  function getBaseStorageKey(priceKey){ return 'egilmez_pct_base_v1_' + getTradingDayKey() + '_' + priceKey; }
   function getDailyBase(priceKey, currentValue){
     var key = getBaseStorageKey(priceKey);
     var saved = Number(localStorage.getItem(key) || 0);
@@ -1859,10 +1933,10 @@ setInterval(function() {
     return v.toLocaleString('tr-TR', {maximumFractionDigits:3});
   }
   function getPortfolioStorage(){
-    try { return JSON.parse(localStorage.getItem('gp10_portfolio') || '[]'); } catch(e){ return []; }
+    try { return JSON.parse(localStorage.getItem('egilmez_portfolio_v1') || '[]'); } catch(e){ return []; }
   }
   function setPortfolioStorage(items){
-    try { localStorage.setItem('gp10_portfolio', JSON.stringify(items)); } catch(e){}
+    try { localStorage.setItem('egilmez_portfolio_v1', JSON.stringify(items)); } catch(e){}
   }
   function pfGetPortfolioOptions(){
     var arr = [];
