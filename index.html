@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Eğilmez Kuyumculuk</title>
+<link rel="manifest" href="manifest.json">
+<script>
+if (window.location.search.indexOf('admin') !== -1) {
+  try { localStorage.removeItem('gp10_tv'); } catch(e) {}
+  try { sessionStorage.removeItem('gp10_tv'); } catch(e) {}
+  document.addEventListener('DOMContentLoaded', function () {
+    document.body.classList.remove('tv-mode');
+  });
+}
+</script>
+
+<meta name="theme-color" content="#b8960c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Eğilmez Kuyumculuk">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  background: #1a1a1a; color: #f0e6c8;
+  max-width: 480px; margin: 0 auto;
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+
+/* ── MASAÜSTÜ RESPONSIVE ── */
+@media (min-width: 768px) {
+  body {
+    max-width: 100%;
+    flex-direction: column;
+  }
+  .header {
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    text-align: left;
+  }
+  .header .logo { width: 80px; height: 80px; margin-bottom: 0; }
+  .header h1 { font-size: 28px; }
+  .header .phone { font-size: 17px; border-top: none; padding-top: 0; margin-top: 4px; }
+  .has-info { font-size: 14px; }
+  .admin-btn { right: 24px; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; font-size: 22px; }
+  .mod-btn { left: 24px; top: 50%; transform: translateY(-50%); }
+
+  .doviz-bant-inner { padding: 10px 0; }
+  .doviz-item { font-size: 15px; margin: 0 32px; }
+
+  .desktop-layout {
+    display: flex;
+    flex: 1;
+    gap: 0;
+  }
+  .desktop-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .desktop-side {
+    flex: 1;
+    min-width: 0;
+    background: #141414;
+    border-left: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .table-header {
+    padding: 12px 24px;
+    grid-template-columns: 1.5fr 1fr 1fr 1.1fr;
+  }
+  .table-header span { font-size: 15px; }
+
+  .price-row {
+    padding: 12px 24px;
+    grid-template-columns: 1.5fr 1fr 1fr 1.1fr;
+  }
+  .price-row .birim { font-size: 17px; }
+  .price-row .alis, .price-row .satis { font-size: 17px; }
+  .price-row .kk { font-size: 15px; }
+
+  .update-bar { padding: 12px 24px; }
+  .bottom-nav { display: none; }
+
+  .overlay { align-items: center; }
+  .admin-panel { border-radius: 18px; max-width: 560px; max-height: 88vh; }
+
+  #adminEkstra { display: none !important; }
+}
+
+@media (min-width: 1200px) {
+  .price-row .birim { font-size: 18px; }
+  .price-row .alis, .price-row .satis { font-size: 18px; }
+}
+.header { text-align: center; padding: 16px 16px 10px; position: relative; background: #111; border-bottom: 2px solid #b8960c; }
+.header .logo { width: 90px; height: 90px; border-radius: 50%; margin-bottom: 8px; }
+.header h1 { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: #f0d060; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+.header .phone { font-size: 15px; color: #c8b88a; margin-top: 4px; padding-top: 5px; border-top: 1px solid #444; display: inline-block; min-width: 100px; }
+.has-info { font-size: 12px; color: #5dba6a; margin-top: 4px; display: block; font-weight: 500; }
+.has-info.err { color: #e05050; }
+.admin-btn { position: absolute; right: 14px; top: 20px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid #555; background: #2a2a2a; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #c8b88a; }
+
+/* Döviz bandı */
+.doviz-bant { background: #111; border-bottom: 1px solid #333; overflow: hidden; white-space: nowrap; padding: 0; }
+.doviz-bant-inner { display: inline-block; padding: 7px 0; animation: dovizKay 28s linear infinite; }
+.doviz-bant-inner:hover { animation-play-state: paused; }
+@keyframes dovizKay { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.doviz-item { display: inline-block; margin: 0 22px; font-size: 13px; font-weight: 600; color: #c8b88a; }
+.doviz-item .d-kur { color: #f0d060; }
+.doviz-item .d-up { color: #2ecc71; }
+.doviz-item .d-dn { color: #e74c3c; }
+
+.table-header { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1.1fr; padding: 10px 12px; background: #222; border-top: 1px solid #444; border-bottom: 1px solid #444; }
+.table-header span { font-size: 14px; font-weight: 700; color: #d4af37; letter-spacing: 0.5px; }
+.table-header span:nth-child(2), .table-header span:nth-child(3), .table-header span:nth-child(4) { text-align: right; }
+.table-header span:nth-child(4) { color: #7ab0e0; }
+
+.price-row { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1.1fr; padding: 13px 12px; border-bottom: 1px solid #2e2e2e; align-items: center; }
+.price-row:nth-child(even) { background: #202020; }
+.price-row .birim { font-size: 17px; font-weight: 500; color: #e8d9b0; }
+.price-row .alis, .price-row .satis { text-align: right; font-size: 17px; transition: color 0.4s ease; font-weight: 600; }
+.price-row .kk { text-align: right; font-size: 15px; font-weight: 600; color: #7ab0e0; }
+.price-up   { color: #2ecc71 !important; font-weight: 700 !important; }
+.price-down { color: #e74c3c !important; font-weight: 700 !important; }
+.price-same { color: #f0e6c8 !important; }
+@keyframes flashUp   { 0%{background:#d5f5e3} 100%{background:transparent} }
+@keyframes flashDown { 0%{background:#fde8e8} 100%{background:transparent} }
+.flash-up   { animation: flashUp   0.8s ease-out; }
+.flash-down { animation: flashDown 0.8s ease-out; }
+
+.update-bar { text-align: center; padding: 10px 16px 12px; margin-top: auto; background: #111; }
+.upd-text { display: inline-block; background: #2a2a2a; border-radius: 20px; padding: 6px 18px; font-size: 13px; color: #c8b88a; border: 1px solid #3a3a3a; }
+.upd-src { display: block; font-size: 11px; margin-top: 3px; color: #666; }
+.upd-src.ok { color: #2ecc71; }
+.upd-src.err { color: #e74c3c; }
+
+.bottom-nav { display: flex; border-top: 1px solid #333; background: #111; }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 0 12px; font-size: 12px; color: #888; cursor: pointer; gap: 4px; border: none; background: none; }
+.nav-item.active { color: #d4af37; }
+.nav-icon { font-size: 22px; }
+
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; justify-content: center; }
+.overlay.open { display: flex; }
+.admin-panel { background: #1e1e1e; width: 100%; max-width: 480px; border-radius: 18px 18px 0 0; max-height: 92vh; overflow-y: auto; padding-bottom: 34px; border-top: 2px solid #b8960c; }
+.admin-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 12px; border-bottom: 1px solid #333; position: sticky; top: 0; background: #1e1e1e; z-index: 1; }
+.admin-header h2 { font-size: 17px; font-weight: 600; color: #d4af37; }
+.close-btn { width: 30px; height: 30px; border-radius: 50%; background: #333; border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ccc; }
+.sec-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #d4af37; padding: 14px 18px 6px; }
+.has-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px; background: #252510; border-bottom: 1px solid #3a3a20; }
+.has-row-label { font-size: 13px; color: #c8a840; }
+.has-row-val { font-size: 15px; font-weight: 700; color: #f0d060; font-family: monospace; }
+.admin-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; border-bottom: 1px solid #2a2a2a; gap: 6px; }
+.row-label { font-size: 14px; min-width: 100px; font-weight: 500; color: #e0d0a0; }
+.inp-group { display: flex; align-items: center; gap: 4px; }
+.admin-inp { padding: 7px 8px; border: 1px solid #444; border-radius: 8px; font-size: 14px; text-align: right; color: #f0e6c8; background: #2a2a2a; width: 82px; }
+.admin-inp:focus { outline: none; border-color: #d4af37; background: #333; }
+.inp-unit { font-size: 11px; color: #888; }
+.prev-a { font-size: 11px; color: #aaa; min-width: 58px; text-align: right; }
+.prev-s { font-size: 11px; color: #e07050; min-width: 58px; text-align: right; }
+.hint-box { margin: 4px 18px; background: #252515; border: 1px solid #4a4a20; border-radius: 8px; padding: 9px 12px; font-size: 12px; color: #c8b060; line-height: 1.7; }
+.admin-save-btn { display: block; width: calc(100% - 36px); margin: 16px 18px 0; background: #b8960c; color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.admin-save-btn:active { background: #9a7e0a; }
+.admin-reset-btn { display: block; width: calc(100% - 36px); margin: 10px 18px 0; background: none; color: #666; border: 1px solid #444; padding: 11px; border-radius: 12px; font-size: 14px; cursor: pointer; }
+.mod-btn { position: absolute; left: 14px; top: 20px; height: 38px; padding: 0 12px; border-radius: 19px; border: 1.5px solid #555; background: #2a2a2a; font-size: 12px; font-weight: 700; cursor: pointer; color: #c8b88a; display: none; align-items: center; }
+.mod-btn.hareketli { background: #3a2200; border-color: #e07020; color: #f0a040; }
+.item-del-btn { background: #6b1a1a; border: none; color: #ff8080; border-radius: 6px; width: 28px; height: 28px; font-size: 16px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.item-del-btn:active { background: #9a1a1a; }
+.add-item-box { margin: 8px 18px 0; background: #1a1a2a; border: 1px solid #2a2a4a; border-radius: 10px; padding: 12px 14px; }
+.add-item-box p { font-size: 12px; color: #d4af37; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.add-item-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.add-item-inp { padding: 7px 8px; border: 1px solid #444; border-radius: 8px; font-size: 13px; color: #f0e6c8; background: #2a2a2a; }
+.add-item-inp:focus { outline: none; border-color: #d4af37; }
+.add-item-btn { background: #1a5a1a; color: #5dba6a; border: 1px solid #2a6a2a; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.add-item-btn:active { background: #1a7a1a; }
+.admin-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; border-bottom: 1px solid #2a2a2a; gap: 6px; flex-wrap: wrap; }
+
+.share-box { margin: 8px 18px 0; background: #1a2a1a; border: 1px solid #2a4a2a; border-radius: 10px; padding: 12px 14px; }
+.share-box p { font-size: 13px; color: #5dba6a; margin-bottom: 8px; font-weight: 600; }
+.share-box small { font-size: 11px; color: #666; display: block; margin-top: 6px; line-height: 1.5; }
+.share-link { font-size: 11px; color: #7ab0e0; word-break: break-all; margin: 6px 0; display: block; background: #1a2030; padding: 6px 8px; border-radius: 6px; }
+.btn-row { display: flex; gap: 8px; margin-top: 8px; }
+.copy-btn { flex:1; display: flex; align-items: center; justify-content: center; gap: 5px; background: #1a4a8a; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.wa-btn   { flex:1; display: flex; align-items: center; justify-content: center; gap: 5px; background: #1a8a40; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+.toast { position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%) translateY(8px); background: #b8960c; color: #fff; padding: 9px 18px; border-radius: 20px; font-size: 13px; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 200; white-space: nowrap; font-weight: 600; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+body.tv-mode {
+  max-width: 100% !important;
+  background: #000;
+}
+body.tv-mode .header {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+body.tv-mode .header .logo {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 4px;
+}
+body.tv-mode .header h1 { font-size: 28px; }
+body.tv-mode .header .phone { font-size: 18px; }
+body.tv-mode .has-info { font-size: 14px; }
+body.tv-mode .table-header { padding: 14px 22px; }
+body.tv-mode .table-header span { font-size: 18px; }
+body.tv-mode .price-row { padding: 18px 22px; }
+body.tv-mode .price-row .birim,
+body.tv-mode .price-row .alis,
+body.tv-mode .price-row .satis,
+body.tv-mode .price-row .kk { font-size: 28px !important; }
+body.tv-mode .upd-bar,
+body.tv-mode .update-bar { font-size: 14px; }
+body.tv-mode .bottom-nav,
+body.tv-mode .overlay { display: none !important; }
+body.tv-mode .admin-btn,
+body.tv-mode .mod-btn,
+body.tv-mode .tv-btn { opacity: .45; }
+body.tv-mode .doviz-bant-inner { animation-duration: 18s; }
+/* TV modu sadece müşteri ekranı gibi çalışsın */
+body.tv-mode #adminEkstra,
+body.tv-mode #desktopSide,
+body.tv-mode .desktop-side,
+body.tv-mode #ekstraDovizRows,
+body.tv-mode #ekstraHurdaRows { display: none !important; }
+body.tv-mode .desktop-main { flex: 1 1 100% !important; width: 100% !important; }
+body.tv-mode .desktop-layout { display: block !important; }
+@media (min-width: 768px) {
+  body.tv-mode .header { padding: 16px 36px; }
+  body.tv-mode .header h1 { font-size: 34px; }
+  body.tv-mode .header .phone { font-size: 22px; }
+  body.tv-mode .table-header span { font-size: 20px; }
+  body.tv-mode .price-row .birim,
+  body.tv-mode .price-row .alis,
+  body.tv-mode .price-row .satis,
+  body.tv-mode .price-row .kk { font-size: 34px !important; }
+}
+
+
+/* --- yüzde + varlıklarım eklentisi --- */
+.change-rate{display:block;font-size:11px;line-height:1.1;margin-top:3px;font-weight:700}
+.change-up{color:#2ecc71}
+.change-down{color:#e74c3c}
+.change-same{color:#aaa}
+
+body.portfolio-mode .table-header,
+body.portfolio-mode #priceRows,
+body.portfolio-mode #adminEkstra,
+body.portfolio-mode .update-bar,
+body.portfolio-mode #desktopSide{display:none !important}
+body.portfolio-mode #portfolioWrap{display:block !important}
+
+#portfolioWrap{display:none;padding:12px}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.summary-card{background:#1e1e1e;border:1px solid #333;border-radius:12px;padding:12px}
+.summary-card .label{font-size:12px;color:#c8b88a;margin-bottom:6px}
+.summary-card .value{font-size:18px;font-weight:700;color:#f0d060}
+.summary-card .value.kar{color:#2ecc71}
+.summary-card .value.zarar{color:#e74c3c}
+.portfolio-card{background:#1e1e1e;border:1px solid #333;border-radius:12px;padding:12px;margin-bottom:12px}
+.portfolio-title{font-size:13px;font-weight:700;color:#d4af37;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.portfolio-form-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.portfolio-label{display:block;font-size:12px;color:#c8b88a;margin-bottom:5px}
+.portfolio-inp,.portfolio-select{width:100%;padding:10px 12px;border:1px solid #444;border-radius:10px;font-size:14px;background:#2a2a2a;color:#f0e6c8}
+.portfolio-inp:focus,.portfolio-select:focus{outline:none;border-color:#d4af37;background:#333}
+.portfolio-btn-row{display:flex;gap:8px;margin-top:10px}
+.portfolio-btn-primary,.portfolio-btn-secondary,.portfolio-btn-danger{border:none;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.portfolio-btn-primary{background:#b8960c;color:#fff;flex:1}
+.portfolio-btn-secondary{background:#1a4a8a;color:#fff}
+.portfolio-btn-danger{background:#6b1a1a;color:#fff}
+.holding-card{background:#202020;border:1px solid #2e2e2e;border-radius:12px;padding:12px;margin-bottom:10px}
+.holding-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+.holding-name{font-size:16px;font-weight:700;color:#f0d060}
+.holding-pct{font-size:12px;font-weight:700}
+.holding-pct.up{color:#2ecc71}
+.holding-pct.down{color:#e74c3c}
+.holding-pct.same{color:#aaa}
+.holding-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.holding-grid div{font-size:12px;color:#c8b88a}
+.holding-grid strong{display:block;color:#f0e6c8;font-size:14px;margin-top:2px}
+.holding-note{margin-top:8px;font-size:12px;color:#aaa}
+.empty-portfolio{color:#888;font-size:13px;text-align:center;padding:14px 0}
+@media (min-width:768px){
+  #portfolioWrap{padding:18px 24px}
+  .summary-grid{grid-template-columns:repeat(4,1fr)}
+  .portfolio-form-grid{grid-template-columns:1.2fr .8fr .9fr 1.1fr}
+}
+
+
+.top-switcher{display:flex;justify-content:center;gap:8px;padding:8px 12px 12px;background:#111;border-bottom:1px solid #2a2a2a}
+.top-switch-btn{border:1px solid #555;background:#2a2a2a;color:#c8b88a;border-radius:18px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer}
+.top-switch-btn.active{background:#3a2d00;border-color:#b8960c;color:#f0d060}
+body.portfolio-mode .top-switch-btn[data-view="portfolio"],
+body:not(.portfolio-mode) .top-switch-btn[data-view="prices"]{background:#3a2d00;border-color:#b8960c;color:#f0d060}
+body.portfolio-mode .doviz-bant,
+body.portfolio-mode .table-header,
+body.portfolio-mode #priceRows,
+body.portfolio-mode .update-bar,
+body.portfolio-mode .bottom-nav,
+body.portfolio-mode #desktopSide,
+body.portfolio-mode #adminEkstra{display:none !important}
+body.portfolio-mode #portfolioWrap{display:block !important}
+
+
+body.tv-mode .top-switcher{display:none !important}
+
+
+/* ── EĞİLMEZ: LOGO + AÇIK/KARANLIK TEMA ── */
+.logo-placeholder{width:90px;height:90px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;border:2px dashed #8b7422;color:#d4af37;background:#171717;font-size:24px;font-weight:800;letter-spacing:1px}
+.theme-btn{position:absolute;right:58px;top:20px;width:38px;height:38px;border-radius:50%;border:1px solid #555;background:#2a2a2a;color:#f0d060;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+@media (min-width:768px){.logo-placeholder{width:80px;height:80px;margin:0}.theme-btn{right:78px;top:50%;transform:translateY(-50%);width:44px;height:44px}}
+body.light-mode{background:#f4f1e8;color:#28251e}
+body.light-mode .header,body.light-mode .doviz-bant,body.light-mode .update-bar,body.light-mode .bottom-nav{background:#fffdf7}
+body.light-mode .header{border-bottom-color:#b8960c}
+body.light-mode .header h1{color:#8a6900;text-shadow:none}
+body.light-mode .header .phone,body.light-mode .has-info,body.light-mode .doviz-item{color:#6d6040}
+body.light-mode .table-header{background:#eee8d8;border-color:#d8cfba}
+body.light-mode .price-row{border-color:#ddd6c8;background:#fffdf8}
+body.light-mode .price-row:nth-child(even){background:#f5f0e5}
+body.light-mode .price-row .birim,body.light-mode .price-row .alis,body.light-mode .price-row .satis{color:#2b2924}
+body.light-mode .desktop-side{background:#f6f2e9;border-color:#d8cfba}
+body.light-mode .desktop-side>div,body.light-mode #adminEkstra>div{filter:none}
+body.light-mode .upd-text{background:#eee8d8;color:#6b6044;border-color:#d8cfba}
+body.light-mode .admin-btn,body.light-mode .theme-btn,body.light-mode .mod-btn{background:#f0eadc;border-color:#cfc4ab;color:#765b00}
+body.light-mode .overlay{background:rgba(0,0,0,.35)}
+body.light-mode .admin-panel,body.light-mode .admin-header{background:#fffdf8;color:#2a2720}
+body.light-mode .admin-row{border-color:#e5dece}
+body.light-mode .row-label{color:#4a4334}
+body.light-mode .admin-inp,body.light-mode .add-item-inp{background:#fff;border-color:#cfc5ae;color:#2a2720}
+body.light-mode .hint-box{background:#faf5e7;border-color:#ded0a6;color:#6e5a16}
+body.light-mode .logo-placeholder{background:#fffaf0;color:#8a6900;border-color:#b8960c}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-placeholder" id="logoPlaceholder">EK</div>
+  <img id="shopLogo" class="logo" alt="Logo" style="display:none">
+  <h1 id="shopName">EĞİLMEZ KUYUMCULUK</h1>
+  <div class="phone" id="shopPhone" style="display:none"></div>
+  <span class="has-info" id="hasInfo"></span>
+  <button class="admin-btn" id="adminBtn" onclick="openAdmin()">⋯</button>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Açık/Koyu Tema">☀️</button>
+  <button class="mod-btn" id="modBtn" onclick="toggleMod()">⚡ Normal</button>
+</div>
+
+<div class="top-switcher" id="topSwitcher">
+  <button class="top-switch-btn active" data-view="prices" id="btnPricesTop">Fiyatlar</button>
+  <button class="top-switch-btn" data-view="portfolio" id="btnPortfolioTop">Varlıklarım</button>
+</div>
+
+<div class="doviz-bant"><div class="doviz-bant-inner" id="dovizBant">⏳ Döviz yükleniyor...</div></div>
+
+<div class="desktop-layout">
+<div class="desktop-main">
+<div class="table-header">
+  <span>Birim</span><span>Alış</span><span>Satış</span><span>K. Kartı</span>
+</div>
+<div id="priceRows"></div>
+
+<!-- Sadece admin modunda görünür -->
+<div id="adminEkstra" style="display:none">
+  <div style="background:#111;border-top:2px solid #1a3a5a;padding:10px 12px 4px">
+    <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7ab0e0">💱 Döviz Kurları</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#111;padding:4px 12px 2px;border-bottom:1px solid #222">
+    <span style="font-size:11px;color:#888">Döviz</span>
+    <span style="font-size:11px;color:#5dba6a;text-align:right">Alış</span>
+    <span style="font-size:11px;color:#e07050;text-align:right">Satış</span>
+  </div>
+  <div id="ekstraDovizRows"></div>
+
+  <div style="background:#111;border-top:2px solid #3a3000;padding:10px 12px 4px;margin-top:6px">
+    <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#c8a040">🔩 Hurda Altın</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#111;padding:4px 12px 2px;border-bottom:1px solid #222">
+    <span style="font-size:11px;color:#888">Tür</span>
+    <span style="font-size:11px;color:#5dba6a;text-align:right">Alış</span>
+    <span style="font-size:11px;color:#e07050;text-align:right">Satış</span>
+  </div>
+  <div id="ekstraHurdaRows"></div>
+</div>
+
+
+<div id="portfolioWrap">
+  <div class="summary-grid">
+    <div class="summary-card"><div class="label">Toplam Güncel Değer</div><div class="value" id="pfTotalCurrent">0 TL</div></div>
+    <div class="summary-card"><div class="label">Toplam Maliyet</div><div class="value" id="pfTotalCost">0 TL</div></div>
+    <div class="summary-card"><div class="label">Kâr / Zarar</div><div class="value" id="pfProfitLoss">0 TL</div></div>
+    <div class="summary-card"><div class="label">USD / EUR Karşılığı</div><div class="value" id="pfUsdEur">0 $ / 0 €</div></div>
+  </div>
+
+  <div class="portfolio-card">
+    <div class="portfolio-title">Yeni Varlık Ekle</div>
+    <div class="portfolio-form-grid">
+      <div><label class="portfolio-label">Varlık Türü</label>
+        <select class="portfolio-select" id="pfType"></select>
+      </div>
+      <div><label class="portfolio-label">Miktar / Adet / Gram</label><input class="portfolio-inp" id="pfQty" type="number" step="0.001" placeholder="0"></div>
+      <div><label class="portfolio-label">Toplam Alış Maliyeti (TL)</label><input class="portfolio-inp" id="pfCost" type="number" step="0.01" placeholder="0"></div>
+      <div><label class="portfolio-label">Not</label><input class="portfolio-inp" id="pfNote" type="text" placeholder="İsteğe bağlı"></div>
+    </div>
+    <div class="portfolio-btn-row">
+      <button class="portfolio-btn-primary" id="pfSaveBtn">Varlık Ekle</button>
+      <button class="portfolio-btn-secondary" id="pfCancelEditBtn" style="display:none">İptal</button>
+    </div>
+  </div>
+
+  <div class="portfolio-card">
+    <div class="portfolio-title">Kayıtlı Varlıklar</div>
+    <div id="pfList"></div>
+  </div>
+</div>
+
+<div class="update-bar">
+  <span class="upd-text" id="updTime">Yükleniyor...</span>
+  <span class="upd-src" id="updSrc"></span>
+</div>
+</div><!-- desktop-main -->
+
+<!-- Masaüstü sağ panel: döviz + hurda -->
+<div class="desktop-side" id="desktopSide" style="display:none">
+  <div style="background:#111;border-bottom:2px solid #1a3a5a;padding:14px 18px">
+    <span style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7ab0e0">💱 Döviz Kurları</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#1a1a1a;padding:6px 18px;border-bottom:1px solid #2a2a2a">
+    <span style="font-size:12px;color:#888">Döviz</span>
+    <span style="font-size:12px;color:#5dba6a;text-align:right">Alış</span>
+    <span style="font-size:12px;color:#e07050;text-align:right">Satış</span>
+  </div>
+  <div id="desktopDovizRows"></div>
+
+  <div style="background:#111;border-top:2px solid #3a3000;border-bottom:2px solid #3a3000;padding:14px 18px;margin-top:8px">
+    <span style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#c8a040">🔩 Hurda Altın</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#1a1a1a;padding:6px 18px;border-bottom:1px solid #2a2a2a">
+    <span style="font-size:12px;color:#888">Tür</span>
+    <span style="font-size:12px;color:#5dba6a;text-align:right">Alış</span>
+    <span style="font-size:12px;color:#e07050;text-align:right">Satış</span>
+  </div>
+  <div id="desktopHurdaRows"></div>
+</div>
+</div><!-- desktop-layout -->
+
+<div class="bottom-nav" id="bottomNav">
+  <button class="nav-item active"><span class="nav-icon">📊</span>Fiyat Panosu</button>
+  <button class="nav-item" onclick="openAdmin()"><span class="nav-icon">⚙️</span>Yönetici</button>
+
+  </div>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeAdmin()">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <h2>⚙️ Yönetici Paneli</h2>
+      <button class="close-btn" onclick="closeAdmin()">✕</button>
+    </div>
+
+    <div class="sec-title">Dükkan Bilgileri</div>
+    <div class="admin-row">
+      <span class="row-label">Dükkan Adı</span>
+      <input class="admin-inp" style="width:175px" type="text" id="aName" placeholder="Adınız">
+    </div>
+    <div class="admin-row">
+      <span class="row-label">Telefon</span>
+      <input class="admin-inp" style="width:175px" type="text" id="aPhone" placeholder="444 0 000">
+    </div>
+    <div class="admin-row" style="align-items:flex-start">
+      <span class="row-label">Logo</span>
+      <div style="display:flex;flex-direction:column;gap:7px;align-items:flex-end">
+        <input type="file" id="aLogoFile" accept="image/*" style="max-width:190px;color:#aaa;font-size:12px">
+        <div style="display:flex;gap:6px">
+          <button type="button" class="copy-btn" style="padding:7px 10px;flex:none" onclick="previewLogoUpload()">Logo Yükle</button>
+          <button type="button" class="item-del-btn" style="width:auto;padding:0 9px" onclick="removeLogo()">Kaldır</button>
+        </div>
+        <small style="color:#777">Logo 256×256 boyutuna optimize edilir.</small>
+      </div>
+    </div>
+    <div class="admin-row">
+      <span class="row-label">Varsayılan Tema</span>
+      <select id="aTheme" class="admin-inp" style="width:175px;text-align:left">
+        <option value="dark">🌙 Karanlık</option>
+        <option value="light">☀️ Açık</option>
+      </select>
+    </div>
+
+    <div class="sec-title">Has Fiyat Düzeltme</div>
+    <div class="admin-row">
+      <span class="row-label">Alış Farkı</span>
+      <div class="inp-group">
+        <input class="admin-inp" type="number" step="1" id="aHasDuzA" placeholder="0" style="width:82px">
+        <span class="inp-unit">₺</span>
+      </div>
+    </div>
+    <div class="admin-row">
+      <span class="row-label">Satış Farkı</span>
+      <div class="inp-group">
+        <input class="admin-inp" type="number" step="1" id="aHasDuzS" placeholder="0" style="width:82px">
+        <span class="inp-unit">₺</span>
+      </div>
+    </div>
+    <div class="hint-box" style="margin-bottom:4px">
+      <b>Has Alış</b> = API fiyatı + Alış Farkı &nbsp;|&nbsp; Eksi değer girilebilir (örn: -50)
+    </div>
+
+    <div class="sec-title">Kredi Kartı Komisyonu</div>
+    <div class="admin-row">
+      <span class="row-label">Komisyon Oranı</span>
+      <div class="inp-group">
+        <input class="admin-inp" type="number" step="0.1" min="0" max="20" id="aKK" placeholder="0.00" style="width:82px">
+        <span class="inp-unit">%</span>
+      </div>
+    </div>
+    <div class="hint-box" style="margin-bottom:4px">
+      <b>K. Kartı Satış</b> = Satış × (1 + oran/100)
+    </div>
+
+    <div class="sec-title">Anlık Has Fiyatı</div>
+    <div class="has-row"><span class="has-row-label">Has Alış</span><span class="has-row-val" id="adminHasA">—</span></div>
+    <div class="has-row"><span class="has-row-label">Has Satış</span><span class="has-row-val" id="adminHasS">—</span></div>
+
+    <div class="sec-title">Çarpan Ayarları</div>
+    <div class="hint-box">
+      <b>Alış</b> = Has Alış × işçilik<br>
+      <b>Satış</b> = Has Satış × işçilik
+    </div>
+    <div id="adminRows"></div>
+
+    <div class="sec-title" style="color:#f0a040">⚡ Hareketli Mod Çarpanları</div>
+    <div class="hint-box" style="background:#1e1500;border-color:#5a3800;color:#c8a060">
+      Hareketli modda bu çarpanlar kullanılır. Ekranda ⚡ butonu ile geçiş yapılır.
+    </div>
+    <div id="adminRowsH"></div>
+
+    <div class="sec-title">Ürün Listesi Yönetimi</div>
+    <div class="urun-mgr">
+      <div id="urunList"></div>
+      <div class="urun-add-row">
+        <input class="add-item-inp" id="newLabel" placeholder="Ürün adı" style="width:100px">
+        <input class="add-item-inp" id="newAlisX" type="number" step="0.0001" min="0.1" max="5" placeholder="Alış×" style="width:68px" value="0.9930">
+        <input class="add-item-inp" id="newSatisX" type="number" step="0.0001" min="0.1" max="5" placeholder="Satış×" style="width:68px" value="1.0080">
+        <button class="urun-add-btn" onclick="addUrun()">+ Ekle</button>
+      </div>
+    </div>
+
+    <div class="sec-title" style="color:#7ab0e0">💱 Döviz Kurları (Sadece Admin)</div>
+    <div class="hint-box" style="background:#0a1a2a;border-color:#1a3a5a;color:#7ab0e0;margin-bottom:4px">
+      Canlı alış/satış + senin düzeltmen = gösterilen fiyat
+    </div>
+    <div id="adminDovizRows"></div>
+
+    <div class="sec-title" style="color:#c8a040">🔩 Hurda Altın (Sadece Admin)</div>
+    <div class="hint-box" style="background:#1a1500;border-color:#3a3000;color:#c8a040;margin-bottom:4px">
+      Has fiyatı × ayar oranı + düzeltme
+    </div>
+    <div id="adminHurdaRows"></div>
+
+    <div class="sec-title">Müşteri Linki</div>
+    <div class="share-box">
+      <p>👥 Müşterilere bu adresi gönderin</p>
+      <span class="share-link" id="customerLink">Yükleniyor...</span>
+      <small>Ayarlar buluta kaydedilir. Müşteriler her cihazdan güncel fiyatları görebilir.</small>
+      <div class="btn-row">
+        <button class="copy-btn" onclick="copyLink()">📋 Kopyala</button>
+        <button class="wa-btn"   onclick="shareWA()">WhatsApp</button>
+      </div>
+    </div>
+
+    <div class="sec-title">TV Ekranı Linki</div>
+    <div class="share-box" style="background:#101826;border-color:#203a5a">
+      <p>📺 TV'de bu adresi açın</p>
+      <span class="share-link" id="tvLink">Yükleniyor...</span>
+      <small>Bu bağlantı müşteri ekranını TV modunda açar. Admin kaydettikçe TV ekranı otomatik güncellenir.</small>
+      <div class="btn-row">
+        <button class="copy-btn" onclick="copyTVLink()">📋 TV Linki</button>
+        <button class="wa-btn" onclick="openTVScreen()" style="background:#3456d1">Aç</button>
+      </div>
+    </div>
+
+    <div class="sec-title">Yönetici Şifresi</div>
+    <div class="field-row">
+      <label class="field-label">Yeni Şifre</label>
+      <div class="inp-wrap">
+        <input class="admin-inp" type="password" id="aNewPass" placeholder="Yeni şifre girin">
+      </div>
+    </div>
+    <div class="field-row">
+      <label class="field-label">Şifre Tekrar</label>
+      <div class="inp-wrap">
+        <input class="admin-inp" type="password" id="aNewPass2" placeholder="Tekrar girin">
+      </div>
+    </div>
+    <small style="color:#888;padding:0 4px">Boş bırakırsanız şifre değişmez.</small>
+
+    <button class="admin-save-btn" onclick="saveAdmin()">💾 Kaydet</button>
+    <button class="admin-reset-btn" onclick="resetAdmin()">↺ Varsayılana Döndür</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Array.find polyfill (eski Safari)
+if (!Array.prototype.find) {
+  Array.prototype.find = function(fn) {
+    for (var i=0;i<this.length;i++) { if(fn(this[i],i,this)) return this[i]; }
+    return undefined;
+  };
+}
+// ── ÜRÜNLER ──────────────────────────────────────────────────────────────────
+var DOVIZLER = [
+  { id:'usd', label:'USD', flag:'🇺🇸' },
+  { id:'eur', label:'EUR', flag:'🇪🇺' },
+  { id:'gbp', label:'GBP', flag:'🇬🇧' },
+  { id:'sar', label:'SAR', flag:'🇸🇦' },
+  { id:'chf', label:'CHF', flag:'🇨🇭' },
+];
+var HURDALAR = [
+  { id:'hurda22', label:'22 Ayar Hurda', oran: 22/24 },
+  { id:'hurda14', label:'14 Ayar Hurda', oran: 14/24 },
+  { id:'hurda8',  label:'8 Ayar Hurda',  oran: 8/24  },
+];
+var ITEMS = [
+  { id:'has24',    label:'24 Ayar',     defA:1.0000, defS:1.0030 },
+  { id:'ayar22',   label:'22 Ayar',     defA:0.9100, defS:0.9220 },
+  { id:'tam',      label:'Tam',         defA:0.9930, defS:1.0080 },
+  { id:'yarim',    label:'Yarım',       defA:0.9930, defS:1.0090 },
+  { id:'ceyrek',   label:'Çeyrek',      defA:0.9920, defS:1.0100 },
+  { id:'besli',    label:'Beşli',       defA:0.9930, defS:1.0080 },
+  { id:'yarimbes', label:'Yarım Beşli', defA:0.9930, defS:1.0085 },
+  { id:'resat',    label:'Reşat',       defA:0.9930, defS:1.0070 },
+  { id:'ata',      label:'Ata',         defA:0.9930, defS:1.0070 },
+  { id:'gremise',  label:'Gremise',     defA:0.9930, defS:1.0080 },
+];
+
+function makeDefaults() {
+  var l = {};
+  ITEMS.forEach(function(i) { l[i.id] = { a: i.defA, s: i.defS }; });
+  return { shopName:'EĞİLMEZ KUYUMCULUK', shopPhone:'', logoData:'', theme:'dark', labor:l, customItems:[], kkOran:0 };
+}
+
+// Aktif urun listesini dondur (varsayilan + ozel, gizliler haric)
+function getActiveItems() {
+  var custom = (settings.customItems || []);
+  var hidden = settings.hiddenItems || [];
+  var deleted = settings.deletedItems || [];
+  var all = ITEMS.concat(custom);
+  var order = settings.itemOrder || [];
+  var map = {};
+  all.forEach(function(i){ map[i.id] = i; });
+  var ordered = [];
+  order.forEach(function(id){
+    if (map[id]) { ordered.push(map[id]); delete map[id]; }
+  });
+  all.forEach(function(i){
+    if (map[i.id]) ordered.push(i);
+  });
+  return ordered.filter(function(i){ return hidden.indexOf(i.id) === -1 && deleted.indexOf(i.id) === -1; });
+}
+
+// ── AYARLARI URL HASH'TEN OKU ─────────────────────────────────────────────
+// URL yapısı: altin.html#admin=1&d=BASE64 (yönetici)
+//             altin.html#d=BASE64          (müşteri)
+function parseHash() {
+  var hash = window.location.hash.slice(1); // '#' kaldır
+  var params = {};
+  hash.split('&').forEach(function(p) {
+    var kv = p.split('=');
+    if (kv[0]) params[kv[0]] = kv[1] || '';
+  });
+  return params;
+}
+
+// ── FIREBASE AYARLARI ─────────────────────────────────────────────────────────
+var FIREBASE_URL = 'https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebasedatabase.app/ayarlar.json';
+
+// Admin şifresi — Firebase'den yüklenir
+var ADMIN_PASS = '1234';
+var IS_ADMIN = false;
+var FORCE_TV = window.location.search.indexOf('tv=1') !== -1;
+
+// ?admin yoksa buton gizli
+if (window.location.search.indexOf('admin') === -1 || FORCE_TV) {
+  var adminBtnEl = document.getElementById('adminBtn');
+  var bottomNavEl = document.getElementById('bottomNav');
+  var tvBtnEl = document.getElementById('tvBtn');
+  if (adminBtnEl) adminBtnEl.style.display = 'none';
+  if (bottomNavEl) bottomNavEl.style.display = 'none';
+  if (FORCE_TV && tvBtnEl) {
+    tvBtnEl.style.display = 'none';
+  }
+} else {
+  var mb = document.getElementById('modBtn');
+  var adminEkstraEl = document.getElementById('adminEkstra');
+  if (mb) mb.style.display = 'flex';
+  if (adminEkstraEl) adminEkstraEl.style.display = 'block';
+}
+applyTVMode();
+updateModBtn();
+
+function checkAdminSession() {
+  return sessionStorage.getItem('gp10_admin') === '1';
+}
+
+function openAdminLogin() {
+  var pass = prompt('Yönetici şifresi:');
+  if (pass === null) return;
+  if (pass === ADMIN_PASS) {
+    sessionStorage.setItem('gp10_admin', '1');
+    IS_ADMIN = true;
+    openAdmin();
+  } else {
+    alert('Hatalı şifre!');
+  }
+}
+
+function jsonbinSave(data, cb) {
+  fetch(FIREBASE_URL, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(function(r){ return r.json(); }).then(function(){
+    if(cb) cb(true);
+  }).catch(function(){ if(cb) cb(false); });
+}
+
+function jsonbinLoad(cb) {
+  fetch(FIREBASE_URL)
+    .then(function(r){ return r.json(); })
+    .then(function(r){ if(cb) cb(r); })
+    .catch(function(){ if(cb) cb(null); });
+}
+
+function loadSettings() {
+  // Önce localStorage'dan yükle (hızlı başlangıç)
+  var local = JSON.parse(localStorage.getItem('gp10') || 'null');
+  var s = local || makeDefaults();
+  if (!s.customItems) s.customItems = [];
+  if (!s.labor) s.labor = {};
+  return s;
+}
+
+var settings = loadSettings();
+if (typeof settings.logoData !== 'string') settings.logoData = '';
+if (!settings.theme) settings.theme = 'dark';
+if (typeof settings.shopPhone !== 'string') settings.shopPhone = '';
+var hasAlis  = parseFloat(localStorage.getItem('gp10_ha') || '0') || null;
+var hasSatis = parseFloat(localStorage.getItem('gp10_hs') || '0') || null;
+var prevPrices = {};
+var aktifMod = 'normal';
+var tvMode = FORCE_TV;
+
+function toggleMod() {
+  aktifMod = aktifMod === 'normal' ? 'hareketli' : 'normal';
+  localStorage.setItem('gp10_mod', aktifMod);
+  try { settings.aktifMod = aktifMod; } catch(e) {}
+  try {
+    jsonbinSave(settings, function(){});
+  } catch(e) {}
+  updateModBtn();
+  document.getElementById('priceRows').innerHTML = '';
+  renderTable();
+  showToast(aktifMod === 'hareketli' ? '⚡ Hareketli Mod Aktif' : '✅ Normal Mod Aktif');
+}
+
+function updateModBtn() {
+  var btn = document.getElementById('modBtn');
+  if (aktifMod === 'hareketli') {
+    btn.textContent = '⚡ Hareketli';
+    btn.classList.add('hareketli');
+  } else {
+    btn.textContent = '⚡ Normal';
+    btn.classList.remove('hareketli');
+  }
+}
+
+function applyTVMode() {
+  var isAdmin = window.location.search.indexOf('admin') !== -1;
+  if (FORCE_TV) {
+    tvMode = true;
+    document.body.classList.add('tv-mode');
+  } else if (!isAdmin) {
+    tvMode = false;
+    try { localStorage.removeItem('gp10_tv'); } catch(e) {}
+    try { sessionStorage.removeItem('gp10_tv'); } catch(e) {}
+    document.body.classList.remove('tv-mode');
+  } else {
+    document.body.classList.remove('tv-mode');
+  }
+  var btn = document.getElementById('tvBtn');
+  if (btn) {
+    btn.classList.toggle('active', FORCE_TV ? true : (isAdmin ? tvMode : false));
+    btn.textContent = '📺';
+    btn.title = FORCE_TV ? 'TV ekranı açık' : ((isAdmin && tvMode) ? 'TV modu açık' : 'TV modu kapalı');
+  }
+}
+
+function toggleTVMode() {
+  if (FORCE_TV) return;
+  var isAdmin = window.location.search.indexOf('admin') !== -1;
+  if (!isAdmin) return;
+  tvMode = !tvMode;
+  applyTVMode();
+  if (tvMode && document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen().catch(function(){});
+  } else if (!tvMode && document.fullscreenElement && document.exitFullscreen) {
+    document.exitFullscreen().catch(function(){});
+  }
+  showToast(tvMode ? '📺 TV Modu Aktif' : '📺 TV Modu Kapandı');
+}
+
+// Admin butonuna tıklandığında şifre sor
+var adminBtnBind = document.getElementById('adminBtn');
+if (adminBtnBind) adminBtnBind.onclick = function() {
+  if (checkAdminSession()) {
+    IS_ADMIN = true;
+    openAdmin();
+  } else {
+    openAdminLogin();
+  }
+};
+var lastNavItem = document.querySelector('.nav-item:last-child');
+if (lastNavItem) lastNavItem.onclick = function() {
+  if (checkAdminSession()) {
+    IS_ADMIN = true;
+    openAdmin();
+  } else {
+    openAdminLogin();
+  }
+};
+
+function getLabor(item) {
+  if (aktifMod === 'hareketli' && settings.laborH && settings.laborH[item.id]) return settings.laborH[item.id];
+  if (settings && settings.labor && settings.labor[item.id]) return settings.labor[item.id];
+  return { a: item.defA, s: item.defS };
+}
+
+// ── TABLO ────────────────────────────────────────────────────────────────────
+function renderTable() {
+  document.getElementById('shopName').textContent  = settings.shopName || 'EĞİLMEZ KUYUMCULUK';
+  var phoneEl = document.getElementById('shopPhone');
+  if (phoneEl) { phoneEl.textContent = settings.shopPhone || ''; phoneEl.style.display = settings.shopPhone ? 'inline-block' : 'none'; }
+  applyShopLogo();
+  applyTheme();
+
+  var container = document.getElementById('priceRows');
+  var isFirst   = !container.innerHTML;
+
+  getActiveItems().forEach(function(item) {
+    var lab  = getLabor(item);
+    var newA = hasAlis  ? Math.round(hasAlis  * lab.a) : null;
+    var newS = hasSatis ? Math.round(hasSatis * lab.s) : null;
+    var kkOran = parseFloat(settings.kkOran) || 0;
+    var newKK = newS ? Math.round(newS * (1 + kkOran / 100)) : null;
+    var aId  = 'av_' + item.id;
+    var sId  = 'sv_' + item.id;
+    var kId  = 'kv_' + item.id;
+    var rId  = 'rv_' + item.id;
+
+    if (isFirst) {
+      var div = document.createElement('div');
+      div.className = 'price-row'; div.id = rId;
+      div.innerHTML = '<span class="birim">' + item.label + '</span>'
+        + '<span class="alis"  id="' + aId + '">' + (newA ? fmt(newA) : '—') + '</span>'
+        + '<span class="satis" id="' + sId + '">' + (newS ? fmt(newS) : '—') + '</span>'
+        + '<span class="kk"    id="' + kId + '">' + (newKK ? fmt(newKK) : '—') + '</span>';
+      container.appendChild(div);
+    } else {
+      updateCell(document.getElementById(aId), document.getElementById(rId), newA, prevPrices[item.id+'_a'], 'alis', true);
+      updateCell(document.getElementById(sId), document.getElementById(rId), newS, prevPrices[item.id+'_s'], 'satis', false);
+      var kkEl = document.getElementById(kId);
+      if (kkEl) kkEl.textContent = newKK ? fmt(newKK) : '—';
+    }
+    if (newA) prevPrices[item.id+'_a'] = newA;
+    if (newS) prevPrices[item.id+'_s'] = newS;
+  });
+}
+
+function updateCell(el, row, newVal, oldVal, cls, isAlis) {
+  if (!el || !newVal) return;
+  el.textContent = fmt(newVal);
+  el.className = cls;
+  if (!oldVal) return;
+  if (newVal > oldVal) {
+    el.classList.add('price-up');
+    if (isAlis) { row.classList.remove('flash-down'); row.classList.add('flash-up'); }
+  } else if (newVal < oldVal) {
+    el.classList.add('price-down');
+    if (isAlis) { row.classList.remove('flash-up'); row.classList.add('flash-down'); }
+  } else { el.classList.add('price-same'); }
+  if (isAlis) setTimeout((function(r){ return function(){ r.classList.remove('flash-up','flash-down'); }; })(row), 900);
+}
+
+function fmt(n) { return new Intl.NumberFormat('tr-TR').format(n); }
+
+function setStatus(ok) {
+  var now = new Date();
+  var d = now.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  var t = now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('updTime').textContent = 'Son güncelleme: ' + d + ' ' + t;
+  var src = document.getElementById('updSrc');
+  var hi  = document.getElementById('hasInfo');
+  if (ok) {
+    src.textContent = ''; src.className = 'upd-src';
+    hi.textContent  = 'Has Alış: ' + fmt(Math.round(hasAlis)) + '  |  Has Satış: ' + fmt(Math.round(hasSatis));
+    hi.className = 'has-info';
+  } else {
+    src.textContent = '⚠ Bağlantı yok'; src.className = 'upd-src err';
+    hi.textContent  = hasAlis ? ('Son: ' + fmt(Math.round(hasAlis)) + ' / ' + fmt(Math.round(hasSatis))) : '';
+    hi.className = 'has-info err';
+  }
+}
+
+// ── API ──────────────────────────────────────────────────────────────────────
+var WORKER_URL = 'https://altin-proxy.ufuk87900.workers.dev';
+var activeXHR = null;
+
+function applyPrices(a, s) {
+  a = a + (parseFloat(settings.hasDuzA) || 0);
+  s = s + (parseFloat(settings.hasDuzS) || 0);
+  if (!a || a < 100) return false;
+  hasAlis = a; hasSatis = s;
+  localStorage.setItem('gp10_ha', a);
+  localStorage.setItem('gp10_hs', s);
+  setStatus(true);
+  renderTable();
+  return true;
+}
+
+function fetchPrices() {
+  if (activeXHR) { try { activeXHR.abort(); } catch(e){} activeXHR = null; }
+  var xhr = new XMLHttpRequest();
+  activeXHR = xhr;
+  xhr.open('GET', WORKER_URL, true);
+  xhr.timeout = 10000;
+  xhr.onload = function() {
+    if (activeXHR !== xhr) return;
+    activeXHR = null;
+    if (xhr.status >= 200 && xhr.status < 300) {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        var a = parseFloat(data.hasAlis);
+        var s = parseFloat(data.hasSatis);
+        if (!a || a < 100) throw new Error('Geçersiz fiyat');
+        if (!applyPrices(a, s)) throw new Error('applyPrices hata');
+        // Döviz verilerini sakla
+        liveDoviz = data || {};
+        updateDovizBant({});
+        refreshAdminDataViews();
+      } catch(e) {
+        setStatus(false);
+        if (hasAlis) renderTable();
+      }
+    } else {
+      setStatus(false);
+      if (hasAlis) renderTable();
+    }
+  };
+  xhr.onerror = xhr.ontimeout = function() {
+    if (activeXHR !== xhr) return;
+    activeXHR = null;
+    setStatus(false);
+    if (hasAlis) renderTable();
+  };
+  xhr.send();
+}
+
+// ── YÖNETİCİ ─────────────────────────────────────────────────────────────────
+function openAdmin() {
+  document.getElementById('aName').value  = settings.shopName;
+  document.getElementById('aPhone').value = settings.shopPhone || '';
+  var themeSel = document.getElementById('aTheme'); if (themeSel) themeSel.value = settings.theme || 'dark';
+  document.getElementById('aKK').value    = (settings.kkOran || 0).toFixed(2);
+  document.getElementById('aHasDuzA').value = settings.hasDuzA || 0;
+  document.getElementById('aHasDuzS').value = settings.hasDuzS || 0;
+  document.getElementById('adminHasA').textContent = hasAlis  ? fmt(Math.round(hasAlis))  + ' ₺' : '—';
+  document.getElementById('adminHasS').textContent = hasSatis ? fmt(Math.round(hasSatis)) + ' ₺' : '—';
+  updateCustomerLink();
+  renderAdminRows();
+  renderAdminDoviz();
+  renderAdminHurda();
+  document.getElementById('overlay').classList.add('open');
+}
+function closeAdmin() { document.getElementById('overlay').classList.remove('open'); }
+
+function updateCustomerLink() {
+  var base = window.location.href.split('?')[0].split('#')[0];
+  document.getElementById('customerLink').textContent = base;
+  document.getElementById('customerLink').dataset.url = base;
+  var tvUrl = base + '?tv=1';
+  var tvEl = document.getElementById('tvLink');
+  if (tvEl) {
+    tvEl.textContent = tvUrl;
+    tvEl.dataset.url = tvUrl;
+  }
+}
+
+function renderAdminRows() {
+  // Normal mod carpan ayarlari
+  var html = '';
+  getActiveItems().forEach(function(item) {
+    var lab = getLabor(item);
+    var pA  = hasAlis  ? fmt(Math.round(hasAlis  * lab.a)) : '-';
+    var pS  = hasSatis ? fmt(Math.round(hasSatis * lab.s)) : '-';
+    html += '<div class="admin-row">'
+      + '<span class="row-label" style="flex:1;min-width:70px">' + item.label + '</span>'
+      + '<div class="inp-group"><span class="inp-unit">Alis x</span>'
+      + '<input class="admin-inp" type="number" step="0.0001" min="0.1" max="5" id="a_' + item.id + '" value="' + lab.a.toFixed(4) + '">'
+      + '<span class="prev-a">' + pA + '</span></div>'
+      + '<div class="inp-group"><span class="inp-unit">Satis x</span>'
+      + '<input class="admin-inp" type="number" step="0.0001" min="0.1" max="5" id="s_' + item.id + '" value="' + lab.s.toFixed(4) + '">'
+      + '<span class="prev-s">' + pS + '</span></div></div>';
+  });
+  document.getElementById('adminRows').innerHTML = html;
+
+  // Hareketli mod carpan ayarlari
+  var htmlH = '';
+  getActiveItems().forEach(function(item) {
+    var labH = (settings.laborH && settings.laborH[item.id]) ? settings.laborH[item.id] : (settings.labor && settings.labor[item.id] ? settings.labor[item.id] : { a: item.defA, s: item.defS });
+    var pA  = hasAlis  ? fmt(Math.round(hasAlis  * labH.a)) : '-';
+    var pS  = hasSatis ? fmt(Math.round(hasSatis * labH.s)) : '-';
+    htmlH += '<div class="admin-row" style="background:#1e1500;border-color:#3a2800">'
+      + '<span class="row-label" style="flex:1;min-width:70px;color:#e0c080">' + item.label + '</span>'
+      + '<div class="inp-group"><span class="inp-unit">Alis x</span>'
+      + '<input class="admin-inp" type="number" step="0.0001" min="0.1" max="5" id="ah_' + item.id + '" value="' + labH.a.toFixed(4) + '" style="border-color:#5a3800">'
+      + '<span class="prev-a">' + pA + '</span></div>'
+      + '<div class="inp-group"><span class="inp-unit">Satis x</span>'
+      + '<input class="admin-inp" type="number" step="0.0001" min="0.1" max="5" id="sh_' + item.id + '" value="' + labH.s.toFixed(4) + '" style="border-color:#5a3800">'
+      + '<span class="prev-s">' + pS + '</span></div></div>';
+  });
+  document.getElementById('adminRowsH').innerHTML = htmlH;
+
+  // Urun listesi yonetimi
+  renderUrunList();
+}
+
+function renderUrunList() {
+  var hidden = settings.hiddenItems || [];
+  var custom = settings.customItems || [];
+  var deleted = settings.deletedItems || [];
+  var order = settings.itemOrder || [];
+  var all = ITEMS.concat(custom);
+  var map = {};
+  all.forEach(function(i){ map[i.id] = i; });
+  var ordered = [];
+  order.forEach(function(id){
+    if (map[id]) { ordered.push(map[id]); delete map[id]; }
+  });
+  all.forEach(function(i){
+    if (map[i.id]) ordered.push(i);
+  });
+
+  var html = '';
+  ordered.forEach(function(item, index) {
+    var isCustom = custom.some(function(c){ return c.id === item.id; });
+    var isDeleted = deleted.indexOf(item.id) !== -1;
+    var isHidden = hidden.indexOf(item.id) !== -1;
+
+    if (!isCustom && isDeleted) {
+      html += '<div class="urun-item hidden-urun">'
+        + '<span class="urun-name" style="text-decoration:line-through;color:#666">' + item.label + ' <small style="color:#555;font-size:11px">(silindi)</small></span>'
+        + '<button class="urun-add-btn" style="font-size:11px;padding:4px 8px" onclick="restoreDefault(\'' + item.id + '\')">Geri Getir</button>'
+        + '</div>';
+      return;
+    }
+
+    html += '<div class="urun-item' + (isHidden ? ' hidden-urun' : '') + '">'
+      + '<span class="urun-name"' + (isCustom ? ' style="color:#d4af37"' : '') + '>' + item.label + (isHidden ? ' <small style="color:#666;font-size:11px">(gizli)</small>' : '') + '</span>'
+      + '<button class="urun-vis-btn" onclick="moveItem(\'' + item.id + '\', -1)" title="Yukarı">↑</button>'
+      + '<button class="urun-vis-btn" onclick="moveItem(\'' + item.id + '\', 1)" title="Aşağı">↓</button>'
+      + '<button class="urun-vis-btn" onclick="toggleUrun(\'' + item.id + '\')" title="' + (isHidden ? 'Goster' : 'Gizle') + '">'
+      + (isHidden ? '👁' : '🙈') + '</button>'
+      + (isCustom
+          ? '<button class="urun-del-btn" onclick="deleteUrun(\'' + item.id + '\')" title="Sil">x</button>'
+          : '<button class="urun-del-btn" onclick="deleteDefault(\'' + item.id + '\')" title="Sil">x</button>')
+      + '</div>';
+  });
+  document.getElementById('urunList').innerHTML = html;
+}
+
+function moveItem(id, direction) {
+  if (!settings.itemOrder) {
+    settings.itemOrder = ITEMS.concat(settings.customItems || []).map(function(i){ return i.id; });
+  }
+  var list = settings.itemOrder.slice();
+  var idx = list.indexOf(id);
+  if (idx === -1) return;
+  var newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= list.length) return;
+  var tmp = list[idx];
+  list[idx] = list[newIdx];
+  list[newIdx] = tmp;
+  settings.itemOrder = list;
+  try { localStorage.setItem('gp10', JSON.stringify(settings)); } catch(e) {}
+  try { jsonbinSave(settings, function(){}); } catch(e) {}
+  renderUrunList();
+  document.getElementById('priceRows').innerHTML = '';
+  renderTable();
+  showToast('Sıralama güncellendi');
+}
+
+function toggleUrun(id) {
+  if (!settings.hiddenItems) settings.hiddenItems = [];
+  var idx = settings.hiddenItems.indexOf(id);
+  if (idx === -1) {
+    settings.hiddenItems.push(id);
+    showToast('Gizlendi');
+  } else {
+    settings.hiddenItems.splice(idx, 1);
+    showToast('Gosterildi');
+  }
+  document.getElementById('priceRows').innerHTML = '';
+  renderTable();
+  renderUrunList();
+}
+
+
+function persistQuickSettings(msg) {
+  try { localStorage.setItem('gp10', JSON.stringify(settings)); } catch(e) {}
+  jsonbinSave(settings, function(ok) {
+    if (msg) showToast(ok ? msg : (msg + ' (yerel kaydedildi)'));
+  });
+}
+
+function addUrun() {
+  var label = document.getElementById('newLabel').value.trim();
+  var alisX = parseFloat(document.getElementById('newAlisX').value) || 0.9930;
+  var satisX = parseFloat(document.getElementById('newSatisX').value) || 1.0080;
+  if (!label) { showToast('Urun adi girin!'); return; }
+  if (!settings.customItems) settings.customItems = [];
+  if (!settings.labor) settings.labor = {};
+  var id = 'c_' + Date.now();
+  settings.customItems.push({ id:id, label:label, defA:alisX, defS:satisX });
+  if (!settings.itemOrder) settings.itemOrder = ITEMS.concat(settings.customItems || []).map(function(i){ return i.id; });
+  if (settings.itemOrder.indexOf(id) === -1) settings.itemOrder.push(id);
+  settings.labor[id] = { a:alisX, s:satisX };
+  document.getElementById('newLabel').value = '';
+  document.getElementById('priceRows').innerHTML = '';
+  renderTable();
+  renderUrunList();
+  persistQuickSettings(label + ' eklendi');
+}
+
+function restoreDefault(id) {
+  settings.deletedItems = (settings.deletedItems || []).filter(function(x){ return x !== id; });
+  if (!settings.itemOrder) settings.itemOrder = ITEMS.concat(settings.customItems || []).map(function(i){ return i.id; });
+  if (settings.itemOrder.indexOf(id) === -1) settings.itemOrder.push(id);
+  document.getElementById('priceRows').innerHTML = '';
+  renderTable();
+  renderUrunList();
+  persistQuickSettings('Geri getirildi!');
+}
+
+function deleteDefault(id) {
+  if (!confirm('Bu urunu silmek istiyor musunuz? Varsayilana don butonu ile geri getirebilirsiniz.')) return;
+  if (!settings.deletedItems) settings.deletedItems = [];
+  settings.deletedItems.push(id);
+  document.getElementById('priceRows').innerHTML = '';
+  renderTable();
+  renderUrunList();
+  persistQuickSettings('Silindi');
+}
+
+function deleteUrun(id) {
+  if (!confirm('Bu urunu silmek istiyor musunuz?')) return;
+  settings.customItems = (settings.customItems || []).filter(function(c){ return c.id !== id; });
+  delete settings.labor[id];
+  document.getElementById('priceRows').innerHTML = '';
+  renderTable();
+  renderUrunList();
+  persistQuickSettings('Silindi');
+}
+
+// ── LOGO / TEMA ──────────────────────────────────────────────────────────────
+var pendingLogoData = null;
+function applyShopLogo() {
+  var img = document.getElementById('shopLogo');
+  var ph = document.getElementById('logoPlaceholder');
+  if (!img || !ph) return;
+  var logo = (typeof settings !== 'undefined' && settings.logoData) ? settings.logoData : '';
+  if (logo) { img.src = logo; img.style.display = ''; ph.style.display = 'none'; }
+  else { img.removeAttribute('src'); img.style.display = 'none'; ph.style.display = 'flex'; }
+}
+function effectiveTheme() {
+  try { var localTheme = localStorage.getItem('egilmez_theme_local'); if (localTheme) return localTheme; } catch(e) {}
+  return (typeof settings !== 'undefined' && settings.theme) ? settings.theme : 'dark';
+}
+function applyTheme() {
+  var t = effectiveTheme();
+  document.body.classList.toggle('light-mode', t === 'light');
+  var b = document.getElementById('themeBtn'); if (b) b.textContent = t === 'light' ? '🌙' : '☀️';
+  var meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', t === 'light' ? '#f4f1e8' : '#b8960c');
+}
+function toggleTheme() {
+  var next = effectiveTheme() === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('egilmez_theme_local', next); } catch(e) {}
+  applyTheme();
+}
+function previewLogoUpload() {
+  var inp = document.getElementById('aLogoFile');
+  if (!inp || !inp.files || !inp.files[0]) { showToast('⚠ Önce logo dosyası seçin'); return; }
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var im = new Image();
+    im.onload = function() {
+      var size = 256, c = document.createElement('canvas'); c.width=size; c.height=size;
+      var ctx=c.getContext('2d'); ctx.clearRect(0,0,size,size);
+      var scale=Math.min(size/im.width,size/im.height), w=im.width*scale, h=im.height*scale;
+      ctx.drawImage(im,(size-w)/2,(size-h)/2,w,h);
+      pendingLogoData=c.toDataURL('image/png'); settings.logoData=pendingLogoData; applyShopLogo(); showToast('✓ Logo hazır. Kaydet butonuna basın.');
+    };
+    im.src=ev.target.result;
+  };
+  reader.readAsDataURL(inp.files[0]);
+}
+function removeLogo() { settings.logoData=''; pendingLogoData=''; applyShopLogo(); showToast('Logo kaldırıldı. Kaydet butonuna basın.'); }
+
+function saveAdmin() {
+  settings.shopName  = document.getElementById('aName').value  || settings.shopName;
+  settings.shopPhone = document.getElementById('aPhone').value.trim();
+  var themeSel = document.getElementById('aTheme'); if (themeSel) settings.theme = themeSel.value || 'dark';
+  settings.kkOran    = parseFloat(document.getElementById('aKK').value) || 0;
+  settings.hasDuzA   = parseFloat(document.getElementById('aHasDuzA').value) || 0;
+  settings.hasDuzS   = parseFloat(document.getElementById('aHasDuzS').value) || 0;
+  // Şifre değiştir
+  var p1 = document.getElementById('aNewPass').value;
+  var p2 = document.getElementById('aNewPass2').value;
+  if (p1 || p2) {
+    if (p1 !== p2) { showToast('⚠ Şifreler eşleşmiyor!'); return; }
+    if (p1.length < 4) { showToast('⚠ Şifre en az 4 karakter olmalı!'); return; }
+    settings.adminPass = p1;
+    ADMIN_PASS = p1;
+  }
+  getActiveItems().forEach(function(item) {
+    settings.labor[item.id] = {
+      a: parseFloat(document.getElementById('a_' + item.id).value) || item.defA,
+      s: parseFloat(document.getElementById('s_' + item.id).value) || item.defS,
+    };
+  });
+  if (!settings.laborH) settings.laborH = {};
+  getActiveItems().forEach(function(item) {
+    settings.laborH[item.id] = {
+      a: parseFloat(document.getElementById('ah_' + item.id).value) || item.defA,
+      s: parseFloat(document.getElementById('sh_' + item.id).value) || item.defS,
+    };
+  });
+  // Döviz düzeltmeleri kaydet
+  if (!settings.dovizDuz) settings.dovizDuz = {};
+  DOVIZLER.forEach(function(d) {
+    settings.dovizDuz[d.id+'A'] = parseFloat(document.getElementById('duzA_'+d.id).value) || 0;
+    settings.dovizDuz[d.id+'S'] = parseFloat(document.getElementById('duzS_'+d.id).value) || 0;
+  });
+  // Hurda çarpanlarını kaydet
+  if (!settings.hurdaCarp) settings.hurdaCarp = {};
+  HURDALAR.forEach(function(h) {
+    settings.hurdaCarp[h.id+'A'] = parseFloat(document.getElementById('hurdaA_'+h.id).value) || h.oran;
+    settings.hurdaCarp[h.id+'S'] = parseFloat(document.getElementById('hurdaS_'+h.id).value) || h.oran;
+  });
+  localStorage.setItem('gp10', JSON.stringify(settings));
+  try { localStorage.removeItem('egilmez_theme_local'); } catch(e) {}
+  applyTheme(); applyShopLogo();
+  renderTable();
+  closeAdmin();
+  showToast('⏳ Buluta kaydediliyor...');
+  jsonbinSave(settings, function(ok) {
+    showToast(ok ? '✅ Kaydedildi! Tüm cihazlar güncellendi.' : '⚠ Bağlantı yok, yerel kaydedildi');
+  });
+}
+
+function resetAdmin() {
+  if (!confirm('Sıfırlansın mı?')) return;
+  settings = makeDefaults();
+  localStorage.removeItem('gp10');
+  document.getElementById('priceRows').innerHTML = '';
+  renderTable(); closeAdmin();
+  showToast('↺ Sıfırlandı');
+  jsonbinSave(settings, function(){});
+}
+
+function copyLink() {
+  var link = document.getElementById('customerLink').dataset.url || document.getElementById('customerLink').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(function(){ showToast('✓ Link kopyalandı'); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = link; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('✓ Link kopyalandı');
+  }
+}
+
+function shareWA() {
+  var link = document.getElementById('customerLink').dataset.url || document.getElementById('customerLink').textContent;
+  var msg  = settings.shopName + ' güncel altın fiyatları:\n' + link;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function copyTVLink() {
+  var el = document.getElementById('tvLink');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0] + '?tv=1');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = link; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('✓ TV linki kopyalandı');
+  }
+}
+
+function openTVScreen() {
+  var el = document.getElementById('tvLink');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0] + '?tv=1');
+  window.open(link, '_blank');
+}
+
+
+function showToast(m) {
+  var t = document.getElementById('toast');
+  t.textContent = m; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2500);
+}
+
+// ── SERVICE WORKER ───────────────────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function(e) {
+      console.log('SW kayıt hatası:', e);
+    });
+  });
+}
+
+// ── BAŞLAT ────────────────────────────────────────────────────────────────────
+settings = loadSettings();
+renderTable();
+renderDesktopPanel();
+// XAU endpoint hem altın hem kuru veriyor; döviz bandı için fetchDoviz ayrıca çalışır
+fetchPrices();
+setInterval(fetchPrices, 5000);
+fetchDoviz();
+setInterval(fetchDoviz, 60000);
+
+// Buluttan güncel ayarları çek — max 3 saniye bekle
+var cloudLoaded = false;
+var cloudTimeout = setTimeout(function() {
+  if (!cloudLoaded) {
+    // Firebase gelmediyse localStorage ile devam et, sorun yok
+    cloudLoaded = true;
+  }
+}, 3000);
+
+jsonbinLoad(function(cloud) {
+  if (cloudLoaded) return; // zaten timeout oldu
+  cloudLoaded = true;
+  clearTimeout(cloudTimeout);
+  if (cloud && cloud.shopName) {
+    settings = cloud;
+    if (typeof settings.logoData !== 'string') settings.logoData = '';
+    if (!settings.theme) settings.theme = 'dark';
+    if (typeof settings.shopPhone !== 'string') settings.shopPhone = '';
+    if (settings.adminPass) ADMIN_PASS = settings.adminPass;
+    if (settings.aktifMod) aktifMod = settings.aktifMod;
+    updateModBtn();
+    localStorage.setItem('gp10', JSON.stringify(settings));
+    document.getElementById('priceRows').innerHTML = '';
+    renderTable();
+    refreshAdminDataViews();
+  }
+});
+
+// ── DÖVİZ BANT ───────────────────────────────────────────────────────────────
+var dovizCache = {};
+var liveDoviz = {}; // worker'dan gelen canlı döviz verileri
+
+
+function isAdminEditing() {
+  try {
+    var el = document.activeElement;
+    if (!el) return false;
+    if (el.classList && (el.classList.contains('admin-inp') || el.classList.contains('add-item-inp'))) return true;
+    var ov = document.getElementById('overlay');
+    if (ov && ov.classList.contains('open') && el.tagName && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT')) return true;
+  } catch(e) {}
+  return false;
+}
+
+function refreshAdminDataViews() {
+  if (isAdminEditing()) return;
+  try { if (document.getElementById('adminDovizRows')) renderAdminDoviz(); } catch(e) {}
+  try { if (document.getElementById('adminHurdaRows')) renderAdminHurda(); } catch(e) {}
+  try { if (document.getElementById('ekstraDovizRows')) renderEkstraDoviz(); } catch(e) {}
+  try { if (document.getElementById('ekstraHurdaRows')) renderEkstraHurda(); } catch(e) {}
+  try { if (document.getElementById('desktopDovizRows') || document.getElementById('desktopHurdaRows')) renderDesktopPanel(); } catch(e) {}
+}
+
+function fetchDoviz() {
+  // Worker'dan döviz verilerini çek (zaten fetchPrices ile geliyor, cachedDoviz kullan)
+  // Yedek olarak exchangerate-api kullan
+  var url = 'https://api.exchangerate-api.com/v4/latest/USD';
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.timeout = 8000;
+  xhr.onload = function() {
+    if (xhr.status >= 200 && xhr.status < 300) {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        var rates = data.rates;
+        var usdTry = rates['TRY'];
+        var eurTry = rates['TRY'] / rates['EUR'];
+        var gbpTry = rates['TRY'] / rates['GBP'];
+        cachedUsdTry = usdTry;
+        updateDovizBant({ USD: usdTry, EUR: eurTry, GBP: gbpTry });
+      } catch(e) { fetchDovizFallback(); }
+    } else { fetchDovizFallback(); }
+  };
+  xhr.onerror = xhr.ontimeout = fetchDovizFallback;
+  xhr.send();
+}
+
+function fetchDovizFallback() {
+  var url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://api.exchangerate-api.com/v4/latest/USD');
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.timeout = 8000;
+  xhr.onload = function() {
+    if (xhr.status >= 200 && xhr.status < 300) {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        var rates = data.rates;
+        var usdTry = rates['TRY'];
+        var eurTry = rates['TRY'] / rates['EUR'];
+        var gbpTry = rates['TRY'] / rates['GBP'];
+        cachedUsdTry = usdTry;
+        updateDovizBant({ USD: usdTry, EUR: eurTry, GBP: gbpTry });
+      } catch(e) {}
+    }
+  };
+  xhr.onerror = xhr.ontimeout = function(){};
+  xhr.send();
+}
+
+function updateDovizBant(rates) {
+  // Önce worker'dan gelen liveDoviz varsa onu kullan, yoksa exchangerate'den gelenle devam et
+  var bantItems = [];
+  if (liveDoviz && liveDoviz.usdAlis) {
+    var dovizListesi = [
+      { sym:'🇺🇸 USD', id:'usd' },
+      { sym:'🇪🇺 EUR', id:'eur' },
+      { sym:'🇬🇧 GBP', id:'gbp' },
+      { sym:'🇸🇦 SAR', id:'sar' },
+      { sym:'🇨🇭 CHF', id:'chf' },
+    ];
+    dovizListesi.forEach(function(d) {
+      var duzA = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'A']) || 0);
+      var duzS = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'S']) || 0);
+      var alis  = liveDoviz[d.id+'Alis']  ? (liveDoviz[d.id+'Alis']  + duzA).toFixed(2) : null;
+      var satis = liveDoviz[d.id+'Satis'] ? (liveDoviz[d.id+'Satis'] + duzS).toFixed(2) : null;
+      if (alis && satis) bantItems.push({ sym: d.sym, alis: alis, satis: satis });
+    });
+  } else {
+    bantItems = [
+      { sym:'🇺🇸 USD', alis: rates.USD ? rates.USD.toFixed(2) : null, satis: rates.USD ? rates.USD.toFixed(2) : null },
+      { sym:'🇪🇺 EUR', alis: rates.EUR ? rates.EUR.toFixed(2) : null, satis: rates.EUR ? rates.EUR.toFixed(2) : null },
+      { sym:'🇬🇧 GBP', alis: rates.GBP ? rates.GBP.toFixed(2) : null, satis: rates.GBP ? rates.GBP.toFixed(2) : null },
+    ];
+  }
+  var html = '';
+  bantItems.forEach(function(it) {
+    if (!it.alis) return;
+    html += '<span class="doviz-item">' + it.sym
+      + ' <span class="d-kur" style="color:#5dba6a">' + it.alis + '</span>'
+      + '<span style="color:#888;margin:0 2px">/</span>'
+      + '<span class="d-kur" style="color:#e07050">' + it.satis + '</span>'
+      + ' ₺</span>';
+  });
+  var bantEl = document.getElementById('dovizBant');
+  bantEl.innerHTML = html + html;
+}
+
+// ── ADMİN DÖVİZ & HURDA TABLOSU ──────────────────────────────────────────────
+function renderAdminDoviz() {
+  var html = '';
+  if (!liveDoviz) liveDoviz = {};
+  DOVIZLER.forEach(function(d) {
+    var alis  = liveDoviz[d.id+'Alis']  || 0;
+    var satis = liveDoviz[d.id+'Satis'] || 0;
+    var duzA  = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'A']) || 0);
+    var duzS  = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'S']) || 0);
+    var gosterA = alis  ? (alis  + duzA).toFixed(2) : '—';
+    var gosterS = satis ? (satis + duzS).toFixed(2) : '—';
+    html += '<div class="admin-row" style="flex-wrap:wrap;gap:4px">'
+      + '<span class="row-label" style="min-width:60px">' + d.flag + ' ' + d.label + '</span>'
+      + '<span style="font-size:13px;color:#5dba6a;min-width:70px">' + gosterA + ' ₺</span>'
+      + '<span style="font-size:13px;color:#e07050;min-width:70px">' + gosterS + ' ₺</span>'
+      + '<div class="inp-group"><span class="inp-unit">A±₺</span>'
+      + '<input class="admin-inp" type="number" step="0.01" id="duzA_'+d.id+'" value="'+duzA+'" style="width:72px"></div>'
+      + '<div class="inp-group"><span class="inp-unit">S±₺</span>'
+      + '<input class="admin-inp" type="number" step="0.01" id="duzS_'+d.id+'" value="'+duzS+'" style="width:72px"></div>'
+      + '</div>';
+  });
+  document.getElementById('adminDovizRows').innerHTML = html;
+  renderEkstraDoviz();
+}
+
+function renderAdminHurda() {
+  var html = '';
+  HURDALAR.forEach(function(h) {
+    var defA = h.oran * 0.99;
+    var defS = h.oran * 1.00;
+    var carpA = parseFloat((settings.hurdaCarp && settings.hurdaCarp[h.id+'A']) || defA.toFixed(4));
+    var carpS = parseFloat((settings.hurdaCarp && settings.hurdaCarp[h.id+'S']) || defS.toFixed(4));
+    var alis  = hasAlis  ? Math.round(hasAlis  * carpA) : null;
+    var satis = hasSatis ? Math.round(hasSatis * carpS) : null;
+    html += '<div class="admin-row" style="flex-wrap:wrap;gap:4px">'
+      + '<span class="row-label" style="min-width:100px">' + h.label + '</span>'
+      + '<span style="font-size:13px;color:#5dba6a;min-width:70px">' + (alis ? fmt(alis) : '—') + ' ₺</span>'
+      + '<span style="font-size:13px;color:#e07050;min-width:70px">' + (satis ? fmt(satis) : '—') + ' ₺</span>'
+      + '<div class="inp-group"><span class="inp-unit">Alış×</span>'
+      + '<input class="admin-inp" type="number" step="0.0001" min="0.1" max="2" id="hurdaA_'+h.id+'" value="'+carpA.toFixed(4)+'" style="width:78px"></div>'
+      + '<div class="inp-group"><span class="inp-unit">Satış×</span>'
+      + '<input class="admin-inp" type="number" step="0.0001" min="0.1" max="2" id="hurdaS_'+h.id+'" value="'+carpS.toFixed(4)+'" style="width:78px"></div>'
+      + '</div>';
+  });
+  document.getElementById('adminHurdaRows').innerHTML = html;
+  renderEkstraHurda();
+}
+
+function renderDesktopPanel() {
+  var side = document.getElementById('desktopSide');
+  if (!side) return;
+  // Sadece admin modunda ve geniş ekranda göster
+  var isAdmin = window.location.search.indexOf('admin') !== -1;
+  var isDesktop = window.innerWidth >= 768;
+  side.style.display = (isAdmin && isDesktop) ? 'flex' : 'none';
+  if (!isAdmin || !isDesktop) return;
+  side.style.flexDirection = 'column';
+  if (!liveDoviz) liveDoviz = {};
+
+  // Döviz
+  var dovizHtml = '';
+  DOVIZLER.forEach(function(d) {
+    var duzA  = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'A']) || 0);
+    var duzS  = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'S']) || 0);
+    var alis  = liveDoviz[d.id+'Alis']  ? (liveDoviz[d.id+'Alis']  + duzA).toFixed(2) : '—';
+    var satis = liveDoviz[d.id+'Satis'] ? (liveDoviz[d.id+'Satis'] + duzS).toFixed(2) : '—';
+    dovizHtml += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:11px 18px;border-bottom:1px solid #2e2e2e;background:#1a1a1a">'
+      + '<span style="font-size:17px;font-weight:600;color:#e8d9b0">' + d.flag + ' ' + d.label + '</span>'
+      + '<span style="font-size:17px;font-weight:600;color:#5dba6a;text-align:right">' + alis + '</span>'
+      + '<span style="font-size:17px;font-weight:600;color:#e07050;text-align:right">' + satis + '</span>'
+      + '</div>';
+  });
+  document.getElementById('desktopDovizRows').innerHTML = dovizHtml;
+
+  // Hurda
+  var hurdaHtml = '';
+  HURDALAR.forEach(function(h) {
+    var carpA = parseFloat((settings.hurdaCarp && settings.hurdaCarp[h.id+'A']) || h.oran * 0.99);
+    var carpS = parseFloat((settings.hurdaCarp && settings.hurdaCarp[h.id+'S']) || h.oran);
+    var alis  = hasAlis  ? fmt(Math.round(hasAlis  * carpA)) : '—';
+    var satis = hasSatis ? fmt(Math.round(hasSatis * carpS)) : '—';
+    hurdaHtml += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:11px 18px;border-bottom:1px solid #2e2e2e;background:#1a1a1a">'
+      + '<span style="font-size:15px;font-weight:600;color:#e8d9b0">' + h.label + '</span>'
+      + '<span style="font-size:15px;font-weight:600;color:#5dba6a;text-align:right">' + alis + '</span>'
+      + '<span style="font-size:15px;font-weight:600;color:#e07050;text-align:right">' + satis + '</span>'
+      + '</div>';
+  });
+  document.getElementById('desktopHurdaRows').innerHTML = hurdaHtml;
+}
+
+function renderEkstraDoviz() {
+  var el = document.getElementById('ekstraDovizRows');
+  if (!el) return;
+  var html = '';
+  DOVIZLER.forEach(function(d) {
+    var alis  = liveDoviz[d.id+'Alis']  || 0;
+    var satis = liveDoviz[d.id+'Satis'] || 0;
+    var duzA  = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'A']) || 0);
+    var duzS  = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'S']) || 0);
+    var gosterA = alis  ? (alis  + duzA).toFixed(2) : '—';
+    var gosterS = satis ? (satis + duzS).toFixed(2) : '—';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:9px 12px;border-bottom:1px solid #2e2e2e;background:#1a1a1a">'
+      + '<span style="font-size:15px;font-weight:600;color:#e8d9b0">' + d.flag + ' ' + d.label + '</span>'
+      + '<span style="font-size:15px;font-weight:600;color:#f0e6c8;text-align:right">' + gosterA + '</span>'
+      + '<span style="font-size:15px;font-weight:600;color:#f0e6c8;text-align:right">' + gosterS + '</span>'
+      + '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function renderEkstraHurda() {
+  var el = document.getElementById('ekstraHurdaRows');
+  if (!el) return;
+  var html = '';
+  HURDALAR.forEach(function(h) {
+    var defA = h.oran * 0.99;
+    var defS = h.oran * 1.00;
+    var carpA = parseFloat((settings.hurdaCarp && settings.hurdaCarp[h.id+'A']) || defA);
+    var carpS = parseFloat((settings.hurdaCarp && settings.hurdaCarp[h.id+'S']) || defS);
+    var alis  = hasAlis  ? Math.round(hasAlis  * carpA) : null;
+    var satis = hasSatis ? Math.round(hasSatis * carpS) : null;
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:9px 12px;border-bottom:1px solid #2e2e2e;background:#1a1a1a">'
+      + '<span style="font-size:15px;font-weight:600;color:#e8d9b0">' + h.label + '</span>'
+      + '<span style="font-size:15px;font-weight:600;color:#f0e6c8;text-align:right">' + (alis ? fmt(alis) : '—') + '</span>'
+      + '<span style="font-size:15px;font-weight:600;color:#f0e6c8;text-align:right">' + (satis ? fmt(satis) : '—') + '</span>'
+      + '</div>';
+  });
+  el.innerHTML = html;
+}
+
+// hareketli/normal mod canlı senkron
+setInterval(function() {
+  try {
+    if (typeof jsonbinLoad === 'function') {
+      jsonbinLoad(function(data) {
+        if (!data) return;
+        if (isAdminEditing()) return;
+        if (data.aktifMod && data.aktifMod !== aktifMod) {
+          aktifMod = data.aktifMod;
+          try { localStorage.setItem('gp10_mod', aktifMod); } catch(e) {}
+          updateModBtn();
+          try { document.getElementById('priceRows').innerHTML = ''; } catch(e) {}
+          try { renderTable(); } catch(e) {}
+        }
+      });
+    }
+  } catch(e) {}
+}, 2000);
+
+</script>
+
+<script>
+(function(){
+  try {
+    var aktifMod = localStorage.getItem('gp10_mod') || 'normal';
+
+    window.updateModBtn = function() {
+      var btn = document.getElementById('modBtn');
+      if (!btn) return;
+      if (aktifMod === 'hareketli') {
+        btn.classList.add('hareketli');
+        btn.textContent = '⚡ Hareketli';
+      } else {
+        btn.classList.remove('hareketli');
+        btn.textContent = '✅ Normal';
+      }
+    };
+
+    window.toggleMod = function() {
+      aktifMod = aktifMod === 'normal' ? 'hareketli' : 'normal';
+      localStorage.setItem('gp10_mod', aktifMod);
+      if (typeof settings !== 'undefined') {
+        settings.aktifMod = aktifMod;
+        try { jsonbinSave(settings, function(){}); } catch(e){}
+      }
+      updateModBtn();
+      try {
+        document.getElementById('priceRows').innerHTML = '';
+        if (typeof renderTable === 'function') renderTable();
+      } catch(e){}
+    };
+
+    document.addEventListener("DOMContentLoaded", function(){
+      updateModBtn();
+    });
+
+  } catch(e){}
+})();
+</script>
+
+
+<script>
+/* CANLI BULUT SENKRON - müşteri ekranı için */
+(function () {
+  var lastRemoteText = "";
+
+  function applyRemoteSettings(data) {
+    if (!data) return;
+
+    try {
+      var newText = JSON.stringify(data);
+      if (newText === lastRemoteText) return;
+      lastRemoteText = newText;
+    } catch (e) {}
+
+    try {
+      if (typeof settings !== "undefined" && data) {
+        settings = data;
+        if (typeof settings.logoData !== "string") settings.logoData = "";
+        if (!settings.theme) settings.theme = "dark";
+        if (typeof settings.shopPhone !== "string") settings.shopPhone = "";
+        try { applyShopLogo(); applyTheme(); } catch(e) {}
+      }
+
+      if (typeof aktifMod !== "undefined" && data.aktifMod) {
+        aktifMod = data.aktifMod;
+        try { localStorage.setItem("gp10_mod", aktifMod); } catch(e) {}
+        if (typeof updateModBtn === "function") updateModBtn();
+      }
+
+      try {
+        var rows = document.getElementById("priceRows");
+        if (rows) rows.innerHTML = "";
+      } catch(e) {}
+
+      if (typeof renderTable === "function") renderTable();
+      if (typeof renderEkstraDoviz === "function") renderEkstraDoviz();
+      if (typeof renderEkstraHurda === "function") renderEkstraHurda();
+      if (typeof updateCustomerLink === "function") updateCustomerLink();
+
+      if (typeof updateHasInfo === "function") {
+        updateHasInfo("Canlı", true);
+      }
+    } catch (e) {
+      console.log("Canlı senkron uygulama hatası:", e);
+    }
+  }
+
+  function pollRemote() {
+    try {
+      if (typeof jsonbinLoad !== "function") return;
+      if (window.location.search.indexOf("admin") !== -1) return;
+
+      jsonbinLoad(function (data) {
+        if (!data) return;
+        applyRemoteSettings(data);
+      });
+    } catch (e) {
+      console.log("Canlı senkron okuma hatası:", e);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(pollRemote, 800);
+    setInterval(pollRemote, 2000);
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  function getTradingDayKey() {
+    var d = new Date();
+    var resetHour = 9;
+    if (d.getHours() < resetHour) d.setDate(d.getDate() - 1);
+    var y = d.getFullYear();
+    var m = String(d.getMonth()+1).padStart(2,'0');
+    var day = String(d.getDate()).padStart(2,'0');
+    return y + '-' + m + '-' + day;
+  }
+  function getBaseStorageKey(priceKey){ return 'gp10_pct_base_' + getTradingDayKey() + '_' + priceKey; }
+  function getDailyBase(priceKey, currentValue){
+    var key = getBaseStorageKey(priceKey);
+    var saved = Number(localStorage.getItem(key) || 0);
+    if (!saved && currentValue) {
+      saved = Number(currentValue);
+      try { localStorage.setItem(key, String(saved)); } catch(e){}
+    }
+    return saved;
+  }
+  function getPercentChange(baseValue, newValue){
+    baseValue = Number(baseValue); newValue = Number(newValue);
+    if (!baseValue || !newValue) return {text:'', cls:'change-same'};
+    var diff = ((newValue - baseValue) / baseValue) * 100;
+    var rounded = Math.abs(diff).toFixed(2);
+    if (diff > 0) return {text:'+%' + rounded, cls:'change-up'};
+    if (diff < 0) return {text:'-%' + rounded, cls:'change-down'};
+    return {text:'%0.00', cls:'change-same'};
+  }
+  function formatPriceWithChange(newVal, priceKey){
+    if (!newVal) return '—';
+    var baseVal = getDailyBase(priceKey, newVal);
+    var ch = getPercentChange(baseVal, newVal);
+    if (!ch.text) return fmt(newVal);
+    return fmt(newVal) + '<span class="change-rate ' + ch.cls + '">' + ch.text + '</span>';
+  }
+  function updatePriceWithChange(el, row, newVal, priceKey, cls, isAlis){
+    if (!el) return;
+    if (!newVal) { el.textContent = '—'; el.className = cls; return; }
+    var visualPrev = Number(el.getAttribute('data-last') || 0);
+    el.innerHTML = formatPriceWithChange(newVal, priceKey);
+    el.className = cls;
+    el.setAttribute('data-last', String(newVal));
+    if (!visualPrev) return;
+    if (newVal > visualPrev) {
+      el.classList.add('price-up');
+      if (row && isAlis) { row.classList.remove('flash-down'); row.classList.add('flash-up'); }
+      if (row && !isAlis) { row.classList.remove('flash-up'); row.classList.add('flash-down'); }
+    } else if (newVal < visualPrev) {
+      el.classList.add('price-down');
+      if (row && isAlis) { row.classList.remove('flash-up'); row.classList.add('flash-down'); }
+      if (row && !isAlis) { row.classList.remove('flash-down'); row.classList.add('flash-up'); }
+    } else {
+      el.classList.add('price-same');
+    }
+    if (row && isAlis) setTimeout(function(){ row.classList.remove('flash-up','flash-down'); }, 900);
+  }
+
+  // renderTable override
+  var _oldRenderTable = renderTable;
+  renderTable = function() {
+    document.getElementById('shopName').textContent  = settings.shopName;
+    document.getElementById('shopPhone').textContent = settings.shopPhone;
+
+    var container = document.getElementById('priceRows');
+    var isFirst   = !container.innerHTML;
+
+    getActiveItems().forEach(function(item) {
+      var lab  = getLabor(item);
+      var newA = hasAlis  ? Math.round(hasAlis  * lab.a) : null;
+      var newS = hasSatis ? Math.round(hasSatis * lab.s) : null;
+      var kkOran = parseFloat(settings.kkOran) || 0;
+      var newKK = newS ? Math.round(newS * (1 + kkOran / 100)) : null;
+      var aId  = 'av_' + item.id;
+      var sId  = 'sv_' + item.id;
+      var kId  = 'kv_' + item.id;
+      var rId  = 'rv_' + item.id;
+
+      if (isFirst) {
+        var div = document.createElement('div');
+        div.className = 'price-row'; div.id = rId;
+        div.innerHTML = '<span class="birim">' + item.label + '</span>'
+          + '<span class="alis"  id="' + aId + '">' + formatPriceWithChange(newA, item.id + '_a') + '</span>'
+          + '<span class="satis" id="' + sId + '">' + formatPriceWithChange(newS, item.id + '_s') + '</span>'
+          + '<span class="kk"    id="' + kId + '">' + (newKK ? fmt(newKK) : '—') + '</span>';
+        container.appendChild(div);
+      } else {
+        updatePriceWithChange(document.getElementById(aId), document.getElementById(rId), newA, item.id + '_a', 'alis', true);
+        updatePriceWithChange(document.getElementById(sId), document.getElementById(rId), newS, item.id + '_s', 'satis', false);
+        var kkEl = document.getElementById(kId);
+        if (kkEl) kkEl.textContent = newKK ? fmt(newKK) : '—';
+      }
+      prevPrices[item.id + '_a'] = newA;
+      prevPrices[item.id + '_s'] = newS;
+    });
+
+    try { renderPortfolio(); } catch(e){}
+  };
+
+  updateCell = function(el, row, newVal, oldVal, cls, isAlis) {
+    var key = '';
+    if (el && el.id && el.id.indexOf('av_') === 0) key = el.id.slice(3) + '_a';
+    else if (el && el.id && el.id.indexOf('sv_') === 0) key = el.id.slice(3) + '_s';
+    updatePriceWithChange(el, row, newVal, key, cls, isAlis);
+  };
+
+  // portfolio
+  var portfolioEditId = null;
+  function pfFmtTl(v){ return fmt(Math.round(Number(v || 0))) + ' TL'; }
+  function pfFmtNum(v){
+    v = Number(v || 0);
+    return v.toLocaleString('tr-TR', {maximumFractionDigits:3});
+  }
+  function getPortfolioStorage(){
+    try { return JSON.parse(localStorage.getItem('gp10_portfolio') || '[]'); } catch(e){ return []; }
+  }
+  function setPortfolioStorage(items){
+    try { localStorage.setItem('gp10_portfolio', JSON.stringify(items)); } catch(e){}
+  }
+  function pfGetPortfolioOptions(){
+    var arr = [];
+    try {
+      var items = getActiveItems();
+      items.forEach(function(it){
+        var id = String(it.id || '');
+        var label = String(it.label || '').trim();
+        var low = label.toLowerCase();
+        if (!label) return;
+        if (low.indexOf('gram altın') !== -1 || low.indexOf('gram altin') !== -1) return;
+        if (low.indexOf('has altın') !== -1 || low.indexOf('has altin') !== -1) return;
+        arr.push({value:'item:' + id, label:label});
+      });
+    } catch(e){}
+    arr.push({value:'usd', label:'Dolar'});
+    arr.push({value:'eur', label:'Euro'});
+    return arr;
+  }
+  function fillPortfolioTypeSelect(){
+    var el = document.getElementById('pfType');
+    if (!el) return;
+    var current = el.value || '';
+    var opts = pfGetPortfolioOptions();
+    el.innerHTML = opts.map(function(o){
+      return '<option value="' + o.value + '">' + o.label + '</option>';
+    }).join('');
+    if (current && Array.from(el.options).some(function(x){ return x.value === current; })) {
+      el.value = current;
+    }
+  }
+  function pfTypeLabel(type){
+    if (type === 'usd') return 'Dolar';
+    if (type === 'eur') return 'Euro';
+    if (String(type).indexOf('item:') === 0) {
+      try {
+        var id = String(type).slice(5);
+        var items = getActiveItems();
+        for (var i=0;i<items.length;i++) {
+          if (String(items[i].id) === id) return String(items[i].label || id);
+        }
+      } catch(e){}
+      return String(type).slice(5);
+    }
+    return type;
+  }
+  function pfParseMoney(val){
+    if (val == null) return 0;
+    var s = String(val).trim().replace(/₺|TL|\$/gi,'').trim();
+    if (s.indexOf(',') !== -1 && s.indexOf('.') !== -1) {
+      if (s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(/\./g, '').replace(',', '.');
+      else s = s.replace(/,/g, '');
+    } else if (s.indexOf(',') !== -1) {
+      s = s.replace(',', '.');
+    }
+    var n = Number(s);
+    return isNaN(n) ? 0 : n;
+  }
+  function pfFindCurrencyFromBand(code){
+    try {
+      var txt = document.getElementById('dovizBant').textContent || '';
+      var re = new RegExp(code + '\s+([\d.,]+)\s*\/\s*([\d.,]+)', 'i');
+      var m = txt.match(re);
+      if (m) {
+        var buy = pfParseMoney(m[1]);
+        if (buy) return buy;
+      }
+    } catch(e){}
+    return 0;
+  }
+  function pfFindPriceByType(type){
+    if (type === 'usd') return pfFindCurrencyFromBand('USD') || 0;
+    if (type === 'eur') return pfFindCurrencyFromBand('EUR') || 0;
+    if (String(type).indexOf('item:') === 0) {
+      var wantedId = String(type).slice(5);
+      try {
+        var items = getActiveItems();
+        for (var i=0;i<items.length;i++) {
+          if (String(items[i].id) === wantedId) {
+            var lab = getLabor(items[i]);
+            var v = hasAlis ? Math.round(hasAlis * lab.a) : (hasSatis ? Math.round(hasSatis * lab.s) : 0);
+            if (v) return Number(v);
+          }
+        }
+      } catch(e){}
+    }
+    return 0;
+  }
+  function pfCompute(item){
+    var qty = Number(item.qty || 0);
+    var cost = Number(item.cost || 0);
+    var unit = pfFindPriceByType(item.type);
+    var current = qty * unit;
+    var diff = current - cost;
+    var pct = cost > 0 ? (diff / cost) * 100 : 0;
+    return {unit:unit, current:current, diff:diff, pct:pct};
+  }
+  window.renderPortfolio = function(){
+    fillPortfolioTypeSelect();
+    var listEl = document.getElementById('pfList');
+    if (!listEl) return;
+    var items = getPortfolioStorage();
+    var totalCurrent = 0, totalCost = 0, html = '';
+    items.forEach(function(item){
+      var calc = pfCompute(item);
+      totalCurrent += calc.current;
+      totalCost += Number(item.cost || 0);
+      var pctCls = calc.pct > 0 ? 'up' : (calc.pct < 0 ? 'down' : 'same');
+      var pctText = (calc.pct > 0 ? '+%' : (calc.pct < 0 ? '-%' : '%')) + Math.abs(calc.pct).toFixed(2);
+      html += '<div class="holding-card">'
+        + '<div class="holding-head"><div class="holding-name">' + pfTypeLabel(item.type) + '</div><div class="holding-pct ' + pctCls + '">' + pctText + '</div></div>'
+        + '<div class="holding-grid">'
+        + '<div>Miktar<strong>' + pfFmtNum(item.qty) + '</strong></div>'
+        + '<div>Güncel Birim<strong>' + pfFmtTl(calc.unit) + '</strong></div>'
+        + '<div>Güncel Değer<strong>' + pfFmtTl(calc.current) + '</strong></div>'
+        + '<div>Maliyet<strong>' + pfFmtTl(item.cost) + '</strong></div>'
+        + '<div>Kâr / Zarar<strong style="color:' + (calc.diff >= 0 ? '#2ecc71' : '#e74c3c') + '">' + (calc.diff >= 0 ? '+' : '') + pfFmtTl(calc.diff) + '</strong></div>'
+        + '<div>Tür<strong>' + pfTypeLabel(item.type) + '</strong></div>'
+        + '</div>'
+        + (item.note ? '<div class="holding-note">Not: ' + item.note + '</div>' : '')
+        + '<div class="portfolio-btn-row"><button class="portfolio-btn-secondary" onclick="editPortfolioItem(\'' + item.id + '\')">Düzenle</button><button class="portfolio-btn-danger" onclick="deletePortfolioItem(\'' + item.id + '\')">Sil</button></div>'
+        + '</div>';
+    });
+    if (!html) html = '<div class="empty-portfolio">Henüz kayıtlı varlık yok.</div>';
+    listEl.innerHTML = html;
+
+    var totalDiff = totalCurrent - totalCost;
+    var usdRate = pfFindPriceByType('usd') || 0;
+    var eurRate = pfFindPriceByType('eur') || 0;
+    document.getElementById('pfTotalCurrent').textContent = pfFmtTl(totalCurrent);
+    document.getElementById('pfTotalCost').textContent = pfFmtTl(totalCost);
+    var profitEl = document.getElementById('pfProfitLoss');
+    profitEl.textContent = (totalDiff >= 0 ? '+' : '') + pfFmtTl(totalDiff);
+    profitEl.className = 'value ' + (totalDiff >= 0 ? 'kar' : 'zarar');
+    document.getElementById('pfUsdEur').textContent = pfFmtNum(usdRate ? totalCurrent / usdRate : 0) + ' $ / ' + pfFmtNum(eurRate ? totalCurrent / eurRate : 0) + ' €';
+  };
+  window.editPortfolioItem = function(id){
+    var item = getPortfolioStorage().find(function(x){ return x.id === id; });
+    if (!item) return;
+    portfolioEditId = id;
+    document.getElementById('pfType').value = item.type;
+    document.getElementById('pfQty').value = item.qty;
+    document.getElementById('pfCost').value = item.cost;
+    document.getElementById('pfNote').value = item.note || '';
+    document.getElementById('pfSaveBtn').textContent = 'Güncelle';
+    document.getElementById('pfCancelEditBtn').style.display = 'inline-block';
+  };
+  window.deletePortfolioItem = function(id){
+    setPortfolioStorage(getPortfolioStorage().filter(function(x){ return x.id !== id; }));
+    if (portfolioEditId === id) {
+      portfolioEditId = null;
+      document.getElementById('pfSaveBtn').textContent = 'Varlık Ekle';
+      document.getElementById('pfCancelEditBtn').style.display = 'none';
+    }
+    renderPortfolio();
+    try { showToast('Varlık silindi'); } catch(e){}
+  };
+  function clearPortfolioForm(){
+    portfolioEditId = null;
+    fillPortfolioTypeSelect(); document.getElementById('pfType').selectedIndex = 0;
+    document.getElementById('pfQty').value = '';
+    document.getElementById('pfCost').value = '';
+    document.getElementById('pfNote').value = '';
+    document.getElementById('pfSaveBtn').textContent = 'Varlık Ekle';
+    document.getElementById('pfCancelEditBtn').style.display = 'none';
+  }
+  function savePortfolioItem(){
+    var type = document.getElementById('pfType').value;
+    var qty = Number(document.getElementById('pfQty').value || 0);
+    var cost = Number(document.getElementById('pfCost').value || 0);
+    var note = (document.getElementById('pfNote').value || '').trim();
+    if (!qty || qty <= 0) { try { showToast('Miktar girin'); } catch(e){} return; }
+    if (!cost && cost !== 0) { try { showToast('Maliyet girin'); } catch(e){} return; }
+    var items = getPortfolioStorage();
+    if (portfolioEditId) {
+      items = items.map(function(x){ if (x.id === portfolioEditId) { x.type = type; x.qty = qty; x.cost = cost; x.note = note; } return x; });
+      try { showToast('Varlık güncellendi'); } catch(e){}
+    } else {
+      items.push({id:'pf_' + Date.now(), type:type, qty:qty, cost:cost, note:note});
+      try { showToast('Varlık eklendi'); } catch(e){}
+    }
+    setPortfolioStorage(items);
+    clearPortfolioForm();
+    renderPortfolio();
+  }
+  function showPortfolioMode(){
+    document.body.classList.add('portfolio-mode');
+    var pBtn = document.getElementById('btnPortfolioTop');
+    var firstBtn = document.getElementById('btnPricesTop');
+    if (pBtn) pBtn.classList.add('active');
+    if (firstBtn) firstBtn.classList.remove('active');
+    renderPortfolio();
+  }
+  function showPriceMode(){
+    document.body.classList.remove('portfolio-mode');
+    var pBtn = document.getElementById('btnPortfolioTop');
+    var firstBtn = document.getElementById('btnPricesTop');
+    if (pBtn) pBtn.classList.remove('active');
+    if (firstBtn) firstBtn.classList.add('active');
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    fillPortfolioTypeSelect();
+    var navPf = document.getElementById('btnPortfolioTop');
+    if (navPf) navPf.onclick = showPortfolioMode;
+    var firstBtn = document.getElementById('btnPricesTop');
+    if (firstBtn) firstBtn.onclick = showPriceMode;
+    var saveBtn = document.getElementById('pfSaveBtn');
+    if (saveBtn) saveBtn.onclick = savePortfolioItem;
+    var cancelBtn = document.getElementById('pfCancelEditBtn');
+    if (cancelBtn) cancelBtn.onclick = clearPortfolioForm;
+    try { renderPortfolio(); } catch(e){}
+  });
+})();
+</script>
+
+</body>
+</html>
