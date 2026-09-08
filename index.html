@@ -396,19 +396,90 @@ body.light-mode .desktop-side{background:#e4dccf!important;border-color:#c6b8a4!
 .header #shopLogo{background:#eee8dc;padding:6px 14px;border:1px solid rgba(185,154,85,.35)}
 body.light-mode .header #shopLogo{background:#eee8dc;border-color:#bfae91;box-shadow:0 5px 18px rgba(78,58,35,.08)}
 
+
+
+/* ===== EĞİLMEZ PREMIUM UI v3 ===== */
+:root{
+  --bg:#0d1012;--surface:#15191c;--surface2:#1b2024;--line:#30363b;
+  --text:#f5efe1;--muted:#9aa2aa;--gold:#d5ad55;--gold2:#f0ce78;
+  --blue:#8ec5ff;--green:#49d17d;--red:#ff6b68;
+}
+body{max-width:560px;background:var(--bg);color:var(--text);padding-bottom:76px;}
+.header{background:linear-gradient(180deg,#0f1316 0%,#11161a 100%);border-bottom:0;padding:24px 18px 14px;}
+.header .logo-placeholder{display:none!important}
+.header .logo{max-width:240px!important;max-height:72px!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0 auto 4px!important;}
+.header h1{font-family:Georgia,'Times New Roman',serif;font-size:42px;line-height:.95;font-weight:400;letter-spacing:-1.5px;text-transform:lowercase;color:#e8d6b2;text-shadow:none;margin-top:4px;}
+.header h1::after{content:'KUYUMCULUK';display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:11px;letter-spacing:5px;font-weight:700;color:#c8ab72;margin-top:8px;text-transform:uppercase;}
+.header .phone{display:none!important}
+.has-info{display:none!important}
+.admin-btn,.theme-btn{top:26px;width:42px;height:42px;border-radius:16px;border:1px solid #3b4146;background:#171c20;color:#e2c174;box-shadow:0 8px 24px rgba(0,0,0,.22)}
+.admin-btn{right:16px}.theme-btn{right:66px}.mod-btn{left:16px;top:28px}
+
+.market-status{margin:0 14px 12px;display:grid;grid-template-columns:1.2fr .8fr;gap:0;background:linear-gradient(180deg,#171c20,#13181b);border:1px solid #333a40;border-radius:22px;box-shadow:0 12px 30px rgba(0,0,0,.22);overflow:hidden}
+.market-status .status-cell{padding:13px 14px;min-width:0}.market-status .status-cell+ .status-cell{border-left:1px solid #31373c}
+.status-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:750;color:#f0eadb}.status-title .dot{width:10px;height:10px;border-radius:50%;background:#31d26f;box-shadow:0 0 0 5px rgba(49,210,111,.11)}
+.status-sub{margin-top:5px;font-size:12px;color:#98a0a7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.status-phone{color:#d7c59f}
+
+.top-switcher{margin:0 14px 12px;padding:4px;background:#12171a;border:1px solid #333a40;border-radius:20px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.top-switch-btn{border:0!important;border-radius:16px!important;background:transparent!important;color:#aeb5bb!important;padding:12px 8px!important;font-size:14px!important;font-weight:750!important}
+.top-switch-btn.active,body.portfolio-mode .top-switch-btn[data-view='portfolio'],body:not(.portfolio-mode) .top-switch-btn[data-view='prices']{background:linear-gradient(180deg,#e1bd64,#bd8f36)!important;color:#17130b!important;box-shadow:0 8px 22px rgba(205,157,56,.22)!important}
+
+.doviz-bant{margin:0 14px 12px;border:1px solid #2f363b;border-radius:16px;background:#111619;overflow:hidden}
+.doviz-bant-inner{padding:8px 0}.doviz-item{font-size:12px;color:#b9c0c5}.doviz-item .d-kur{color:#e4c36d}
+
+.desktop-main{margin:0 14px 12px;border:1px solid #343b40;border-radius:22px;overflow:hidden;background:#12171a;box-shadow:0 14px 34px rgba(0,0,0,.18)}
+.table-header{background:#1a2024;border:0;border-bottom:1px solid #30373c;padding:11px 14px}.table-header span{color:#aeb5bb;font-size:12px}.table-header span:first-child{color:#e1c36f}
+.price-row{padding:13px 14px;border-bottom:1px solid #2b3136;background:#13181b}.price-row:nth-child(even){background:#161b1f}
+.price-row .birim{font-size:16px;color:#eee5d2;font-weight:650}.price-row .alis,.price-row .satis{font-size:16px;color:#f4ead4;font-weight:750}.price-row .kk{font-size:15px;color:#8bc5ff;font-weight:750}
+.price-up{color:#49d17d!important}.price-down{color:#ff6b68!important}.price-same{color:#f4ead4!important}
+.update-bar{background:transparent;padding:12px 0 14px}.upd-text{background:#171d20;border:1px solid #343b40;color:#b8c0c6;padding:8px 16px}
+.bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(560px,100%);z-index:70;background:#101518;border-top:1px solid #31383d;box-shadow:0 -10px 30px rgba(0,0,0,.2)}
+.nav-item{padding:11px 0 12px;color:#8e969d}.nav-item.active{color:#e0bd65}
+
+/* Customer and TV screens never show detailed FX / scrap sections. */
+body:not(.admin-route) #adminEkstra,body:not(.admin-route) #desktopSide{display:none!important}
+body.tv-mode #adminEkstra,body.tv-mode #desktopSide{display:none!important}
+
+/* Light mode: muted ivory, not bright white */
+body.light-mode{--bg:#e9e2d7;--surface:#f3ede3;--surface2:#e4dacb;--line:#cbbda9;--text:#2f2924;--muted:#6c6258;background:#e9e2d7!important;color:#2f2924!important}
+body.light-mode .header{background:linear-gradient(180deg,#eee7dc,#e6ddd0)!important;border:0!important}
+body.light-mode .header h1{color:#5d4636!important}.light-mode .header h1::after{color:#8b6d46!important}
+body.light-mode .admin-btn,body.light-mode .theme-btn,body.light-mode .mod-btn{background:#e1d6c6!important;border-color:#c4b39d!important;color:#6a5136!important}
+body.light-mode .market-status{background:linear-gradient(180deg,#f1ebe1,#e8dfd1)!important;border-color:#c7b9a5!important;box-shadow:0 10px 26px rgba(79,59,37,.08)!important}
+body.light-mode .market-status .status-cell+ .status-cell{border-color:#cbbda9!important}.light-mode .status-title{color:#40372f!important}.light-mode .status-sub{color:#76695e!important}
+body.light-mode .top-switcher{background:#dfd5c7!important;border-color:#c6b8a4!important}.light-mode .top-switch-btn{color:#5a4d42!important}.light-mode .top-switch-btn.active,.light-mode.portfolio-mode .top-switch-btn[data-view='portfolio'],.light-mode:not(.portfolio-mode) .top-switch-btn[data-view='prices']{background:linear-gradient(180deg,#b79560,#967446)!important;color:#fff8eb!important;box-shadow:none!important}
+body.light-mode .doviz-bant{background:#ddd3c4!important;border-color:#c4b59f!important}.light-mode .doviz-item{color:#564a40!important}.light-mode .doviz-item .d-kur{color:#6c532c!important}
+body.light-mode .desktop-main{background:#ede6da!important;border-color:#c8baa6!important;box-shadow:0 10px 28px rgba(75,55,34,.08)!important}
+body.light-mode .table-header{background:#dcd1c1!important;border-color:#c6b7a3!important}.light-mode .table-header span{color:#5d5148!important}.light-mode .table-header span:first-child{color:#735828!important}.light-mode .table-header span:nth-child(4){color:#315f84!important}
+body.light-mode .price-row{background:#eee8dd!important;border-color:#d0c4b3!important}.light-mode .price-row:nth-child(even){background:#e6ddd0!important}.light-mode .price-row .birim{color:#2f2924!important}.light-mode .price-row .alis,.light-mode .price-row .satis{color:#28231f!important}.light-mode .price-row .kk{color:#315f84!important}
+body.light-mode .price-up{color:#1d7147!important}.light-mode .price-down{color:#b6403c!important}.light-mode .price-same{color:#28231f!important}
+body.light-mode .upd-text{background:#e2d9cc!important;border-color:#c7b8a4!important;color:#51463d!important}.light-mode .bottom-nav{background:#dfd6c9!important;border-color:#c5b7a4!important}.light-mode .nav-item{color:#6a5e54!important}.light-mode .nav-item.active{color:#7a5a25!important}
+@media(min-width:768px){body{max-width:1100px}.header{padding-top:28px}.desktop-layout{gap:16px}.desktop-main{flex:1.35}.desktop-side{flex:.65;border-radius:22px;overflow:hidden;margin:0 14px 12px 0}}
+
 </style>
 </head>
 <body>
+<script>if (window.location.search.indexOf('admin') !== -1 && window.location.search.indexOf('tv=1') === -1) document.body.classList.add('admin-route');</script>
 
 <div class="header">
   <div class="logo-placeholder" id="logoPlaceholder">EK</div>
   <img id="shopLogo" class="logo" alt="Logo" style="display:none">
-  <h1 id="shopName">EĞİLMEZ KUYUMCULUK</h1>
+  <h1 id="shopName">eğilmez</h1>
   <div class="phone" id="shopPhone" style="display:none"></div>
   <span class="has-info" id="hasInfo"></span>
   <button class="admin-btn" id="adminBtn" onclick="openAdmin()">⋯</button>
   <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Açık/Koyu Tema">☀️</button>
   <button class="mod-btn" id="modBtn" onclick="toggleMod()">⚡ Normal</button>
+</div>
+<div class="market-status" id="marketStatus">
+  <div class="status-cell">
+    <div class="status-title"><span class="dot"></span><span>Piyasa Canlı</span></div>
+    <div class="status-sub">Son güncelleme: <span id="statusTime">--:--</span></div>
+  </div>
+  <div class="status-cell">
+    <div class="status-title">☎️ <span>İletişim</span></div>
+    <div class="status-sub status-phone" id="statusPhone">Henüz eklenmedi</div>
+  </div>
 </div>
 
 <div class="top-switcher" id="topSwitcher">
@@ -703,7 +774,7 @@ var APP_ID = 'egilmez-kuyumculuk-v1';
 function makeDefaults() {
   var l = {};
   ITEMS.forEach(function(i) { l[i.id] = { a: i.defA, s: i.defS }; });
-  return { appId:APP_ID, shopName:'EĞİLMEZ KUYUMCULUK', shopPhone:'', logoData:'egilmez-logo.png', theme:'dark', labor:l, customItems:[], kkOran:0 };
+  return { appId:APP_ID, shopName:'EĞİLMEZ KUYUMCULUK', shopPhone:'', logoData:'', theme:'dark', labor:l, customItems:[], kkOran:0 };
 }
 
 // Aktif urun listesini dondur (varsayilan + ozel, gizliler haric)
@@ -2150,6 +2221,21 @@ setInterval(function() {
     if (cancelBtn) cancelBtn.onclick = clearPortfolioForm;
     try { renderPortfolio(); } catch(e){}
   });
+})();
+</script>
+
+
+<script>
+(function(){
+  function refreshPremiumStatus(){
+    try{
+      var p=document.getElementById('statusPhone');
+      if(p){ var ph=(typeof settings!=='undefined' && settings.shopPhone)?String(settings.shopPhone).trim():''; p.textContent=ph||'Henüz eklenmedi'; }
+      var t=document.getElementById('statusTime');
+      if(t){ var u=document.getElementById('updTime'); var txt=u?u.textContent:''; var m=txt.match(/(\d{1,2}:\d{2}(?::\d{2})?)/); t.textContent=m?m[1]:new Date().toLocaleTimeString('tr-TR'); }
+    }catch(e){}
+  }
+  setInterval(refreshPremiumStatus,1000);setTimeout(refreshPremiumStatus,300);
 })();
 </script>
 
