@@ -456,29 +456,74 @@ body.light-mode .price-up{color:#1d7147!important}.light-mode .price-down{color:
 body.light-mode .upd-text{background:#e2d9cc!important;border-color:#c7b8a4!important;color:#51463d!important}.light-mode .bottom-nav{background:#dfd6c9!important;border-color:#c5b7a4!important}.light-mode .nav-item{color:#6a5e54!important}.light-mode .nav-item.active{color:#7a5a25!important}
 @media(min-width:768px){body{max-width:1100px}.header{padding-top:28px}.desktop-layout{gap:16px}.desktop-main{flex:1.35}.desktop-side{flex:.65;border-radius:22px;overflow:hidden;margin:0 14px 12px 0}}
 
+
+
+/* ───────────────── EĞİLMEZ PREMIUM V4 ───────────────── */
+:root{--v4gold:#d9b04c;--v4gold2:#f0cf73;--v4bg:#0b0f12;--v4surface:#10161a;--v4surface2:#171d21;--v4line:#384047;--v4text:#f3eee2;--v4muted:#9ca5ad;--v4blue:#7fc0ff}
+body{max-width:560px!important;background:radial-gradient(circle at 88% 0%,rgba(138,92,20,.20),transparent 25%),linear-gradient(180deg,#0b1013,#090d10)!important;color:var(--v4text)!important;padding-bottom:88px}
+.header{min-height:182px!important;padding:24px 18px 12px!important;background:transparent!important;border:0!important;display:flex!important;align-items:flex-start!important;justify-content:center!important;position:relative!important}
+.brand-wrap{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:2px;pointer-events:none}
+.header .logo{width:min(330px,62vw)!important;max-width:330px!important;max-height:112px!important;object-fit:contain!important;margin:0 auto!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;filter:drop-shadow(0 4px 18px rgba(212,176,78,.08))}
+.header .has-info,.header .phone{display:none!important}
+.admin-btn{left:18px!important;right:auto!important;top:31px!important;width:48px!important;height:48px!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#e8ca78!important;font-size:31px!important;border-radius:12px!important;transform:none!important}
+.header-tools{position:absolute;right:18px;top:26px;display:flex;align-items:center;gap:9px;z-index:3}
+.contact-pill{height:48px;min-width:118px;padding:0 13px;border:1px solid #8f7948;border-radius:24px;background:linear-gradient(180deg,rgba(31,29,24,.94),rgba(18,20,21,.94));color:#f0eadf;display:flex;align-items:center;gap:9px;box-shadow:0 8px 28px rgba(0,0,0,.24)}
+.contact-icon{font-size:19px;color:#efd277}.contact-copy{display:flex;flex-direction:column;text-align:left;line-height:1.05}.contact-copy b{font-size:12px}.contact-copy small{font-size:9px;color:#bab2a3;margin-top:4px;max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.theme-btn{position:relative!important;right:auto!important;top:auto!important;transform:none!important;width:78px!important;height:48px!important;padding:0!important;border:1px solid #8f7948!important;border-radius:25px!important;background:#171b1e!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 8px 28px rgba(0,0,0,.22)!important;overflow:hidden!important;color:#d9b04c!important}
+.theme-btn .theme-sun,.theme-btn .theme-moon{position:absolute;top:50%;transform:translateY(-50%);z-index:2;font-size:18px;line-height:1}.theme-btn .theme-sun{left:12px;color:#2c2412}.theme-btn .theme-moon{right:12px;color:#e9eef5}.theme-btn .theme-knob{position:absolute;left:4px;top:4px;width:38px;height:38px;border-radius:50%;background:linear-gradient(180deg,#f0cf73,#c99c37);box-shadow:0 4px 14px rgba(201,156,55,.28);transition:transform .25s ease}.theme-btn.is-light .theme-knob{transform:translateX(32px);background:linear-gradient(180deg,#252b30,#14181b)}.theme-btn.is-light .theme-sun{color:#f4cf69}.theme-btn.is-light .theme-moon{color:#f4f7fa}
+.mod-btn{top:134px!important;left:18px!important;transform:none!important;height:32px!important;font-size:10px!important;opacity:.75}
+.market-status{margin:0 14px 14px!important;display:grid!important;grid-template-columns:1.45fr .72fr .72fr!important;background:linear-gradient(120deg,#11181c,#0e1417 70%,rgba(116,82,21,.24))!important;border:1px solid #8e733a!important;border-radius:24px!important;overflow:hidden!important;box-shadow:0 16px 36px rgba(0,0,0,.26)!important}
+.market-status .status-cell{padding:16px 15px!important;display:flex;flex-direction:column;justify-content:center;min-height:102px}.market-status .status-cell+.status-cell{border-left:1px solid #3b4145!important}
+.status-title{font-size:17px!important;color:#f2ede3!important}.status-title .dot{width:11px!important;height:11px!important;background:#2fe177!important;box-shadow:0 0 0 6px rgba(47,225,119,.10),0 0 14px rgba(47,225,119,.42)!important}.status-sub{font-size:11px!important;color:#9ba5ad!important;margin-top:15px!important}.status-clock{color:#d7b65d;margin:0 4px 0 8px}.status-label{font-size:12px;color:#aeb6bd;margin-bottom:8px}.status-value{font-size:24px;font-weight:800;letter-spacing:.2px;color:#f3e9d1}
+.top-switcher{margin:0 14px 14px!important;padding:0!important;min-height:70px!important;border-radius:23px!important;border:1px solid #394146!important;background:#10161a!important;overflow:hidden!important;gap:0!important}.top-switch-btn{border-radius:22px!important;font-size:17px!important;padding:16px 10px!important}.top-switch-btn.active,body.portfolio-mode .top-switch-btn[data-view='portfolio'],body:not(.portfolio-mode) .top-switch-btn[data-view='prices']{background:linear-gradient(110deg,#f1ca68,#bd8b2e)!important;color:#15110a!important;box-shadow:0 7px 26px rgba(209,159,47,.28)!important}
+.doviz-bant{display:none!important}
+.desktop-main{margin:0 14px 14px!important;border:1px solid #846b36!important;border-radius:24px!important;box-shadow:0 16px 40px rgba(0,0,0,.20)!important;background:#10161a!important}.desktop-main:before{content:'◉  Altın Fiyatları';display:block;padding:16px 16px 14px;font-size:19px;font-weight:800;color:#f4eee0;border-bottom:1px solid #343c41;background:linear-gradient(180deg,#12181c,#0f1518)}
+.table-header{padding:10px 15px!important;background:#1a2024!important}.table-header span{font-size:12px!important;color:#b5bdc4!important}.table-header span:first-child{color:#b5bdc4!important}
+.price-row{padding:15px!important;background:#101619!important;border-bottom:1px solid #30373c!important;min-height:76px}.price-row:nth-child(even){background:#11181c!important}.price-row .birim{font-size:17px!important;color:#f1ebdd!important}.price-row .alis,.price-row .satis{font-size:18px!important;color:#f5eddb!important}.price-row .kk{font-size:17px!important;color:#7dc0ff!important}.change-down{color:#ff5f5a!important}.change-up{color:#49d17d!important}.change-same{color:#868f96!important}
+.update-bar{padding:8px 14px 18px!important}.upd-text{border:1px solid #3a4247!important;background:#11171a!important;border-radius:22px!important;padding:10px 18px!important;color:#abb4ba!important}
+.bottom-nav{display:flex!important;position:fixed!important;left:50%!important;bottom:0!important;transform:translateX(-50%)!important;width:min(560px,100%)!important;min-height:76px!important;background:#0d1215!important;border:1px solid #41484d!important;border-bottom:0!important;border-radius:24px 24px 0 0!important;overflow:hidden!important;box-shadow:0 -14px 38px rgba(0,0,0,.28)!important}.nav-item{font-size:13px!important;color:#e8e8e8!important;gap:5px!important;padding:10px!important}.nav-item .nav-icon{font-size:23px!important}.nav-item.active{background:linear-gradient(110deg,#d8a946,#8f6828)!important;color:#fff4d5!important}.portfolio-mode .bottom-nav{display:flex!important}
+body.tv-mode .bottom-nav{display:none!important}
+body.light-mode{background:radial-gradient(circle at 90% 0%,rgba(184,144,74,.11),transparent 25%),linear-gradient(180deg,#eee9df,#e5ddcf)!important;color:#302a24!important}
+body.light-mode .header{background:transparent!important}.light-mode .contact-pill{background:linear-gradient(180deg,#f4eee4,#e6dccd)!important;color:#493c2c!important;border-color:#b99d6a!important}.light-mode .contact-copy small{color:#766957!important}.light-mode .theme-btn{background:#ded4c7!important;border-color:#b89d6e!important}.light-mode .market-status{background:linear-gradient(120deg,#f4eee4,#e6ddd0)!important;border-color:#b59a64!important}.light-mode .market-status .status-cell+.status-cell{border-color:#c9baa4!important}.light-mode .status-title,.light-mode .status-value{color:#352d25!important}.light-mode .status-label,.light-mode .status-sub{color:#75695d!important}.light-mode .top-switcher{background:#ddd3c5!important;border-color:#bca98c!important}.light-mode .top-switch-btn{color:#54493e!important}.light-mode .desktop-main{background:#eee7db!important;border-color:#b3945d!important}.light-mode .desktop-main:before{background:#e7ddce!important;color:#44382d!important;border-color:#cbbba3!important}.light-mode .table-header{background:#d9cebd!important;border-color:#c4b49d!important}.light-mode .table-header span{color:#61564c!important}.light-mode .price-row,.light-mode .price-row:nth-child(even){background:#ece5d9!important;border-color:#cdc0ad!important}.light-mode .price-row:nth-child(even){background:#e4dbce!important}.light-mode .price-row .birim,.light-mode .price-row .alis,.light-mode .price-row .satis{color:#2d2823!important}.light-mode .price-row .kk{color:#315f84!important}.light-mode .update-bar{background:transparent!important}.light-mode .upd-text{background:#e1d7c9!important;border-color:#c2b198!important;color:#544a40!important}.light-mode .bottom-nav{background:#ddd4c7!important;border-color:#bba98d!important}.light-mode .nav-item{color:#51463d!important}.light-mode .nav-item.active{color:#fff9ec!important;background:linear-gradient(110deg,#b38b50,#876437)!important}
+@media(max-width:460px){.header{min-height:174px!important;padding-top:22px!important}.header .logo{width:min(260px,57vw)!important}.contact-pill{display:none!important}.header-tools{right:15px!important}.theme-btn{width:76px!important}.market-status{grid-template-columns:1.30fr .82fr .82fr!important}.market-status .status-cell{padding:13px 11px!important;min-height:94px}.status-title{font-size:15px!important}.status-sub{font-size:10px!important}.status-value{font-size:19px!important}.status-label{font-size:10px!important}.price-row{padding:14px 12px!important}.price-row .birim{font-size:16px!important}.price-row .alis,.price-row .satis{font-size:17px!important}.price-row .kk{font-size:16px!important}}
+@media(min-width:768px){body{max-width:1100px!important;padding-bottom:0}.header{min-height:160px!important}.header .logo{width:360px!important}.contact-pill{min-width:150px}.bottom-nav{max-width:720px}.desktop-main:before{font-size:21px}}
+
 </style>
 </head>
 <body>
 <script>if (window.location.search.indexOf('admin') !== -1 && window.location.search.indexOf('tv=1') === -1) document.body.classList.add('admin-route');</script>
 
 <div class="header">
-  <div class="logo-placeholder" id="logoPlaceholder">EK</div>
-  <img id="shopLogo" class="logo" alt="Logo" style="display:none">
-  <h1 id="shopName">eğilmez</h1>
-  <div class="phone" id="shopPhone" style="display:none"></div>
-  <span class="has-info" id="hasInfo"></span>
-  <button class="admin-btn" id="adminBtn" onclick="openAdmin()">⋯</button>
-  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Açık/Koyu Tema">☀️</button>
+  <button class="admin-btn" id="adminBtn" onclick="openAdmin()" title="Yönetim">☰</button>
+  <div class="brand-wrap">
+    <div class="logo-placeholder" id="logoPlaceholder">EK</div>
+    <img id="shopLogo" class="logo" alt="Eğilmez Kuyumculuk" style="display:none">
+    <h1 id="shopName">eğilmez</h1>
+    <div class="phone" id="shopPhone" style="display:none"></div>
+    <span class="has-info" id="hasInfo"></span>
+  </div>
+  <div class="header-tools">
+    <button class="contact-pill" id="contactPill" type="button" title="İletişim">
+      <span class="contact-icon">☎</span><span class="contact-copy"><b>İletişim</b><small id="headerPhoneText">Henüz eklenmedi</small></span>
+    </button>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Açık / Karanlık Mod" aria-label="Tema değiştir">
+      <span class="theme-sun">☀</span><span class="theme-moon">☾</span><span class="theme-knob"></span>
+    </button>
+  </div>
   <button class="mod-btn" id="modBtn" onclick="toggleMod()">⚡ Normal</button>
 </div>
 <div class="market-status" id="marketStatus">
-  <div class="status-cell">
+  <div class="status-cell status-live">
     <div class="status-title"><span class="dot"></span><span>Piyasa Canlı</span></div>
-    <div class="status-sub">Son güncelleme: <span id="statusTime">--:--</span></div>
+    <div class="status-sub">Son güncelleme <span class="status-clock">◷</span> <span id="statusTime">--:--</span></div>
   </div>
-  <div class="status-cell">
-    <div class="status-title">☎️ <span>İletişim</span></div>
-    <div class="status-sub status-phone" id="statusPhone">Henüz eklenmedi</div>
+  <div class="status-cell status-price">
+    <div class="status-label">Has Alış</div>
+    <div class="status-value" id="statusHasA">—</div>
+  </div>
+  <div class="status-cell status-price">
+    <div class="status-label">Has Satış</div>
+    <div class="status-value" id="statusHasS">—</div>
   </div>
 </div>
 
@@ -581,10 +626,9 @@ body.light-mode .upd-text{background:#e2d9cc!important;border-color:#c7b8a4!impo
 </div><!-- desktop-layout -->
 
 <div class="bottom-nav" id="bottomNav">
-  <button class="nav-item active"><span class="nav-icon">📊</span>Fiyat Panosu</button>
-  <button class="nav-item" onclick="openAdmin()"><span class="nav-icon">⚙️</span>Yönetici</button>
-
-  </div>
+  <button class="nav-item active" id="navPrices"><span class="nav-icon">▥</span>Fiyat Panosu</button>
+  <button class="nav-item" id="navPortfolio"><span class="nav-icon">♙</span>Varlıklarım</button>
+</div>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeAdmin()">
   <div class="admin-panel">
@@ -823,7 +867,7 @@ if (window.location.search.indexOf('admin') === -1 || FORCE_TV) {
   var bottomNavEl = document.getElementById('bottomNav');
   var tvBtnEl = document.getElementById('tvBtn');
   if (adminBtnEl) adminBtnEl.style.display = 'none';
-  if (bottomNavEl) bottomNavEl.style.display = 'none';
+  if (bottomNavEl && FORCE_TV) bottomNavEl.style.display = 'none';
   if (FORCE_TV && tvBtnEl) {
     tvBtnEl.style.display = 'none';
   }
@@ -884,6 +928,7 @@ function loadSettings() {
 
 var settings = loadSettings();
 if (typeof settings.logoData !== 'string') settings.logoData = '';
+if (typeof settings.customLogoEnabled !== 'boolean') settings.customLogoEnabled = false;
 if (!settings.theme) settings.theme = 'dark';
 if (typeof settings.shopPhone !== 'string') settings.shopPhone = '';
 var hasAlis  = parseFloat(localStorage.getItem('egilmez_ha_v1') || '0') || null;
@@ -961,15 +1006,7 @@ if (adminBtnBind) adminBtnBind.onclick = function() {
     openAdminLogin();
   }
 };
-var lastNavItem = document.querySelector('.nav-item:last-child');
-if (lastNavItem) lastNavItem.onclick = function() {
-  if (checkAdminSession()) {
-    IS_ADMIN = true;
-    openAdmin();
-  } else {
-    openAdminLogin();
-  }
-};
+
 
 function getLabor(item) {
   if (aktifMod === 'hareketli' && settings.laborH && settings.laborH[item.id]) return settings.laborH[item.id];
@@ -1046,10 +1083,14 @@ function setStatus(ok) {
     src.textContent = ''; src.className = 'upd-src';
     hi.textContent  = 'Has Alış: ' + fmt(Math.round(hasAlis)) + '  |  Has Satış: ' + fmt(Math.round(hasSatis));
     hi.className = 'has-info';
+    var sha=document.getElementById('statusHasA'); if(sha) sha.textContent=fmt(Math.round(hasAlis));
+    var shs=document.getElementById('statusHasS'); if(shs) shs.textContent=fmt(Math.round(hasSatis));
   } else {
     src.textContent = '⚠ Bağlantı yok'; src.className = 'upd-src err';
     hi.textContent  = hasAlis ? ('Son: ' + fmt(Math.round(hasAlis)) + ' / ' + fmt(Math.round(hasSatis))) : '';
     hi.className = 'has-info err';
+    var sha=document.getElementById('statusHasA'); if(sha) sha.textContent=hasAlis?fmt(Math.round(hasAlis)):'—';
+    var shs=document.getElementById('statusHasS'); if(shs) shs.textContent=hasSatis?fmt(Math.round(hasSatis)):'—';
   }
 }
 
@@ -1320,7 +1361,7 @@ function applyShopLogo() {
   var ph = document.getElementById('logoPlaceholder');
   var title = document.getElementById('shopName');
   if (!img || !ph) return;
-  var logo = (typeof settings !== 'undefined' && settings.logoData) ? settings.logoData : 'egilmez-logo.png';
+  var logo = (typeof settings !== 'undefined' && settings.customLogoEnabled && settings.logoData) ? settings.logoData : 'egilmez-logo.png';
   if (logo) { img.src = logo; img.style.display = ''; ph.style.display = 'none'; if (title) title.style.display='none'; }
   else { img.removeAttribute('src'); img.style.display = 'none'; ph.style.display = 'flex'; if (title) title.style.display=''; }
 }
@@ -1331,8 +1372,8 @@ function effectiveTheme() {
 function applyTheme() {
   var t = effectiveTheme();
   document.body.classList.toggle('light-mode', t === 'light');
-  var b = document.getElementById('themeBtn'); if (b) b.textContent = t === 'light' ? '🌙' : '☀️';
-  var meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', t === 'light' ? '#f4f1e8' : '#b8960c');
+  var b = document.getElementById('themeBtn'); if (b) { b.classList.toggle('is-light', t === 'light'); b.title = t === 'light' ? 'Karanlık moda geç' : 'Açık moda geç'; }
+  var meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', t === 'light' ? '#eee8dd' : '#0d1114');
 }
 function toggleTheme() {
   var next = effectiveTheme() === 'light' ? 'dark' : 'light';
@@ -1350,13 +1391,13 @@ function previewLogoUpload() {
       var ctx=c.getContext('2d'); ctx.clearRect(0,0,size,size);
       var scale=Math.min(size/im.width,size/im.height), w=im.width*scale, h=im.height*scale;
       ctx.drawImage(im,(size-w)/2,(size-h)/2,w,h);
-      pendingLogoData=c.toDataURL('image/png'); settings.logoData=pendingLogoData; applyShopLogo(); showToast('✓ Logo hazır. Kaydet butonuna basın.');
+      pendingLogoData=c.toDataURL('image/png'); settings.logoData=pendingLogoData; settings.customLogoEnabled=true; applyShopLogo(); showToast('✓ Logo hazır. Kaydet butonuna basın.');
     };
     im.src=ev.target.result;
   };
   reader.readAsDataURL(inp.files[0]);
 }
-function removeLogo() { settings.logoData=''; pendingLogoData=''; applyShopLogo(); showToast('Logo kaldırıldı. Kaydet butonuna basın.'); }
+function removeLogo() { settings.logoData=''; settings.customLogoEnabled=false; pendingLogoData=''; applyShopLogo(); showToast('Logo kaldırıldı. Kaydet butonuna basın.'); }
 
 function saveAdmin() {
   settings.appId = APP_ID;
@@ -1500,6 +1541,7 @@ jsonbinLoad(function(cloud) {
   if (cloud && cloud.appId === APP_ID && cloud.shopName) {
     settings = cloud;
     if (typeof settings.logoData !== 'string') settings.logoData = '';
+    if (typeof settings.customLogoEnabled !== 'boolean') settings.customLogoEnabled = false;
     if (!settings.theme) settings.theme = 'dark';
     if (typeof settings.shopPhone !== 'string') settings.shopPhone = '';
     if (settings.adminPass) ADMIN_PASS = settings.adminPass;
@@ -1838,6 +1880,7 @@ setInterval(function() {
       if (typeof settings !== "undefined" && data) {
         settings = data;
         if (typeof settings.logoData !== "string") settings.logoData = "";
+        if (typeof settings.customLogoEnabled !== "boolean") settings.customLogoEnabled = false;
         if (!settings.theme) settings.theme = "dark";
         if (typeof settings.shopPhone !== "string") settings.shopPhone = "";
         try { applyShopLogo(); applyTheme(); } catch(e) {}
@@ -2215,6 +2258,8 @@ setInterval(function() {
     if (navPf) navPf.onclick = showPortfolioMode;
     var firstBtn = document.getElementById('btnPricesTop');
     if (firstBtn) firstBtn.onclick = showPriceMode;
+    var navPrices=document.getElementById('navPrices'); if(navPrices) navPrices.onclick=function(){showPriceMode(); navPrices.classList.add('active'); var np=document.getElementById('navPortfolio'); if(np) np.classList.remove('active');};
+    var navPortfolio=document.getElementById('navPortfolio'); if(navPortfolio) navPortfolio.onclick=function(){showPortfolioMode(); navPortfolio.classList.add('active'); var npr=document.getElementById('navPrices'); if(npr) npr.classList.remove('active');};
     var saveBtn = document.getElementById('pfSaveBtn');
     if (saveBtn) saveBtn.onclick = savePortfolioItem;
     var cancelBtn = document.getElementById('pfCancelEditBtn');
@@ -2229,8 +2274,11 @@ setInterval(function() {
 (function(){
   function refreshPremiumStatus(){
     try{
-      var p=document.getElementById('statusPhone');
-      if(p){ var ph=(typeof settings!=='undefined' && settings.shopPhone)?String(settings.shopPhone).trim():''; p.textContent=ph||'Henüz eklenmedi'; }
+      var ph=(typeof settings!=='undefined' && settings.shopPhone)?String(settings.shopPhone).trim():'';
+      var hp=document.getElementById('headerPhoneText'); if(hp) hp.textContent=ph||'Henüz eklenmedi';
+      var cp=document.getElementById('contactPill'); if(cp) cp.onclick=function(){ if(ph) window.location.href='tel:'+ph.replace(/\s+/g,''); };
+      var sha=document.getElementById('statusHasA'); if(sha && typeof hasAlis!=='undefined' && hasAlis) sha.textContent=fmt(Math.round(hasAlis));
+      var shs=document.getElementById('statusHasS'); if(shs && typeof hasSatis!=='undefined' && hasSatis) shs.textContent=fmt(Math.round(hasSatis));
       var t=document.getElementById('statusTime');
       if(t){ var u=document.getElementById('updTime'); var txt=u?u.textContent:''; var m=txt.match(/(\d{1,2}:\d{2}(?::\d{2})?)/); t.textContent=m?m[1]:new Date().toLocaleTimeString('tr-TR'); }
     }catch(e){}
