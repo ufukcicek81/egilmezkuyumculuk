@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Eğilmez Kuyumculuk</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest-v55.json">
 <script>
 if (window.location.search.indexOf('admin') !== -1) {
   try { localStorage.removeItem('egilmez_tv_v1'); } catch(e) {}
@@ -15,11 +15,20 @@ if (window.location.search.indexOf('admin') !== -1) {
 }
 </script>
 
-<meta name="theme-color" content="#b8960c">
+<meta name="theme-color" content="#0e1214">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Eğilmez Kuyumculuk">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-egilmez-192-v3.png">
+<script>
+(function(){
+  try {
+    var t=localStorage.getItem('egilmez_theme_local') || 'dark';
+    document.documentElement.setAttribute('data-start-theme', t);
+  } catch(e) { document.documentElement.setAttribute('data-start-theme','dark'); }
+})();
+</script>
+
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -605,10 +614,34 @@ body.light-mode .extra-data-row,body.light-mode .extra-data-row:nth-child(even){
 body.light-mode .extra-data-row:nth-child(even){background:#e8dfd3!important}
 body.light-mode .extra-name{color:#352e28!important}body.light-mode .extra-buy{color:#1f744b!important}body.light-mode .extra-sell{color:#b6473f!important}
 body.light-mode #adminEkstra,body.light-mode #desktopSide{background:#e8dfd3!important}
+
+/* Premium launch screen: bridges Android PWA splash to the app without a harsh flash */
+#premiumSplash{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%,#1d211f 0%,#111618 44%,#0b0e10 100%);opacity:1;visibility:visible;transition:opacity .32s ease,visibility .32s ease}
+#premiumSplash .splash-inner{display:flex;flex-direction:column;align-items:center;gap:20px;padding:28px;text-align:center;transform:translateY(-2vh)}
+#premiumSplash .splash-logo{width:min(290px,64vw);height:auto;display:block;object-fit:contain;filter:drop-shadow(0 12px 34px rgba(0,0,0,.22))}
+#premiumSplash .splash-tag{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#c9a85d;font-weight:600}
+#premiumSplash .splash-loader{width:112px;height:2px;position:relative;overflow:hidden;border-radius:2px;background:rgba(212,176,88,.17)}
+#premiumSplash .splash-loader:after{content:'';position:absolute;inset:0;width:46%;background:linear-gradient(90deg,transparent,#e7c875,transparent);animation:splashSweep 1.05s ease-in-out infinite}
+@keyframes splashSweep{0%{transform:translateX(-125%)}100%{transform:translateX(280%)}}
+#premiumSplash.splash-hide{opacity:0;visibility:hidden;pointer-events:none}
+html[data-start-theme='light'] #premiumSplash{background:radial-gradient(circle at 50% 34%,#fffaf0 0%,#f0e8db 52%,#e5dacb 100%)}
+html[data-start-theme='light'] #premiumSplash .splash-logo{filter:brightness(0) saturate(100%) invert(20%) sepia(17%) saturate(1014%) hue-rotate(342deg) brightness(75%) contrast(91%)}
+html[data-start-theme='light'] #premiumSplash .splash-tag{color:#866b3e}
+html[data-start-theme='light'] #premiumSplash .splash-loader{background:rgba(110,83,44,.13)}
+@media(prefers-reduced-motion:reduce){#premiumSplash,.splash-loader:after{transition:none!important;animation:none!important}}
+
 </style>
 <!-- Eğilmez Premium v5.3: tema kalıcılığı + gerçek zamanlı Firebase senkron -->
 </head>
 <body>
+<div id="premiumSplash" aria-hidden="true">
+  <div class="splash-inner">
+    <img class="splash-logo" src="egilmez-logo-clean.png" alt="">
+    <div class="splash-tag">Güvenin Altın Değeri</div>
+    <div class="splash-loader"></div>
+  </div>
+</div>
+
 <script>if (window.location.search.indexOf('admin') !== -1 && window.location.search.indexOf('tv=1') === -1) document.body.classList.add('admin-route');</script>
 
 <div class="header">
@@ -2440,6 +2473,21 @@ setInterval(function() {
     }catch(e){}
   }
   setInterval(refreshPremiumStatus,1000);setTimeout(refreshPremiumStatus,300);
+})();
+</script>
+
+
+<script>
+(function(){
+  var started=Date.now();
+  function closePremiumSplash(){
+    var el=document.getElementById('premiumSplash'); if(!el) return;
+    var wait=Math.max(0,520-(Date.now()-started));
+    setTimeout(function(){ el.classList.add('splash-hide'); setTimeout(function(){ if(el&&el.parentNode) el.parentNode.removeChild(el); },380); },wait);
+  }
+  if(document.readyState==='complete') closePremiumSplash();
+  else window.addEventListener('load',closePremiumSplash,{once:true});
+  setTimeout(closePremiumSplash,2200);
 })();
 </script>
 
