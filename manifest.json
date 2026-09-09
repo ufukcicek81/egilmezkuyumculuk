@@ -1,26 +1,16 @@
 {
   "name": "Eğilmez Kuyumculuk",
   "short_name": "Eğilmez",
-  "description": "Canlı altın ve döviz fiyatları",
+  "description": "Canlı altın fiyatları",
   "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0f1112",
+  "background_color": "#f6f0e5",
   "theme_color": "#b99a55",
   "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    {"src":"icon-egilmez-192-v2.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"icon-egilmez-512-v2.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
   ]
 }

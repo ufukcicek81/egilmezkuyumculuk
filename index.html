@@ -1451,7 +1451,7 @@ function applyShopLogo() {
   var title = document.getElementById('shopName');
   if (!img || !ph) return;
   var isCustomLogo = !!(typeof settings !== 'undefined' && settings.customLogoEnabled && settings.logoData);
-  var logo = isCustomLogo ? settings.logoData : 'egilmez-logo.png';
+  var logo = isCustomLogo ? settings.logoData : 'egilmez-logo-clean.png';
   img.classList.toggle('default-brand-logo', !isCustomLogo);
   if (logo) { img.src = logo; img.style.display = ''; ph.style.display = 'none'; if (title) title.style.display='none'; }
   else { img.removeAttribute('src'); img.style.display = 'none'; ph.style.display = 'flex'; if (title) title.style.display=''; }
