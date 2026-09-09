@@ -70,3 +70,8 @@ Eğilmez Kuyumculuk v7.4 ÜRÜN SIRALAMA FIX
 - itemOrder boş veya eski/eksik olsa bile aktif ürünlerden otomatik doğru sıra oluşturulur.
 - Sıra ekranda anında değişir ve Firebase'e kaydedilir.
 - Ürün silme/ekleme, TV ve canlı fiyat mantığına dokunulmadı.
+
+v7.5 PC DÖVİZ/HURDA SIĞDIRMA
+- PC admin sağ Döviz Kurları + Hurda Altın panelindeki iç dikey scrollbar kaldırıldı.
+- Sağ panel içerik yüksekliğine göre açılır; tüm satırlar aynı sayfada görünür.
+- Mobil ve TV düzenine dokunulmadı.

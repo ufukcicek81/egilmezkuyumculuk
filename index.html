@@ -1115,6 +1115,57 @@ body.tv-mode .price-row small{
 .flash-down-v71{animation:mainPriceFlashDownV71 .65s ease-out!important;border-radius:6px}
 </style>
 
+
+<style id="pc-sidebar-fit-v75">
+@media (min-width: 901px){
+  /* Sağ Döviz + Hurda paneli: iç kaydırma yok, tamamı görünür */
+  .side-panel,
+  .right-panel,
+  .market-side,
+  .sidebar-market,
+  .desktop-side,
+  #sidePanel,
+  #rightPanel,
+  #marketSide,
+  #desktopSide{
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    overflow:visible!important;
+    overflow-y:visible!important;
+    scrollbar-width:none!important;
+  }
+  .side-panel::-webkit-scrollbar,
+  .right-panel::-webkit-scrollbar,
+  .market-side::-webkit-scrollbar,
+  .sidebar-market::-webkit-scrollbar,
+  .desktop-side::-webkit-scrollbar,
+  #sidePanel::-webkit-scrollbar,
+  #rightPanel::-webkit-scrollbar,
+  #marketSide::-webkit-scrollbar,
+  #desktopSide::-webkit-scrollbar{
+    display:none!important;
+    width:0!important;
+  }
+
+  /* Döviz/Hurda kartlarını PC'de biraz sıkılaştır: tek ekrana sığsın */
+  .fx-card, .scrap-card, .currency-card, .hurda-card,
+  #fxCard, #scrapCard, #currencyCard, #hurdaCard{
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+
+  .fx-card .row, .scrap-card .row,
+  .currency-card .row, .hurda-card .row,
+  #fxCard .row, #scrapCard .row{
+    min-height:34px!important;
+    padding-top:5px!important;
+    padding-bottom:5px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -3329,6 +3380,35 @@ setInterval(function() {
       if(a) lastA=a;if(s) lastS=s;
     }catch(e){}
   },500);
+})();
+</script>
+
+
+<script id="pc-sidebar-fit-runtime-v75">
+(function(){
+  function fitPcSide(){
+    if(innerWidth < 901) return;
+    var headings=[].slice.call(document.querySelectorAll('h1,h2,h3,h4,div,span'));
+    var fx=headings.find(function(e){return (e.textContent||'').trim().toUpperCase()==='DÖVİZ KURLARI';});
+    var hu=headings.find(function(e){return (e.textContent||'').trim().toUpperCase()==='HURDA ALTIN';});
+    [fx,hu].forEach(function(h){
+      if(!h)return;
+      var p=h.parentElement;
+      for(var i=0;i<4 && p;i++,p=p.parentElement){
+        var cs=getComputedStyle(p);
+        if(cs.overflowY==='auto'||cs.overflowY==='scroll'||cs.maxHeight!=='none'){
+          p.style.setProperty('height','auto','important');
+          p.style.setProperty('max-height','none','important');
+          p.style.setProperty('overflow-y','visible','important');
+          p.style.setProperty('overflow','visible','important');
+        }
+      }
+    });
+  }
+  addEventListener('load',fitPcSide);
+  addEventListener('resize',fitPcSide);
+  setTimeout(fitPcSide,300);
+  setTimeout(fitPcSide,1200);
 })();
 </script>
 
