@@ -3077,24 +3077,15 @@ setInterval(function() {
     h.innerHTML='<span>Birim</span><span>Alış</span><span>Satış</span><span class="tv-kk">K. Kartı</span>';
     return h;
   }
-  function ensureTVHeaders(){
-    if(!document.body.classList.contains('tv-mode')) return;
-    var c=document.getElementById('priceRows'); if(!c) return;
-    var h1=document.getElementById('tvColHeader1'),h2=document.getElementById('tvColHeader2');
-    if(!h1){h1=makeTVHeader('tvColHeader1');c.insertBefore(h1,c.firstChild);}
-    if(!h2){h2=makeTVHeader('tvColHeader2');c.insertBefore(h2,h1.nextSibling);}
-  }
+  function ensureTVHeaders(){ return; }
   document.addEventListener('DOMContentLoaded',function(){
     ensureDynamicLists();
     if(location.search.indexOf('admin')!==-1) document.body.classList.remove('portfolio-mode');
     setTimeout(function(){try{renderAdminDoviz();renderAdminHurda();renderUrunList();}catch(e){}},250);
     ensureTVHeaders();
-    var c=document.getElementById('priceRows');
-    if(c && window.MutationObserver){
-      new MutationObserver(function(){ensureTVHeaders();}).observe(c,{childList:true});
-    }
+    var c=document.getElementById('priceRows'); /* old TV header observer disabled v6.3 */
   });
-  window.addEventListener('load',function(){setTimeout(ensureTVHeaders,180);setTimeout(ensureTVHeaders,900);});
+  window.addEventListener('load',function(){ /* old TV header timers disabled v6.3 */ });
 })();
 </script>
 
@@ -3186,6 +3177,61 @@ setInterval(function() {
       return r;
     };
   }
+})();
+</script>
+
+
+<script id="egilmez-v63-stability-fix">
+(function(){
+  var lastCount=-1;
+  var timer=null;
+
+  function stableTvRefit(){
+    if(!document.body.classList.contains('tv-mode')) return;
+    var c=document.getElementById('priceRows');
+    if(!c) return;
+    var count=c.querySelectorAll('.price-row').length;
+    if(count===lastCount && lastCount!==-1) return;
+    lastCount=count;
+
+    clearTimeout(timer);
+    timer=setTimeout(function(){
+      try{
+        /* only resize variables; do not add/remove DOM nodes here */
+        var main=document.querySelector('.desktop-main');
+        if(!main) return;
+        var rows=c.querySelectorAll('.price-row');
+        var n=rows.length||1;
+        var h=main.getBoundingClientRect().height || innerHeight*.75;
+        var titleH=innerHeight<=760?30:36;
+        var headH=innerHeight<=760?28:34;
+        var usable=Math.max(180,h-titleH-headH-4);
+        var rowH=usable/n;
+        var clamp=function(v,min,max){return Math.max(min,Math.min(max,v));};
+        document.body.style.setProperty('--tv-row-font',clamp(rowH*.34,11,19).toFixed(1)+'px');
+        document.body.style.setProperty('--tv-value-font',clamp(rowH*.39,12,22).toFixed(1)+'px');
+        document.body.style.setProperty('--tv-change-font',clamp(rowH*.18,7,10).toFixed(1)+'px');
+        document.body.style.setProperty('--tv-row-pad',clamp(rowH*.08,1,6).toFixed(1)+'px');
+      }catch(e){}
+    },80);
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    var c=document.getElementById('priceRows');
+    if(c && window.MutationObserver){
+      new MutationObserver(function(muts){
+        var changed=false;
+        muts.forEach(function(m){
+          if(m.type==='childList') changed=true;
+        });
+        if(changed) stableTvRefit();
+      }).observe(c,{childList:true});
+    }
+    stableTvRefit();
+  });
+  window.addEventListener('load',stableTvRefit);
+  window.addEventListener('resize',function(){ lastCount=-1; stableTvRefit(); });
+  document.addEventListener('fullscreenchange',function(){ lastCount=-1; stableTvRefit(); });
 })();
 </script>
 
