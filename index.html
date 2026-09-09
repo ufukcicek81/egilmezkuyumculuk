@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Eğilmez Kuyumculuk</title>
+
+<script id="egilmez-tv-standalone-redirect">
+(function(){
+  try{
+    if(new URLSearchParams(location.search).get('tv')==='1'){
+      location.replace('tv.html?v=70');
+    }
+  }catch(e){}
+})();
+</script>
+
 <link rel="manifest" href="manifest.json?v=57">
 <script>
 if (window.location.search.indexOf('admin') !== -1) {
@@ -1796,7 +1807,7 @@ function updateCustomerLink() {
   var base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('customerLink').textContent = base;
   document.getElementById('customerLink').dataset.url = base;
-  var tvUrl = base + '?tv=1';
+  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=70';
   var tvEl = document.getElementById('tvLink');
   if (tvEl) {
     tvEl.textContent = tvUrl;
@@ -2110,7 +2121,7 @@ function shareWA() {
 
 function copyTVLink() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0] + '?tv=1');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=70');
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
   } else {
@@ -2123,7 +2134,7 @@ function copyTVLink() {
 
 function openTVScreen() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0] + '?tv=1');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=70');
   window.open(link, '_blank');
 }
 
