@@ -606,6 +606,7 @@ body.light-mode .extra-data-row:nth-child(even){background:#e8dfd3!important}
 body.light-mode .extra-name{color:#352e28!important}body.light-mode .extra-buy{color:#1f744b!important}body.light-mode .extra-sell{color:#b6473f!important}
 body.light-mode #adminEkstra,body.light-mode #desktopSide{background:#e8dfd3!important}
 </style>
+<!-- Eğilmez Premium v5.3: tema kalıcılığı + gerçek zamanlı Firebase senkron -->
 </head>
 <body>
 <script>if (window.location.search.indexOf('admin') !== -1 && window.location.search.indexOf('tv=1') === -1) document.body.classList.add('admin-route');</script>
@@ -1532,7 +1533,7 @@ function saveAdmin() {
     settings.hurdaCarp[h.id+'S'] = parseFloat(document.getElementById('hurdaS_'+h.id).value) || h.oran;
   });
   localStorage.setItem('egilmez_settings_v1', JSON.stringify(settings));
-  try { localStorage.removeItem('egilmez_theme_local'); } catch(e) {}
+  // Cihazın tema tercihini koru; admin kaydı temayı zorla değiştirmesin.
   applyTheme(); applyShopLogo();
   renderTable();
   closeAdmin();
@@ -1953,70 +1954,137 @@ setInterval(function() {
 
 
 <script>
-/* CANLI BULUT SENKRON - müşteri ekranı için */
+/* CANLI BULUT SENKRON v2
+   - Firebase REST stream (SSE): admin kaydı gelir gelmez müşteri/TV ekranına uygular.
+   - Bağlantı koparsa 2 sn REST polling yedeği devreye girer.
+   - Sayfa yenilemeye gerek yoktur.
+*/
 (function () {
   var lastRemoteText = "";
+  var stream = null;
+  var pollTimer = null;
+  var reconnectTimer = null;
+  var isAdminPage = window.location.pathname.toLowerCase().indexOf('admin.html') !== -1 || window.location.search.indexOf('admin') !== -1;
 
-  function applyRemoteSettings(data) {
-    if (!data || data.appId !== APP_ID) return;
+  function normalizeRemote(data) {
+    if (!data || data.appId !== APP_ID) return null;
+    if (typeof data.logoData !== 'string') data.logoData = '';
+    if (typeof data.customLogoEnabled !== 'boolean') data.customLogoEnabled = false;
+    if (!data.theme) data.theme = 'dark';
+    if (typeof data.shopPhone !== 'string') data.shopPhone = '';
+    if (!data.labor) data.labor = {};
+    if (!data.laborH) data.laborH = {};
+    if (!data.customItems) data.customItems = [];
+    if (!data.hiddenItems) data.hiddenItems = [];
+    if (!data.deletedItems) data.deletedItems = [];
+    if (!data.itemOrder) data.itemOrder = [];
+    if (!data.dovizDuz) data.dovizDuz = {};
+    if (!data.hurdaCarp) data.hurdaCarp = {};
+    return data;
+  }
 
+  function applyRemoteSettings(data, force) {
+    data = normalizeRemote(data);
+    if (!data) return;
     try {
       var newText = JSON.stringify(data);
-      if (newText === lastRemoteText) return;
+      if (!force && newText === lastRemoteText) return;
       lastRemoteText = newText;
     } catch (e) {}
 
-    try {
-      if (typeof settings !== "undefined" && data) {
-        settings = data;
-        if (typeof settings.logoData !== "string") settings.logoData = "";
-        if (typeof settings.customLogoEnabled !== "boolean") settings.customLogoEnabled = false;
-        if (!settings.theme) settings.theme = "dark";
-        if (typeof settings.shopPhone !== "string") settings.shopPhone = "";
-        try { applyShopLogo(); applyTheme(); } catch(e) {}
-      }
+    // Admin formunda yazı yazılırken uzaktan gelen veri form alanlarını bozmasın.
+    if (typeof isAdminEditing === 'function' && isAdminEditing()) return;
 
-      if (typeof aktifMod !== "undefined" && data.aktifMod) {
+    try {
+      settings = data;
+      try { localStorage.setItem('egilmez_settings_v1', JSON.stringify(settings)); } catch(e) {}
+
+      if (data.adminPass) ADMIN_PASS = data.adminPass;
+      if (data.aktifMod && data.aktifMod !== aktifMod) {
         aktifMod = data.aktifMod;
-        try { localStorage.setItem("egilmez_mod_v1", aktifMod); } catch(e) {}
-        if (typeof updateModBtn === "function") updateModBtn();
+        try { localStorage.setItem('egilmez_mod_v1', aktifMod); } catch(e) {}
       }
 
-      try {
-        var rows = document.getElementById("priceRows");
-        if (rows) rows.innerHTML = "";
-      } catch(e) {}
+      // Cihazın light/dark tercihi localStorage'da kalır; bulut ayarı bunu ezmez.
+      try { applyShopLogo(); applyTheme(); updateModBtn(); } catch(e) {}
 
-      if (typeof renderTable === "function") renderTable();
-      if (typeof renderEkstraDoviz === "function") renderEkstraDoviz();
-      if (typeof renderEkstraHurda === "function") renderEkstraHurda();
-      if (typeof updateCustomerLink === "function") updateCustomerLink();
-
-      if (typeof updateHasInfo === "function") {
-        updateHasInfo("Canlı", true);
-      }
+      var rows = document.getElementById('priceRows');
+      if (rows) rows.innerHTML = '';
+      if (typeof renderTable === 'function') renderTable();
+      if (typeof renderDesktopPanel === 'function') renderDesktopPanel();
+      if (typeof renderEkstraDoviz === 'function') renderEkstraDoviz();
+      if (typeof renderEkstraHurda === 'function') renderEkstraHurda();
+      if (typeof refreshAdminDataViews === 'function' && isAdminPage) refreshAdminDataViews();
+      if (typeof updateCustomerLink === 'function') updateCustomerLink();
     } catch (e) {
-      console.log("Canlı senkron uygulama hatası:", e);
+      console.log('Canlı senkron uygulama hatası:', e);
     }
   }
 
-  function pollRemote() {
+  function fetchOnce(force) {
     try {
-      if (typeof jsonbinLoad !== "function") return;
-      if (window.location.search.indexOf("admin") !== -1) return;
+      if (typeof jsonbinLoad !== 'function') return;
+      jsonbinLoad(function(data){ if (data) applyRemoteSettings(data, !!force); });
+    } catch(e) {}
+  }
 
-      jsonbinLoad(function (data) {
-        if (!data) return;
-        applyRemoteSettings(data);
+  function startPollingFallback() {
+    if (pollTimer) return;
+    fetchOnce(true);
+    pollTimer = setInterval(function(){ fetchOnce(false); }, 2000);
+  }
+
+  function stopPollingFallback() {
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  }
+
+  function connectStream() {
+    if (!('EventSource' in window)) { startPollingFallback(); return; }
+    try {
+      if (stream) { try { stream.close(); } catch(e) {} }
+      stream = new EventSource(FIREBASE_URL);
+
+      stream.addEventListener('open', function(){
+        stopPollingFallback();
+        fetchOnce(true); // stream açılır açılmaz tam güncel snapshot al
       });
-    } catch (e) {
-      console.log("Canlı senkron okuma hatası:", e);
+
+      stream.addEventListener('put', function(ev){
+        try {
+          var msg = JSON.parse(ev.data || '{}');
+          if (msg.path === '/' && msg.data) {
+            applyRemoteSettings(msg.data, false);
+          } else {
+            // Alt alan değişikliği geldiyse tam snapshot al; veri birleştirme hatasını önler.
+            fetchOnce(true);
+          }
+        } catch(e) { fetchOnce(true); }
+      });
+
+      stream.addEventListener('patch', function(){ fetchOnce(true); });
+      stream.addEventListener('cancel', function(){ startPollingFallback(); });
+      stream.onerror = function(){
+        startPollingFallback();
+        try { stream.close(); } catch(e) {}
+        stream = null;
+        if (reconnectTimer) clearTimeout(reconnectTimer);
+        reconnectTimer = setTimeout(connectStream, 5000);
+      };
+    } catch(e) {
+      startPollingFallback();
     }
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(pollRemote, 800);
-    setInterval(pollRemote, 2000);
+  function immediateSync() { fetchOnce(true); }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    immediateSync();
+    connectStream();
+  });
+  window.addEventListener('online', immediateSync);
+  window.addEventListener('focus', immediateSync);
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden) immediateSync();
   });
 })();
 </script>
