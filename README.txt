@@ -75,3 +75,19 @@ v7.5 PC DÖVİZ/HURDA SIĞDIRMA
 - PC admin sağ Döviz Kurları + Hurda Altın panelindeki iç dikey scrollbar kaldırıldı.
 - Sağ panel içerik yüksekliğine göre açılır; tüm satırlar aynı sayfada görünür.
 - Mobil ve TV düzenine dokunulmadı.
+
+v7.6 PC TAM SAYFA FIT
+- PC admin ekranında ana sayfa dikey scrollbar kaldırıldı.
+- Altın tablosu, Döviz ve Hurda aynı ekran yüksekliğine otomatik sığar.
+- Sağ panelde ayrıca iç scrollbar yoktur.
+- Ürün/Döviz/Hurda satırı arttığında satır ve yazı boyutu otomatik küçülür.
+- Mobil ve TV ekranına dokunulmadı.
+
+v7.7 PC FINAL TEK EKRAN
+- Önceki sabit satır yüksekliği mantığı kaldırıldı.
+- Altın ürünleri CSS Grid ile mevcut ekran yüksekliğine eşit dağıtılır.
+- 10, 12, 15 ürün olsa da tüm satırlar ekran içinde kalır.
+- Döviz ve Hurda da kendi alanına eşit dağıtılır.
+- Ana sayfa ve sağ panel scrollbarları kaldırıldı.
+- Desktop-main eski margin/padding çakışmaları temizlendi.
+- Mobil ve TV koduna dokunulmadı.

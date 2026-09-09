@@ -1394,6 +1394,442 @@ body.tv-mode .price-row small{
 }
 </style>
 
+
+<style id="egilmez-v77-pc-final-one-screen">
+/*
+  PC ADMIN FINAL:
+  - Tüm altın satırları viewport içinde
+  - Sağ Döviz + Hurda viewport içinde
+  - Ana/yan scrollbar yok
+  - Ürün sayısı değişince CSS Grid otomatik eşit satır dağıtır
+*/
+@media (min-width:901px){
+  html{
+    width:100%!important;
+    height:100%!important;
+    overflow:hidden!important;
+  }
+  body.admin-route{
+    width:100vw!important;
+    height:100vh!important;
+    min-height:0!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    display:flex!important;
+    flex-direction:column!important;
+  }
+
+  /* Üst alanı mümkün olduğunca kompakt tut */
+  body.admin-route .header{
+    flex:0 0 58px!important;
+    height:58px!important;
+    min-height:58px!important;
+    width:100%!important;
+    margin:0!important;
+    padding:2px 18px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+  body.admin-route .brand-wrap{
+    height:54px!important;
+    min-height:54px!important;
+    padding:0!important;
+  }
+  body.admin-route .header .logo{
+    height:52px!important;
+    max-height:52px!important;
+    width:auto!important;
+    max-width:220px!important;
+    margin:0 auto!important;
+  }
+  body.admin-route .header h1,
+  body.admin-route .header .phone,
+  body.admin-route .has-info{
+    display:none!important;
+  }
+
+  body.admin-route .market-status{
+    flex:0 0 56px!important;
+    height:56px!important;
+    min-height:56px!important;
+    width:min(880px,88vw)!important;
+    margin:2px auto 4px!important;
+    border-radius:14px!important;
+  }
+  body.admin-route .market-status .status-cell{
+    height:54px!important;
+    min-height:54px!important;
+    padding:4px 12px!important;
+  }
+  body.admin-route .status-title{font-size:15px!important}
+  body.admin-route .status-sub{font-size:9px!important;margin-top:2px!important}
+  body.admin-route .status-label{font-size:10px!important}
+  body.admin-route .status-value{font-size:20px!important;line-height:1!important}
+
+  body.admin-route .top-switcher,
+  body.admin-route .doviz-bant{
+    display:none!important;
+  }
+
+  /* Kalan bütün alan fiyat ekranı */
+  body.admin-route .desktop-layout{
+    flex:1 1 auto!important;
+    width:calc(100vw - 16px)!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0 8px 6px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 300px!important;
+    gap:8px!important;
+    align-items:stretch!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+
+  /* SOL: Altın */
+  body.admin-route .desktop-main{
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:34px 28px minmax(0,1fr) 22px!important;
+    border-radius:14px!important;
+    box-sizing:border-box!important;
+  }
+
+  body.admin-route .desktop-main:before{
+    content:'◉  Altın Fiyatları'!important;
+    height:34px!important;
+    min-height:34px!important;
+    padding:0 12px!important;
+    margin:0!important;
+    display:flex!important;
+    align-items:center!important;
+    font-size:15px!important;
+    line-height:1!important;
+    box-sizing:border-box!important;
+  }
+
+  body.admin-route .table-header{
+    height:28px!important;
+    min-height:28px!important;
+    padding:0 10px!important;
+    margin:0!important;
+    display:grid!important;
+    grid-template-columns:1.45fr 1fr 1fr 1fr!important;
+    align-items:center!important;
+    box-sizing:border-box!important;
+  }
+  body.admin-route .table-header span{
+    font-size:10px!important;
+    line-height:1!important;
+  }
+
+  body.admin-route #priceRows{
+    min-height:0!important;
+    height:100%!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-auto-flow:row!important;
+    grid-auto-rows:minmax(0,1fr)!important;
+  }
+
+  body.admin-route .price-row{
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:1px 10px!important;
+    margin:0!important;
+    display:grid!important;
+    grid-template-columns:1.45fr 1fr 1fr 1fr!important;
+    align-items:center!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+  body.admin-route .price-row .birim{
+    font-size:clamp(10px,1.05vw,14px)!important;
+    line-height:1.02!important;
+  }
+  body.admin-route .price-row .alis,
+  body.admin-route .price-row .satis,
+  body.admin-route .price-row .kk{
+    font-size:clamp(11px,1.12vw,15px)!important;
+    line-height:1!important;
+  }
+  body.admin-route .change-rate{
+    font-size:7px!important;
+    line-height:.95!important;
+    margin-top:0!important;
+  }
+
+  body.admin-route .update-bar{
+    height:22px!important;
+    min-height:22px!important;
+    margin:0!important;
+    padding:0 8px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    overflow:hidden!important;
+  }
+  body.admin-route .upd-text{
+    font-size:9px!important;
+    line-height:1!important;
+    padding:3px 10px!important;
+  }
+
+  /* SAĞ: Döviz + Hurda */
+  body.admin-route #desktopSide{
+    width:300px!important;
+    max-width:300px!important;
+    height:100%!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:
+      28px 22px minmax(0,5fr)
+      28px 22px minmax(0,5fr)!important;
+    border-radius:14px!important;
+    box-sizing:border-box!important;
+  }
+  body.admin-route #desktopSide .desktop-extra-title{
+    height:28px!important;
+    min-height:28px!important;
+    margin:0!important;
+    padding:0 9px!important;
+    display:flex!important;
+    align-items:center!important;
+    box-sizing:border-box!important;
+  }
+  body.admin-route #desktopSide .desktop-extra-title span{
+    font-size:10px!important;
+    line-height:1!important;
+  }
+  body.admin-route #desktopSide .desktop-extra-columns{
+    height:22px!important;
+    min-height:22px!important;
+    margin:0!important;
+    padding:0 9px!important;
+    display:grid!important;
+    align-items:center!important;
+    box-sizing:border-box!important;
+  }
+  body.admin-route #desktopSide .desktop-extra-columns span{
+    font-size:8px!important;
+    line-height:1!important;
+  }
+
+  body.admin-route #desktopDovizRows,
+  body.admin-route #desktopHurdaRows{
+    height:100%!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-auto-rows:minmax(0,1fr)!important;
+  }
+
+  body.admin-route #desktopDovizRows > *,
+  body.admin-route #desktopHurdaRows > *{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:1px 9px!important;
+    display:grid!important;
+    align-items:center!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+
+  body.admin-route #desktopDovizRows *,
+  body.admin-route #desktopHurdaRows *{
+    line-height:1!important;
+  }
+
+  body.admin-route #desktopDovizRows .desktop-extra-name,
+  body.admin-route #desktopHurdaRows .desktop-extra-name,
+  body.admin-route #desktopDovizRows .extra-name,
+  body.admin-route #desktopHurdaRows .extra-name{
+    font-size:clamp(9px,.82vw,12px)!important;
+  }
+  body.admin-route #desktopDovizRows .desktop-extra-value,
+  body.admin-route #desktopHurdaRows .desktop-extra-value,
+  body.admin-route #desktopDovizRows .extra-buy,
+  body.admin-route #desktopDovizRows .extra-sell,
+  body.admin-route #desktopHurdaRows .extra-buy,
+  body.admin-route #desktopHurdaRows .extra-sell{
+    font-size:clamp(9px,.86vw,12px)!important;
+  }
+
+  /* Kesinlikle scrollbar yok */
+  body.admin-route,
+  body.admin-route .desktop-layout,
+  body.admin-route .desktop-main,
+  body.admin-route #priceRows,
+  body.admin-route #desktopSide,
+  body.admin-route #desktopDovizRows,
+  body.admin-route #desktopHurdaRows{
+    scrollbar-width:none!important;
+  }
+  body.admin-route::-webkit-scrollbar,
+  body.admin-route .desktop-layout::-webkit-scrollbar,
+  body.admin-route .desktop-main::-webkit-scrollbar,
+  body.admin-route #priceRows::-webkit-scrollbar,
+  body.admin-route #desktopSide::-webkit-scrollbar,
+  body.admin-route #desktopDovizRows::-webkit-scrollbar,
+  body.admin-route #desktopHurdaRows::-webkit-scrollbar{
+    display:none!important;width:0!important;height:0!important;
+  }
+}
+
+/* 1366x768 gibi laptop ekranlarında sağ panel biraz daha dar */
+@media (min-width:901px) and (max-width:1450px){
+  body.admin-route .desktop-layout{
+    grid-template-columns:minmax(0,1fr) 280px!important;
+  }
+  body.admin-route #desktopSide{
+    width:280px!important;
+    max-width:280px!important;
+  }
+}
+
+/* Çok düşük yükseklik: başlıkları biraz daha sıkıştır */
+@media (min-width:901px) and (max-height:720px){
+  body.admin-route .header{flex-basis:50px!important;height:50px!important;min-height:50px!important}
+  body.admin-route .brand-wrap{height:46px!important;min-height:46px!important}
+  body.admin-route .header .logo{height:44px!important;max-height:44px!important}
+  body.admin-route .market-status{flex-basis:48px!important;height:48px!important;min-height:48px!important}
+  body.admin-route .market-status .status-cell{height:46px!important;min-height:46px!important}
+  body.admin-route .status-title{font-size:13px!important}
+  body.admin-route .status-value{font-size:18px!important}
+  body.admin-route .desktop-main{grid-template-rows:30px 24px minmax(0,1fr) 18px!important}
+  body.admin-route .desktop-main:before{height:30px!important;min-height:30px!important;font-size:13px!important}
+  body.admin-route .table-header{height:24px!important;min-height:24px!important}
+  body.admin-route .update-bar{height:18px!important;min-height:18px!important}
+}
+</style>
+
+
+<style id="egilmez-v78-final-fit">
+@media (min-width:901px){
+  html,body.admin-route{
+    width:100%!important;height:100%!important;min-height:0!important;
+    margin:0!important;padding:0!important;overflow:hidden!important;
+    max-width:none!important;
+  }
+  body.admin-route .header{
+    height:52px!important;min-height:52px!important;max-height:52px!important;
+    padding:0 14px!important;margin:0!important;box-sizing:border-box!important;
+  }
+  body.admin-route .brand-wrap{height:50px!important;min-height:50px!important}
+  body.admin-route .header .logo{height:48px!important;max-height:48px!important;width:auto!important}
+  body.admin-route .market-status{
+    height:50px!important;min-height:50px!important;max-height:50px!important;
+    margin:2px auto 3px!important;width:min(860px,86vw)!important;
+  }
+  body.admin-route .market-status .status-cell{
+    height:48px!important;min-height:48px!important;padding:2px 10px!important;
+  }
+  body.admin-route .status-title{font-size:13px!important}
+  body.admin-route .status-sub,.status-label{font-size:8px!important}
+  body.admin-route .status-value{font-size:18px!important;line-height:1!important}
+  body.admin-route .top-switcher,body.admin-route .doviz-bant{display:none!important}
+
+  body.admin-route .desktop-layout{
+    position:relative!important;
+    width:calc(100vw - 12px)!important;
+    margin:0 6px 4px!important;padding:0!important;
+    display:grid!important;grid-template-columns:minmax(0,1fr) 280px!important;
+    gap:7px!important;overflow:hidden!important;box-sizing:border-box!important;
+  }
+  body.admin-route .desktop-main{
+    margin:0!important;padding:0!important;width:100%!important;height:100%!important;
+    min-height:0!important;overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:28px 24px minmax(0,1fr) 18px!important;
+    box-sizing:border-box!important;
+  }
+  body.admin-route .desktop-main:before{
+    height:28px!important;min-height:28px!important;padding:0 10px!important;
+    display:flex!important;align-items:center!important;font-size:13px!important;
+    box-sizing:border-box!important;
+  }
+  body.admin-route .table-header{
+    height:24px!important;min-height:24px!important;padding:0 8px!important;margin:0!important;
+    display:grid!important;grid-template-columns:1.45fr 1fr 1fr 1fr!important;
+    align-items:center!important;box-sizing:border-box!important;
+  }
+  body.admin-route .table-header span{font-size:9px!important}
+  body.admin-route #priceRows{
+    height:100%!important;min-height:0!important;overflow:hidden!important;
+    display:grid!important;grid-auto-flow:row!important;
+    grid-auto-rows:minmax(0,1fr)!important;
+  }
+  body.admin-route .price-row{
+    height:auto!important;min-height:0!important;max-height:none!important;
+    margin:0!important;padding:0 8px!important;overflow:hidden!important;
+    display:grid!important;grid-template-columns:1.45fr 1fr 1fr 1fr!important;
+    align-items:center!important;box-sizing:border-box!important;
+  }
+  body.admin-route .price-row .birim{font-size:12px!important;line-height:1!important}
+  body.admin-route .price-row .alis,
+  body.admin-route .price-row .satis,
+  body.admin-route .price-row .kk{font-size:13px!important;line-height:1!important}
+  body.admin-route .change-rate{font-size:6.5px!important;line-height:1!important;margin:0!important}
+  body.admin-route .update-bar{
+    height:18px!important;min-height:18px!important;padding:0!important;margin:0!important;
+    overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  }
+  body.admin-route .upd-text{font-size:8px!important;padding:2px 8px!important}
+
+  body.admin-route #desktopSide{
+    width:280px!important;max-width:280px!important;height:100%!important;min-height:0!important;
+    margin:0!important;padding:0!important;overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:25px 19px minmax(0,5fr) 25px 19px minmax(0,5fr)!important;
+    box-sizing:border-box!important;
+  }
+  body.admin-route #desktopSide .desktop-extra-title{
+    height:25px!important;min-height:25px!important;padding:0 8px!important;margin:0!important;
+    display:flex!important;align-items:center!important;box-sizing:border-box!important;
+  }
+  body.admin-route #desktopSide .desktop-extra-title span{font-size:9px!important}
+  body.admin-route #desktopSide .desktop-extra-columns{
+    height:19px!important;min-height:19px!important;padding:0 8px!important;margin:0!important;
+    align-items:center!important;box-sizing:border-box!important;
+  }
+  body.admin-route #desktopSide .desktop-extra-columns span{font-size:7px!important}
+  body.admin-route #desktopDovizRows,body.admin-route #desktopHurdaRows{
+    height:100%!important;min-height:0!important;overflow:hidden!important;
+    display:grid!important;grid-auto-rows:minmax(0,1fr)!important;
+  }
+  body.admin-route #desktopDovizRows>*,
+  body.admin-route #desktopHurdaRows>*{
+    height:auto!important;min-height:0!important;max-height:none!important;
+    margin:0!important;padding:0 8px!important;overflow:hidden!important;
+    display:grid!important;align-items:center!important;box-sizing:border-box!important;
+  }
+  body.admin-route #desktopSide .desktop-extra-name,
+  body.admin-route #desktopSide .extra-name,
+  body.admin-route #desktopSide .desktop-extra-value,
+  body.admin-route #desktopSide .extra-buy,
+  body.admin-route #desktopSide .extra-sell{
+    font-size:10px!important;line-height:1!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -1404,7 +1840,15 @@ body.tv-mode .price-row small{
   </div>
 </div>
 
-<script>if (window.location.search.indexOf('admin') !== -1 && window.location.search.indexOf('tv=1') === -1) document.body.classList.add('admin-route');</script>
+<script>
+(function(){
+  var p=(location.pathname||'').toLowerCase();
+  var q=(location.search||'').toLowerCase();
+  if((q.indexOf('admin')!==-1 || /\/admin(?:\.html)?\/?$/.test(p)) && q.indexOf('tv=1')===-1){
+    document.body.classList.add('admin-route');
+  }
+})();
+</script>
 
 <div class="header">
   <button class="admin-btn" id="adminBtn" onclick="openAdmin()" title="Yönetim">☰</button>
@@ -3641,66 +4085,71 @@ setInterval(function() {
 </script>
 
 
-<script id="egilmez-v76-pc-autofit">
+
+
+
+
+<script id="egilmez-v78-viewport-engine">
 (function(){
-  var timer=null;
-
-  function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
-
-  function fitPcAdmin(){
-    if(innerWidth < 901 || !document.body.classList.contains('admin-route')) return;
+  var busy=false;
+  function isAdmin(){
+    var p=(location.pathname||'').toLowerCase(), q=(location.search||'').toLowerCase();
+    return q.indexOf('tv=1')===-1 && (q.indexOf('admin')!==-1 || /\/admin(?:\.html)?\/?$/.test(p) || document.body.classList.contains('admin-route'));
+  }
+  function fit(){
+    if(busy || innerWidth<901 || !isAdmin()) return;
+    busy=true;
+    document.body.classList.add('admin-route');
 
     var layout=document.querySelector('.desktop-layout');
-    var main=document.querySelector('.desktop-main');
+    var rows=document.getElementById('priceRows');
     var side=document.getElementById('desktopSide');
-    var priceRows=document.getElementById('priceRows');
-    if(!layout || !main || !side || !priceRows) return;
+    if(!layout||!rows){busy=false;return;}
 
-    /* Sol Altın tablosu: ürün arttıkça satır/yazı otomatik küçülür. */
-    var mainRows=priceRows.querySelectorAll('.price-row').length || 1;
-    var mainH=main.getBoundingClientRect().height;
-    var headH=(document.querySelector('.table-header')||{}).offsetHeight || 30;
-    var updateH=(document.querySelector('.update-bar')||{}).offsetHeight || 24;
-    var usableMain=Math.max(180,mainH-headH-updateH-4);
-    var mainRowH=usableMain/mainRows;
+    /* Browserın GERÇEK görünen yüksekliğini kullan. */
+    var top=layout.getBoundingClientRect().top;
+    var available=Math.max(260, window.innerHeight-top-4);
+    layout.style.setProperty('height',available+'px','important');
+    layout.style.setProperty('max-height',available+'px','important');
 
-    document.body.style.setProperty('--pc-main-row-h',clamp(mainRowH,22,44).toFixed(1)+'px');
-    document.body.style.setProperty('--pc-main-font',clamp(mainRowH*.34,10,15).toFixed(1)+'px');
-    document.body.style.setProperty('--pc-main-value',clamp(mainRowH*.39,11,17).toFixed(1)+'px');
+    /* Altın satırları mevcut boşluğa zorla eşit dağıt. */
+    var main=document.querySelector('.desktop-main');
+    var count=rows.querySelectorAll('.price-row').length||1;
+    var mainH=available;
+    var fixed=28+24+18;
+    var rh=Math.max(18,(mainH-fixed)/count);
+    rows.style.setProperty('grid-template-rows','repeat('+count+', minmax(0, 1fr))','important');
 
-    /* Sağ Döviz + Hurda: tüm satırları görünür alana eşit dağıt. */
-    var fx=document.querySelectorAll('#desktopDovizRows .desktop-extra-row,#desktopDovizRows .extra-data-row').length;
-    var hu=document.querySelectorAll('#desktopHurdaRows .desktop-extra-row,#desktopHurdaRows .extra-data-row').length;
-    var total=fx+hu;
-    if(total){
-      var sideH=side.getBoundingClientRect().height;
-      var fixed=112; /* 2 başlık + 2 kolon başlığı */
-      var sideRowH=Math.max(18,(sideH-fixed)/total);
-      document.body.style.setProperty('--pc-side-row-h',sideRowH.toFixed(1)+'px');
-      document.body.style.setProperty('--pc-side-font',clamp(sideRowH*.40,9.5,14).toFixed(1)+'px');
+    /* Çok ürün varsa yazıyı de küçült; hiçbir satır kesilmesin. */
+    var fs=Math.max(8.5,Math.min(13,rh*.36));
+    var nfs=Math.max(9,Math.min(14,rh*.40));
+    document.querySelectorAll('.price-row .birim').forEach(function(e){e.style.setProperty('font-size',fs+'px','important')});
+    document.querySelectorAll('.price-row .alis,.price-row .satis,.price-row .kk').forEach(function(e){e.style.setProperty('font-size',nfs+'px','important')});
+    document.querySelectorAll('.change-rate').forEach(function(e){e.style.setProperty('font-size',Math.max(5.5,fs*.52)+'px','important')});
+
+    if(side){
+      side.style.setProperty('height',available+'px','important');
+      side.style.setProperty('overflow','hidden','important');
+      ['desktopDovizRows','desktopHurdaRows'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el) el.style.setProperty('overflow','hidden','important');
+      });
     }
+    busy=false;
   }
 
-  function schedule(){
-    clearTimeout(timer);
-    timer=setTimeout(fitPcAdmin,50);
-  }
-
-  addEventListener('load',schedule);
-  addEventListener('resize',schedule);
+  var t;
+  function schedule(){clearTimeout(t);t=setTimeout(fit,30)}
   document.addEventListener('DOMContentLoaded',function(){
-    schedule();
-
+    fit();
     ['priceRows','desktopDovizRows','desktopHurdaRows'].forEach(function(id){
-      var el=document.getElementById(id);
-      if(el && window.MutationObserver){
-        new MutationObserver(schedule).observe(el,{childList:true});
-      }
+      var e=document.getElementById(id);
+      if(e&&window.MutationObserver)new MutationObserver(schedule).observe(e,{childList:true,subtree:false});
     });
   });
-
-  setTimeout(schedule,250);
-  setTimeout(schedule,900);
+  addEventListener('load',fit);
+  addEventListener('resize',schedule);
+  setTimeout(fit,150);setTimeout(fit,600);setTimeout(fit,1500);
 })();
 </script>
 
