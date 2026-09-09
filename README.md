@@ -1,9 +1,9 @@
-# Eğilmez Kuyumculuk Premium v4
+# Eğilmez Kuyumculuk Premium v5
 
-- Premium koyu/açık tema
-- Profesyonel üst tema anahtarı
-- Piyasa Canlı kartında Has Alış / Has Satış
-- Müşteri ekranında Döviz/Hurda detayları gizli
-- Varlıklarım cihaz bazında özeldir
-- Eğilmez Firebase bağımsızdır
-- Paket logosu yapay olarak yeniden üretilmiştir; eski yüklenen logo varsayılan olarak kullanılmaz.
+- Kompakt üst alan ve daha küçük Fiyatlar / Varlıklarım sekmeleri
+- Alt sabit navigasyon kaldırıldı
+- Açık modda varsayılan Eğilmez logosu koyu kahve görünür
+- Karanlık / açık tema korunur
+- Piyasa Canlı kartında Has Alış / Has Satış canlı gösterilir
+- Varlıklarım sadece cihaz bazında Eğilmez uygulamasına özeldir
+- Firebase: Eğilmez Kuyumculuk bağımsız Realtime Database
