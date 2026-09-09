@@ -632,6 +632,189 @@ html[data-start-theme='light'] #premiumSplash .splash-loader{background:rgba(110
 
 </style>
 <!-- Eğilmez Premium v5.3: tema kalıcılığı + gerçek zamanlı Firebase senkron -->
+
+<style id="egilmez-v6-premium-fixes">
+/* ===== ADMIN: Varlıklarım kaldırıldı ===== */
+body.admin-route #portfolioWrap,
+body.admin-route #btnPortfolioTop{display:none!important;}
+body.admin-route .top-switcher{display:none!important;}
+
+/* ===== Yönetim listeleri ===== */
+.manage-pro-row{
+  display:grid;grid-template-columns:34px minmax(100px,1fr) 38px 38px 42px;
+  gap:7px;align-items:center;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.08);
+}
+.manage-pro-row .order-no{
+  width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  background:rgba(212,175,55,.12);color:#d8bc6b;font-size:12px;font-weight:800;
+}
+.manage-pro-row .name{font-weight:700;color:#eee4d4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.manage-pro-btn{
+  height:32px;border-radius:9px;border:1px solid #45494b;background:#26292a;color:#ddd;cursor:pointer;font-weight:800
+}
+.manage-pro-btn.del{color:#ff8c86;border-color:#6b3734;background:#2a1c1b}
+.manage-add-box{
+  margin:10px 12px 14px;padding:12px;border:1px solid rgba(212,175,55,.25);
+  border-radius:14px;background:rgba(212,175,55,.055)
+}
+.manage-add-title{font-size:12px;font-weight:800;color:#d9bd6b;margin-bottom:9px;letter-spacing:.2px}
+.manage-add-grid{display:flex;flex-wrap:wrap;gap:7px}
+.manage-add-grid input,.manage-add-grid select{
+  min-width:0;flex:1;padding:9px;border-radius:9px;border:1px solid #444;background:#222627;color:#f3eadc
+}
+.manage-add-grid button{
+  padding:9px 12px;border-radius:9px;border:0;background:#b99536;color:#17120a;font-weight:900
+}
+body.light-mode .manage-pro-row{border-color:#d5c8b5}
+body.light-mode .manage-pro-row .name{color:#342d27}
+body.light-mode .manage-pro-btn{background:#eee5d8;border-color:#c8b79d;color:#55493d}
+body.light-mode .manage-pro-btn.del{background:#f8e5e2;border-color:#d5aaa4;color:#9b3931}
+body.light-mode .manage-add-box{background:#eee4d5;border-color:#c5ad7c}
+body.light-mode .manage-add-grid input,body.light-mode .manage-add-grid select{background:#fbf7f0;color:#302923;border-color:#cbbca6}
+
+/* ===== PC admin tek ekran ===== */
+@media (min-width:1100px){
+  body.admin-route{overflow:auto!important;}
+  body.admin-route .header{
+    min-height:76px!important;height:76px!important;padding:3px 26px!important;
+  }
+  body.admin-route .brand-wrap{min-height:70px!important;height:70px!important}
+  body.admin-route .logo{max-height:66px!important;width:auto!important}
+  body.admin-route .market-status{max-width:920px!important;margin:5px auto 8px!important}
+  body.admin-route .desktop-layout{
+    width:96vw!important;max-width:1650px!important;margin:0 auto!important;
+    display:grid!important;grid-template-columns:minmax(0,2.25fr) minmax(290px,.75fr)!important;
+    gap:14px!important;align-items:start!important;
+  }
+  body.admin-route .desktop-main{min-width:0!important}
+  body.admin-route #desktopSide{
+    display:flex!important;min-width:0!important;max-height:calc(100vh - 190px)!important;
+    overflow:auto!important;border-radius:16px!important;
+  }
+  body.admin-route .price-row{min-height:46px!important;padding:7px 14px!important}
+  body.admin-route .price-row .birim{font-size:15px!important}
+  body.admin-route .price-row .alis,body.admin-route .price-row .satis,body.admin-route .price-row .kk{font-size:16px!important}
+  body.admin-route .table-header{padding:8px 14px!important}
+}
+
+/* ===== TV müşteri aynası: döviz/hurda yok, tam ekran, okunaklı ===== */
+body.tv-mode{
+  width:100vw!important;min-height:100vh!important;overflow:hidden!important;
+  padding:0!important;margin:0!important;
+}
+body.tv-mode #desktopSide,
+body.tv-mode .desktop-side,
+body.tv-mode #adminEkstra,
+body.tv-mode #ekstraDovizRows,
+body.tv-mode #ekstraHurdaRows,
+body.tv-mode #desktopDovizRows,
+body.tv-mode #desktopHurdaRows,
+body.tv-mode .doviz-bant,
+body.tv-mode .top-switcher,
+body.tv-mode .bottom-nav,
+body.tv-mode .overlay,
+body.tv-mode .admin-btn,
+body.tv-mode .mod-btn,
+body.tv-mode .update-bar,
+body.tv-mode #portfolioWrap{display:none!important;}
+
+body.tv-mode .header{
+  width:100vw!important;height:72px!important;min-height:72px!important;
+  padding:3px 2.2vw!important;box-sizing:border-box!important;background:transparent!important;
+}
+body.tv-mode .brand-wrap{
+  height:68px!important;min-height:68px!important;display:flex!important;align-items:center!important;justify-content:center!important;
+}
+body.tv-mode .header .logo{
+  height:64px!important;max-height:64px!important;width:auto!important;max-width:190px!important;object-fit:contain!important;
+}
+body.tv-mode .header-tools{
+  display:flex!important;position:absolute!important;right:2.2vw!important;top:13px!important;z-index:999!important;
+}
+body.tv-mode .header-tools .contact-pill{display:none!important}
+body.tv-mode .header-tools .theme-btn{display:flex!important;opacity:1!important;width:86px!important;height:44px!important}
+
+body.tv-mode .market-status{
+  width:96vw!important;max-width:none!important;margin:2px auto 7px!important;
+  display:grid!important;grid-template-columns:1.15fr .7fr .7fr!important;
+}
+body.tv-mode .market-status .status-cell{min-height:62px!important;padding:7px 18px!important}
+body.tv-mode .status-title{font-size:20px!important;line-height:1.05!important}
+body.tv-mode .status-sub{font-size:12px!important;margin-top:4px!important}
+body.tv-mode .status-label{font-size:13px!important}
+body.tv-mode .status-value{font-size:27px!important;line-height:1!important}
+
+body.tv-mode .desktop-layout{
+  width:96vw!important;max-width:none!important;height:calc(100vh - 151px)!important;
+  margin:0 auto!important;display:block!important;
+}
+body.tv-mode .desktop-main{
+  width:100%!important;height:100%!important;max-width:none!important;margin:0!important;
+  border:1px solid rgba(201,168,92,.5)!important;border-radius:16px!important;overflow:hidden!important;
+  background:#11171a!important;
+}
+body.tv-mode .desktop-main:before{
+  content:"Altın Fiyatları";display:block;padding:7px 16px;font-size:19px;font-weight:900;
+  color:#ead79e;border-bottom:1px solid #333b3f;background:#151b1e;
+}
+body.tv-mode .table-header{display:none!important}
+body.tv-mode #priceRows{
+  display:grid!important;grid-template-columns:1fr 1fr!important;
+  grid-template-rows:34px repeat(7,minmax(0,1fr))!important;
+  grid-auto-flow:column!important;height:calc(100% - 40px)!important;
+  width:100%!important;overflow:hidden!important;
+}
+body.tv-mode .tv-col-header{
+  display:grid!important;grid-template-columns:1.3fr .8fr .8fr .8fr!important;align-items:center!important;
+  padding:0 14px!important;background:#1c2327!important;border-bottom:1px solid #30393e!important;
+  color:#aeb8be!important;font-size:12px!important;font-weight:800!important;
+}
+body.tv-mode .tv-col-header:nth-of-type(2){border-left:1px solid #313a3e!important}
+body.tv-mode .tv-col-header span:not(:first-child){text-align:right!important}
+body.tv-mode .tv-col-header .tv-kk{color:#62aee5!important}
+body.tv-mode .price-row{
+  display:grid!important;grid-template-columns:1.3fr .8fr .8fr .8fr!important;align-items:center!important;
+  min-height:0!important;height:auto!important;padding:4px 14px!important;margin:0!important;border-radius:0!important;
+  border-bottom:1px solid #2d363a!important;background:#11171a!important;box-sizing:border-box!important;
+}
+body.tv-mode .price-row:nth-child(even){background:#141b1f!important}
+body.tv-mode .price-row .birim{font-size:17px!important;font-weight:800!important;color:#efe7da!important}
+body.tv-mode .price-row .alis,body.tv-mode .price-row .satis{
+  font-size:19px!important;font-weight:900!important;text-align:right!important;color:#f1eadf!important;
+}
+body.tv-mode .price-row .kk{font-size:18px!important;font-weight:900!important;text-align:right!important;color:#62aee5!important}
+body.tv-mode .change-rate,body.tv-mode .price-row small{font-size:9px!important;margin-top:1px!important}
+
+/* TV açık tema */
+body.tv-mode.light-mode{background:linear-gradient(180deg,#f2ede4 0%,#e9e1d5 100%)!important;color:#302922!important}
+body.tv-mode.light-mode .desktop-main{background:#f4eee5!important;border-color:#cdbb9f!important}
+body.tv-mode.light-mode .desktop-main:before{background:#eee4d5!important;color:#594729!important;border-color:#d0c0aa!important}
+body.tv-mode.light-mode .tv-col-header{background:#ded3c2!important;border-color:#c9baa5!important;color:#62564a!important}
+body.tv-mode.light-mode .tv-col-header .tv-kk{color:#2f6f9e!important}
+body.tv-mode.light-mode #priceRows .price-row{background:#f2ece2!important;border-color:#d8ccbb!important}
+body.tv-mode.light-mode #priceRows .price-row:nth-child(even){background:#e9e1d5!important}
+body.tv-mode.light-mode #priceRows .price-row .birim,
+body.tv-mode.light-mode #priceRows .price-row .alis,
+body.tv-mode.light-mode #priceRows .price-row .satis{color:#2d2823!important}
+body.tv-mode.light-mode #priceRows .price-row .kk{color:#2f6f9e!important}
+
+@media (max-height:760px){
+  body.tv-mode .header{height:62px!important;min-height:62px!important}
+  body.tv-mode .brand-wrap{height:58px!important;min-height:58px!important}
+  body.tv-mode .header .logo{height:56px!important;max-height:56px!important}
+  body.tv-mode .market-status .status-cell{min-height:54px!important;padding:5px 14px!important}
+  body.tv-mode .status-title{font-size:17px!important}
+  body.tv-mode .status-value{font-size:23px!important}
+  body.tv-mode .desktop-layout{height:calc(100vh - 127px)!important}
+  body.tv-mode .desktop-main:before{padding:5px 14px!important;font-size:17px!important}
+  body.tv-mode #priceRows{grid-template-rows:30px repeat(7,minmax(0,1fr))!important;height:calc(100% - 34px)!important}
+  body.tv-mode .price-row{padding:2px 12px!important}
+  body.tv-mode .price-row .birim{font-size:15px!important}
+  body.tv-mode .price-row .alis,body.tv-mode .price-row .satis{font-size:17px!important}
+  body.tv-mode .price-row .kk{font-size:16px!important}
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -755,7 +938,7 @@ html[data-start-theme='light'] #premiumSplash .splash-loader{background:rgba(110
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeAdmin()">
   <div class="admin-panel">
     <div class="admin-header">
-      <h2>⚙️ Yönetici Paneli</h2>
+      <h2>⚙️ Eğilmez Admin</h2>
       <button class="close-btn" onclick="closeAdmin()">✕</button>
     </div>
 
@@ -850,13 +1033,13 @@ html[data-start-theme='light'] #premiumSplash .splash-loader{background:rgba(110
     <div class="hint-box" style="background:#0a1a2a;border-color:#1a3a5a;color:#7ab0e0;margin-bottom:4px">
       Canlı alış/satış + senin düzeltmen = gösterilen fiyat
     </div>
-    <div id="adminDovizRows"></div>
+    <div id="adminDovizRows"></div><div id="adminDovizAddBox"></div>
 
     <div class="sec-title" style="color:#c8a040">🔩 Hurda Altın (Sadece Admin)</div>
     <div class="hint-box" style="background:#1a1500;border-color:#3a3000;color:#c8a040;margin-bottom:4px">
       Has fiyatı × ayar oranı + düzeltme
     </div>
-    <div id="adminHurdaRows"></div>
+    <div id="adminHurdaRows"></div><div id="adminHurdaAddBox"></div>
 
     <div class="sec-title">Müşteri Linki</div>
     <div class="share-box">
@@ -2488,6 +2671,216 @@ setInterval(function() {
   if(document.readyState==='complete') closePremiumSplash();
   else window.addEventListener('load',closePremiumSplash,{once:true});
   setTimeout(closePremiumSplash,2200);
+})();
+</script>
+
+
+<script id="egilmez-v6-admin-crud-tv">
+(function(){
+  function persist(msg){
+    try{localStorage.setItem('egilmez_settings_v1',JSON.stringify(settings));}catch(e){}
+    try{jsonbinSave(settings,function(ok){ if(msg) showToast(ok?msg:(msg+' (yerel)')); });}catch(e){ if(msg) showToast(msg); }
+  }
+  function ensureDynamicLists(){
+    if(!settings.dovizItems){
+      settings.dovizItems=DOVIZLER.map(function(x){return {id:x.id,label:x.label,flag:x.flag};});
+    }
+    if(!settings.hurdaItems){
+      settings.hurdaItems=HURDALAR.map(function(x){return {id:x.id,label:x.label,oran:x.oran};});
+    }
+    DOVIZLER=settings.dovizItems;
+    HURDALAR=settings.hurdaItems;
+  }
+  ensureDynamicLists();
+
+  /* Admin ekranında Varlıklarım yok */
+  if(location.search.indexOf('admin')!==-1){
+    document.body.classList.remove('portfolio-mode');
+  }
+
+  /* Ürün listesi: silinen ürün yönetim listesinden de tamamen kaybolur */
+  window.renderUrunList=function(){
+    var custom=settings.customItems||[];
+    var active=getActiveItems();
+    var html='';
+    active.forEach(function(item,index){
+      var isCustom=custom.some(function(c){return c.id===item.id;});
+      html+='<div class="manage-pro-row">'
+        +'<span class="order-no">'+(index+1)+'</span>'
+        +'<span class="name"'+(isCustom?' style="color:#d4af37"':'')+'>'+item.label+'</span>'
+        +'<button class="manage-pro-btn" onclick="moveItem(\''+item.id+'\',-1)" title="Yukarı">↑</button>'
+        +'<button class="manage-pro-btn" onclick="moveItem(\''+item.id+'\',1)" title="Aşağı">↓</button>'
+        +'<button class="manage-pro-btn del" onclick="'+(isCustom?'deleteUrun':'deleteDefault')+'(\''+item.id+'\')" title="Sil">×</button>'
+        +'</div>';
+    });
+    var el=document.getElementById('urunList'); if(el) el.innerHTML=html||'<div class="hint-box">Listede ürün yok. Aşağıdan yeni ürün ekleyin.</div>';
+  };
+
+  window.deleteDefault=function(id){
+    if(!confirm('Bu ürünü listeden tamamen kaldırmak istiyor musunuz?')) return;
+    if(!settings.deletedItems) settings.deletedItems=[];
+    if(settings.deletedItems.indexOf(id)===-1) settings.deletedItems.push(id);
+    settings.itemOrder=(settings.itemOrder||[]).filter(function(x){return x!==id;});
+    document.getElementById('priceRows').innerHTML='';
+    renderTable(); renderAdminRows(); persist('Ürün silindi');
+  };
+  window.deleteUrun=function(id){
+    if(!confirm('Bu ürünü listeden tamamen kaldırmak istiyor musunuz?')) return;
+    settings.customItems=(settings.customItems||[]).filter(function(c){return c.id!==id;});
+    settings.itemOrder=(settings.itemOrder||[]).filter(function(x){return x!==id;});
+    if(settings.labor) delete settings.labor[id];
+    if(settings.laborH) delete settings.laborH[id];
+    document.getElementById('priceRows').innerHTML='';
+    renderTable(); renderAdminRows(); persist('Ürün silindi');
+  };
+
+  /* Döviz yönetimi */
+  var SUPPORTED_FX=[
+    {id:'usd',label:'USD',flag:'🇺🇸'},
+    {id:'eur',label:'EUR',flag:'🇪🇺'},
+    {id:'gbp',label:'GBP',flag:'🇬🇧'},
+    {id:'sar',label:'SAR',flag:'🇸🇦'},
+    {id:'chf',label:'CHF',flag:'🇨🇭'}
+  ];
+  function renderFxAddBox(){
+    var el=document.getElementById('adminDovizAddBox'); if(!el) return;
+    var active={}; DOVIZLER.forEach(function(x){active[x.id]=1;});
+    var opts=SUPPORTED_FX.filter(function(x){return !active[x.id];}).map(function(x){
+      return '<option value="'+x.id+'">'+x.flag+' '+x.label+'</option>';
+    }).join('');
+    el.innerHTML='<div class="manage-add-box"><div class="manage-add-title">Döviz Ekle / Sırala</div>'
+      +(opts?'<div class="manage-add-grid"><select id="newFxId">'+opts+'</select><button type="button" onclick="addDovizV6()">+ Döviz Ekle</button></div>'
+      :'<div class="hint-box">Desteklenen tüm dövizler listede.</div>')+'</div>';
+  }
+  window.moveDovizV6=function(id,dir){
+    var i=DOVIZLER.findIndex(function(x){return x.id===id;}); var n=i+dir;
+    if(i<0||n<0||n>=DOVIZLER.length) return;
+    var t=DOVIZLER[i]; DOVIZLER[i]=DOVIZLER[n]; DOVIZLER[n]=t;
+    settings.dovizItems=DOVIZLER; persist('Döviz sırası güncellendi'); renderAdminDoviz();
+  };
+  window.deleteDovizV6=function(id){
+    if(!confirm('Bu döviz listeden kaldırılsın mı?')) return;
+    DOVIZLER=DOVIZLER.filter(function(x){return x.id!==id;}); settings.dovizItems=DOVIZLER;
+    persist('Döviz silindi'); renderAdminDoviz();
+  };
+  window.addDovizV6=function(){
+    var s=document.getElementById('newFxId'); if(!s||!s.value) return;
+    var item=SUPPORTED_FX.find(function(x){return x.id===s.value;}); if(!item) return;
+    DOVIZLER.push({id:item.id,label:item.label,flag:item.flag}); settings.dovizItems=DOVIZLER;
+    persist('Döviz eklendi'); renderAdminDoviz();
+  };
+
+  var oldRenderAdminDoviz=window.renderAdminDoviz;
+  window.renderAdminDoviz=function(){
+    ensureDynamicLists();
+    var html=''; if(!liveDoviz) liveDoviz={};
+    DOVIZLER.forEach(function(d,index){
+      var alis=liveDoviz[d.id+'Alis']||0, satis=liveDoviz[d.id+'Satis']||0;
+      var duzA=parseFloat((settings.dovizDuz&&settings.dovizDuz[d.id+'A'])||0);
+      var duzS=parseFloat((settings.dovizDuz&&settings.dovizDuz[d.id+'S'])||0);
+      var gA=alis?(alis+duzA).toFixed(2):'—', gS=satis?(satis+duzS).toFixed(2):'—';
+      html+='<div class="admin-row" style="flex-wrap:wrap;gap:5px">'
+       +'<span class="order-no" style="display:inline-flex">'+(index+1)+'</span>'
+       +'<span class="row-label" style="min-width:70px">'+d.flag+' '+d.label+'</span>'
+       +'<span style="font-size:13px;color:#5dba6a;min-width:65px">'+gA+' ₺</span>'
+       +'<span style="font-size:13px;color:#e07050;min-width:65px">'+gS+' ₺</span>'
+       +'<div class="inp-group"><span class="inp-unit">A±₺</span><input class="admin-inp" type="number" step="0.01" id="duzA_'+d.id+'" value="'+duzA+'" style="width:64px"></div>'
+       +'<div class="inp-group"><span class="inp-unit">S±₺</span><input class="admin-inp" type="number" step="0.01" id="duzS_'+d.id+'" value="'+duzS+'" style="width:64px"></div>'
+       +'<button class="manage-pro-btn" onclick="moveDovizV6(\''+d.id+'\',-1)">↑</button>'
+       +'<button class="manage-pro-btn" onclick="moveDovizV6(\''+d.id+'\',1)">↓</button>'
+       +'<button class="manage-pro-btn del" onclick="deleteDovizV6(\''+d.id+'\')">×</button>'
+       +'</div>';
+    });
+    var el=document.getElementById('adminDovizRows'); if(el) el.innerHTML=html||'<div class="hint-box">Döviz listesi boş.</div>';
+    renderFxAddBox();
+    try{renderEkstraDoviz();renderDesktopPanel();}catch(e){}
+  };
+
+  /* Hurda yönetimi */
+  window.moveHurdaV6=function(id,dir){
+    var i=HURDALAR.findIndex(function(x){return x.id===id;}); var n=i+dir;
+    if(i<0||n<0||n>=HURDALAR.length) return;
+    var t=HURDALAR[i]; HURDALAR[i]=HURDALAR[n]; HURDALAR[n]=t;
+    settings.hurdaItems=HURDALAR; persist('Hurda sırası güncellendi'); renderAdminHurda();
+  };
+  window.deleteHurdaV6=function(id){
+    if(!confirm('Bu hurda türü listeden kaldırılsın mı?')) return;
+    HURDALAR=HURDALAR.filter(function(x){return x.id!==id;}); settings.hurdaItems=HURDALAR;
+    persist('Hurda türü silindi'); renderAdminHurda();
+  };
+  window.addHurdaV6=function(){
+    var lab=(document.getElementById('newHurdaLabel')||{}).value||'';
+    var ayar=parseFloat((document.getElementById('newHurdaAyar')||{}).value||'0');
+    lab=lab.trim();
+    if(!lab||!ayar||ayar<=0||ayar>24){showToast('Hurda adı ve 1-24 arası ayar girin');return;}
+    var id='hurda_'+Date.now();
+    HURDALAR.push({id:id,label:lab,oran:ayar/24}); settings.hurdaItems=HURDALAR;
+    if(!settings.hurdaCarp) settings.hurdaCarp={};
+    settings.hurdaCarp[id+'A']=(ayar/24)*0.99; settings.hurdaCarp[id+'S']=ayar/24;
+    persist('Hurda türü eklendi'); renderAdminHurda();
+  };
+  function renderHurdaAddBox(){
+    var el=document.getElementById('adminHurdaAddBox'); if(!el) return;
+    el.innerHTML='<div class="manage-add-box"><div class="manage-add-title">Hurda Türü Ekle / Sırala</div>'
+      +'<div class="manage-add-grid"><input id="newHurdaLabel" placeholder="Örn. 18 Ayar Hurda"><input id="newHurdaAyar" type="number" min="1" max="24" step="1" placeholder="Ayar"><button type="button" onclick="addHurdaV6()">+ Hurda Ekle</button></div></div>';
+  }
+  window.renderAdminHurda=function(){
+    ensureDynamicLists();
+    var html='';
+    HURDALAR.forEach(function(h,index){
+      var defA=h.oran*.99, defS=h.oran;
+      var carpA=parseFloat((settings.hurdaCarp&&settings.hurdaCarp[h.id+'A'])||defA.toFixed(4));
+      var carpS=parseFloat((settings.hurdaCarp&&settings.hurdaCarp[h.id+'S'])||defS.toFixed(4));
+      var alis=hasAlis?Math.round(hasAlis*carpA):null, satis=hasSatis?Math.round(hasSatis*carpS):null;
+      html+='<div class="admin-row" style="flex-wrap:wrap;gap:5px">'
+       +'<span class="order-no" style="display:inline-flex">'+(index+1)+'</span>'
+       +'<span class="row-label" style="min-width:110px">'+h.label+'</span>'
+       +'<span style="font-size:13px;color:#5dba6a;min-width:65px">'+(alis?fmt(alis):'—')+' ₺</span>'
+       +'<span style="font-size:13px;color:#e07050;min-width:65px">'+(satis?fmt(satis):'—')+' ₺</span>'
+       +'<div class="inp-group"><span class="inp-unit">Alış×</span><input class="admin-inp" type="number" step="0.0001" id="hurdaA_'+h.id+'" value="'+carpA.toFixed(4)+'" style="width:72px"></div>'
+       +'<div class="inp-group"><span class="inp-unit">Satış×</span><input class="admin-inp" type="number" step="0.0001" id="hurdaS_'+h.id+'" value="'+carpS.toFixed(4)+'" style="width:72px"></div>'
+       +'<button class="manage-pro-btn" onclick="moveHurdaV6(\''+h.id+'\',-1)">↑</button>'
+       +'<button class="manage-pro-btn" onclick="moveHurdaV6(\''+h.id+'\',1)">↓</button>'
+       +'<button class="manage-pro-btn del" onclick="deleteHurdaV6(\''+h.id+'\')">×</button>'
+       +'</div>';
+    });
+    var el=document.getElementById('adminHurdaRows'); if(el) el.innerHTML=html||'<div class="hint-box">Hurda listesi boş.</div>';
+    renderHurdaAddBox();
+    try{renderEkstraHurda();renderDesktopPanel();}catch(e){}
+  };
+
+  /* Kaydet sırasında dinamik listelerin değerleri korunur */
+  var oldSave=window.saveAdmin;
+  window.saveAdmin=function(){
+    ensureDynamicLists();
+    settings.dovizItems=DOVIZLER; settings.hurdaItems=HURDALAR;
+    oldSave();
+  };
+
+  /* TV iki kolon başlıkları */
+  function makeTVHeader(id){
+    var h=document.createElement('div');h.className='tv-col-header';h.id=id;
+    h.innerHTML='<span>Birim</span><span>Alış</span><span>Satış</span><span class="tv-kk">K. Kartı</span>';
+    return h;
+  }
+  function ensureTVHeaders(){
+    if(!document.body.classList.contains('tv-mode')) return;
+    var c=document.getElementById('priceRows'); if(!c) return;
+    var h1=document.getElementById('tvColHeader1'),h2=document.getElementById('tvColHeader2');
+    if(!h1){h1=makeTVHeader('tvColHeader1');c.insertBefore(h1,c.firstChild);}
+    if(!h2){h2=makeTVHeader('tvColHeader2');c.insertBefore(h2,h1.nextSibling);}
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    ensureDynamicLists();
+    if(location.search.indexOf('admin')!==-1) document.body.classList.remove('portfolio-mode');
+    setTimeout(function(){try{renderAdminDoviz();renderAdminHurda();renderUrunList();}catch(e){}},250);
+    ensureTVHeaders();
+    var c=document.getElementById('priceRows');
+    if(c && window.MutationObserver){
+      new MutationObserver(function(){ensureTVHeaders();}).observe(c,{childList:true});
+    }
+  });
+  window.addEventListener('load',function(){setTimeout(ensureTVHeaders,180);setTimeout(ensureTVHeaders,900);});
 })();
 </script>
 
