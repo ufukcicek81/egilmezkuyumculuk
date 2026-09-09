@@ -2,25 +2,16 @@
   "name": "Eğilmez Admin",
   "short_name": "Eğilmez Admin",
   "description": "Eğilmez Kuyumculuk yönetim paneli",
-  "id": "./admin.html",
-  "start_url": "./admin.html",
+  "id": "./admin.html?pwa=v57",
+  "start_url": "./admin.html?pwa=v57",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0e1214",
   "theme_color": "#0e1214",
   "icons": [
-    {
-      "src": "icon-egilmez-admin-192-v3.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-egilmez-admin-512-v3.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    {"src":"icon-admin-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"icon-admin-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"icon-admin-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
   ]
 }
