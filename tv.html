@@ -92,6 +92,33 @@ body.light .row:nth-child(even){background:rgba(90,60,20,.025)}
   .row{padding:var(--row-pad) 12px}
 }
 </style>
+
+<style id="egilmez-v71-tv-logo-flash">
+/* Açık modda logoyu koyulaştır; başka yerleşime dokunma */
+body.light .logo{
+  filter: brightness(0) saturate(100%) sepia(22%) saturate(760%)
+          hue-rotate(338deg) brightness(45%) contrast(96%)!important;
+}
+
+/* Kısa süreli fiyat değişim efekti */
+@keyframes priceFlashUpV71{
+  0%{background:rgba(44,214,122,.30);box-shadow:0 0 16px rgba(44,214,122,.28)}
+  100%{background:transparent;box-shadow:none}
+}
+@keyframes priceFlashDownV71{
+  0%{background:rgba(255,92,88,.28);box-shadow:0 0 16px rgba(255,92,88,.24)}
+  100%{background:transparent;box-shadow:none}
+}
+.flash-up-v71{animation:priceFlashUpV71 .65s ease-out!important;border-radius:6px}
+.flash-down-v71{animation:priceFlashDownV71 .65s ease-out!important;border-radius:6px}
+</style>
+
+
+<style id="egilmez-v72-top-flash">
+.big.flash-up-v72{animation:priceFlashUpV71 .65s ease-out!important;border-radius:7px}
+.big.flash-down-v72{animation:priceFlashDownV71 .65s ease-out!important;border-radius:7px}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -139,6 +166,42 @@ var ITEMS=[
 
 var settings={appId:APP_ID,labor:{},laborH:{},customItems:[],kkOran:0,theme:'dark'};
 var hasA=0,hasS=0,prev={};
+
+var dailyPctBase={};
+
+function getTradingDayKey(){
+  var d=new Date();
+  var resetHour=9;
+  if(d.getHours()<resetHour)d.setDate(d.getDate()-1);
+  var y=d.getFullYear();
+  var m=String(d.getMonth()+1).padStart(2,'0');
+  var day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+function pctStorageKey(priceKey){
+  return 'egilmez_pct_base_v1_'+getTradingDayKey()+'_'+priceKey;
+}
+function getDailyBase(priceKey,currentValue){
+  if(dailyPctBase[priceKey])return dailyPctBase[priceKey];
+  var saved=0;
+  try{saved=Number(localStorage.getItem(pctStorageKey(priceKey))||0);}catch(e){}
+  if(!saved&&currentValue){
+    saved=Number(currentValue);
+    try{localStorage.setItem(pctStorageKey(priceKey),String(saved));}catch(e){}
+  }
+  if(saved)dailyPctBase[priceKey]=saved;
+  return saved;
+}
+function getStablePct(priceKey,newValue){
+  var base=getDailyBase(priceKey,newValue);
+  if(!base||!newValue)return {text:'%0.00',cls:'same'};
+  var diff=((Number(newValue)-Number(base))/Number(base))*100;
+  var abs=Math.abs(diff).toFixed(2);
+  if(diff>0)return {text:'+%'+abs,cls:'up'};
+  if(diff<0)return {text:'-%'+abs,cls:'down'};
+  return {text:'%0.00',cls:'same'};
+}
+
 var activeMode='normal';
 var lastSettingsText='';
 var priceBusy=false,settingsBusy=false;
@@ -192,41 +255,91 @@ function updateLogo(){
   if(settings.customLogoEnabled&&settings.logoData)img.src=settings.logoData;
   else img.src='egilmez-logo-clean.png';
 }
+function flashClass(id,newVal){
+  var old=prev[id];
+  if(old&&old!==newVal) return newVal>old?' flash-up-v71':' flash-down-v71';
+  return '';
+}
 function changeHtml(id,newVal){
   var old=prev[id];
-  var cls='same',pct=0;
+  var cls='same',pct=0,flash='';
   if(old&&old!==newVal){
     pct=((newVal-old)/old)*100;
     cls=pct>0?'up':'down';
+    flash=pct>0?' flash-up-v71':' flash-down-v71';
   }
   prev[id]=newVal;
-  return '<span class="chg '+cls+'">'+(old?(pct>=0?'+':'')+pct.toFixed(2)+'%':'%0.00')+'</span>';
+  return '<span class="chg '+cls+flash+'">'+(old?(pct>=0?'+':'')+pct.toFixed(2)+'%':'%0.00')+'</span>';
 }
-function render(){
-  document.getElementById('hasA').textContent=hasA?fmt(hasA):'—';
-  document.getElementById('hasS').textContent=hasS?fmt(hasS):'—';
+function buildRows(){
   updateLogo();applyTheme();
-
   var list=activeItems();
   var box=document.getElementById('rows');
-  if(!list.length){box.innerHTML='<div class="empty">Ürün bulunmuyor</div>';return;}
+  if(!list.length){
+    box.innerHTML='<div class="empty">Ürün bulunmuyor</div>';
+    return;
+  }
 
-  var kk=Number(settings.kkOran)||0;
   var html='';
   list.forEach(function(item){
-    var l=labor(item);
-    var a=hasA?Math.round(hasA*(Number(l.a)||item.defA||1)):0;
-    var s=hasS?Math.round(hasS*(Number(l.s)||item.defS||1)):0;
-    var k=s?Math.round(s*(1+kk/100)):0;
-    html+='<div class="row">'
+    html+='<div class="row" data-id="'+esc(item.id)+'">'
       +'<div class="name">'+esc(item.label)+'</div>'
-      +'<div class="val">'+(a?fmt(a):'—')+changeHtml(item.id+'_a',a)+'</div>'
-      +'<div class="val">'+(s?fmt(s):'—')+changeHtml(item.id+'_s',s)+'</div>'
-      +'<div class="val kk">'+(k?fmt(k):'—')+'</div>'
+      +'<div class="val" id="tvA_'+esc(item.id)+'">—<span class="chg same">%0.00</span></div>'
+      +'<div class="val" id="tvS_'+esc(item.id)+'">—<span class="chg same">%0.00</span></div>'
+      +'<div class="val kk" id="tvK_'+esc(item.id)+'">—</div>'
       +'</div>';
   });
   box.innerHTML=html;
   fit();
+  updatePricesOnly();
+}
+
+function setPriceCell(el,newVal,key){
+  if(!el)return;
+
+  var oldTick=prev[key];
+  var pct=getStablePct(key,newVal);
+
+  el.classList.remove('flash-up-v71','flash-down-v71');
+
+  /* Yeşil/kırmızı kısa yanma sadece gerçek anlık fiyat değişiminde */
+  if(oldTick&&newVal&&oldTick!==newVal){
+    void el.offsetWidth;
+    el.classList.add(newVal>oldTick?'flash-up-v71':'flash-down-v71');
+    setTimeout(function(){
+      try{el.classList.remove('flash-up-v71','flash-down-v71');}catch(e){}
+    },700);
+  }
+
+  var text=newVal?fmt(newVal):'—';
+  el.innerHTML=text+'<span class="chg '+pct.cls+'">'+pct.text+'</span>';
+
+  if(newVal)prev[key]=newVal;
+}
+
+function updatePricesOnly(){
+  document.getElementById('hasA').textContent=hasA?fmt(hasA):'—';
+  document.getElementById('hasS').textContent=hasS?fmt(hasS):'—';
+
+  var list=activeItems();
+  var kk=Number(settings.kkOran)||0;
+
+  list.forEach(function(item){
+    var l=labor(item);
+    var a=hasA?Math.round(hasA*(Number(l.a)||Number(item.defA)||1)):0;
+    var sv=hasS?Math.round(hasS*(Number(l.s)||Number(item.defS)||1)):0;
+    var k=sv?Math.round(sv*(1+kk/100)):0;
+
+    setPriceCell(document.getElementById('tvA_'+item.id),a,item.id+'_a');
+    setPriceCell(document.getElementById('tvS_'+item.id),sv,item.id+'_s');
+
+    var kEl=document.getElementById('tvK_'+item.id);
+    if(kEl) kEl.textContent=k?fmt(k):'—';
+  });
+}
+
+function render(){
+  buildRows();
 }
 function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 
@@ -254,7 +367,7 @@ async function loadSettings(){
         settings=s;
         activeMode=s.aktifMod||activeMode||'normal';
         try{localStorage.setItem('egilmez_settings_v1',JSON.stringify(s));}catch(e){}
-        render();
+        buildRows();
       }
     }
   }catch(e){}finally{settingsBusy=false;}
@@ -269,9 +382,10 @@ async function loadPrices(){
     if(a>100&&s>100){
       a+=Number(settings.hasDuzA)||0;
       s+=Number(settings.hasDuzS)||0;
+      try{if(window.egilmezFlashTop)window.egilmezFlashTop(a,s);}catch(e){}
       hasA=a;hasS=s;
       document.getElementById('time').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-      render();
+      updatePricesOnly();
     }
   }catch(e){}finally{priceBusy=false;}
 }
@@ -282,7 +396,7 @@ function initLocal(){
     if(s&&s.appId===APP_ID)settings=normalize(s);
     activeMode=settings.aktifMod||localStorage.getItem('egilmez_mod_v1')||'normal';
   }catch(e){}
-  applyTheme();updateLogo();render();
+  applyTheme();updateLogo();buildRows();
 }
 
 window.addEventListener('resize',fit);
@@ -294,5 +408,23 @@ setInterval(loadSettings,2000);
 setInterval(loadPrices,2000);
 })();
 </script>
+<script id="egilmez-v72-top-flash-js">
+(function(){
+  var lastHA=null,lastHS=null;
+  window.egilmezFlashTop=function(a,s){
+    function go(id,now,old){
+      var el=document.getElementById(id);
+      if(!el||old==null||!now||now===old)return;
+      el.classList.remove('flash-up-v72','flash-down-v72');
+      void el.offsetWidth;
+      el.classList.add(now>old?'flash-up-v72':'flash-down-v72');
+      setTimeout(function(){el.classList.remove('flash-up-v72','flash-down-v72')},700);
+    }
+    go('hasA',a,lastHA);go('hasS',s,lastHS);
+    if(a)lastHA=a;if(s)lastHS=s;
+  };
+})();
+</script>
+
 </body>
 </html>
