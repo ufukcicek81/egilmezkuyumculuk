@@ -1029,6 +1029,67 @@ body.tv-mode.light-mode .table-header span:nth-child(4){color:#2f6f9e!important}
 }
 </style>
 
+
+<style id="egilmez-v64-tv-single-table">
+body.tv-mode #priceRows{
+  display:flex!important;
+  flex-direction:column!important;
+  width:100%!important;
+  height:calc(100% - 70px)!important;
+  overflow:hidden!important;
+}
+body.tv-mode .tv-col-header,
+body.tv-mode #tvColHeader1,
+body.tv-mode #tvColHeader2{display:none!important;}
+
+body.tv-mode .table-header{
+  display:grid!important;
+  grid-template-columns:1.30fr .80fr .80fr .80fr!important;
+  align-items:center!important;
+  height:34px!important;
+  min-height:34px!important;
+  padding:0 16px!important;
+  box-sizing:border-box!important;
+}
+body.tv-mode .table-header span:not(:first-child){text-align:right!important;}
+
+body.tv-mode .price-row{
+  flex:1 1 0!important;
+  min-height:0!important;
+  height:auto!important;
+  display:grid!important;
+  grid-template-columns:1.30fr .80fr .80fr .80fr!important;
+  align-items:center!important;
+  padding:var(--tv-row-pad,4px) 16px!important;
+  box-sizing:border-box!important;
+}
+body.tv-mode .price-row .birim{
+  font-size:var(--tv-row-font,17px)!important;
+  line-height:1.05!important;
+}
+body.tv-mode .price-row .alis,
+body.tv-mode .price-row .satis,
+body.tv-mode .price-row .kk{
+  font-size:var(--tv-value-font,19px)!important;
+  line-height:1!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+body.tv-mode .change-rate,
+body.tv-mode .price-row small{
+  font-size:var(--tv-change-font,9px)!important;
+}
+
+@media (max-height:760px){
+  body.tv-mode .table-header{
+    height:28px!important;
+    min-height:28px!important;
+    padding:0 12px!important;
+  }
+  body.tv-mode .price-row{padding:var(--tv-row-pad,2px) 12px!important;}
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -1535,43 +1596,89 @@ function getLabor(item) {
 
 // ── TABLO ────────────────────────────────────────────────────────────────────
 function renderTable() {
-  document.getElementById('shopName').textContent  = settings.shopName || 'EĞİLMEZ KUYUMCULUK';
+  document.getElementById('shopName').textContent = settings.shopName || 'EĞİLMEZ KUYUMCULUK';
   var phoneEl = document.getElementById('shopPhone');
-  if (phoneEl) { phoneEl.textContent = settings.shopPhone || ''; phoneEl.style.display = settings.shopPhone ? 'inline-block' : 'none'; }
+  if (phoneEl) {
+    phoneEl.textContent = settings.shopPhone || '';
+    phoneEl.style.display = settings.shopPhone ? 'inline-block' : 'none';
+  }
+
   applyShopLogo();
   applyTheme();
 
   var container = document.getElementById('priceRows');
-  var isFirst   = !container.innerHTML;
+  if (!container) return;
 
-  getActiveItems().forEach(function(item) {
-    var lab  = getLabor(item);
-    var newA = hasAlis  ? Math.round(hasAlis  * lab.a) : null;
+  /* Eski TV başlık/artıklarını kesin temizle. */
+  container.querySelectorAll('.tv-col-header,#tvColHeader1,#tvColHeader2').forEach(function(el){
+    if (el.parentNode) el.parentNode.removeChild(el);
+  });
+
+  var active = getActiveItems();
+  var activeIds = {};
+
+  active.forEach(function(item) {
+    activeIds[item.id] = true;
+
+    var lab = getLabor(item);
+    var newA = hasAlis ? Math.round(hasAlis * lab.a) : null;
     var newS = hasSatis ? Math.round(hasSatis * lab.s) : null;
     var kkOran = parseFloat(settings.kkOran) || 0;
     var newKK = newS ? Math.round(newS * (1 + kkOran / 100)) : null;
-    var aId  = 'av_' + item.id;
-    var sId  = 'sv_' + item.id;
-    var kId  = 'kv_' + item.id;
-    var rId  = 'rv_' + item.id;
 
-    if (isFirst) {
-      var div = document.createElement('div');
-      div.className = 'price-row'; div.id = rId;
-      div.innerHTML = '<span class="birim">' + item.label + '</span>'
-        + '<span class="alis"  id="' + aId + '">' + (newA ? fmt(newA) : '—') + '</span>'
+    var rId = 'rv_' + item.id;
+    var aId = 'av_' + item.id;
+    var sId = 'sv_' + item.id;
+    var kId = 'kv_' + item.id;
+
+    var row = document.getElementById(rId);
+
+    /* Ürün yeni eklenmişse, listede başka satırlar olsa bile satırı oluştur. */
+    if (!row) {
+      row = document.createElement('div');
+      row.className = 'price-row';
+      row.id = rId;
+      row.dataset.itemId = item.id;
+      row.innerHTML =
+          '<span class="birim">' + item.label + '</span>'
+        + '<span class="alis" id="' + aId + '">' + (newA ? fmt(newA) : '—') + '</span>'
         + '<span class="satis" id="' + sId + '">' + (newS ? fmt(newS) : '—') + '</span>'
-        + '<span class="kk"    id="' + kId + '">' + (newKK ? fmt(newKK) : '—') + '</span>';
-      container.appendChild(div);
+        + '<span class="kk" id="' + kId + '">' + (newKK ? fmt(newKK) : '—') + '</span>';
     } else {
-      updateCell(document.getElementById(aId), document.getElementById(rId), newA, prevPrices[item.id+'_a'], 'alis', true);
-      updateCell(document.getElementById(sId), document.getElementById(rId), newS, prevPrices[item.id+'_s'], 'satis', false);
-      var kkEl = document.getElementById(kId);
-      if (kkEl) kkEl.textContent = newKK ? fmt(newKK) : '—';
+      var nameEl = row.querySelector('.birim');
+      if (nameEl) nameEl.textContent = item.label;
+
+      var aEl = document.getElementById(aId);
+      var sEl = document.getElementById(sId);
+      var kEl = document.getElementById(kId);
+
+      if (aEl) {
+        if (newA) updateCell(aEl, row, newA, prevPrices[item.id+'_a'], 'alis', true);
+        else aEl.textContent = '—';
+      }
+      if (sEl) {
+        if (newS) updateCell(sEl, row, newS, prevPrices[item.id+'_s'], 'satis', false);
+        else sEl.textContent = '—';
+      }
+      if (kEl) kEl.textContent = newKK ? fmt(newKK) : '—';
     }
+
+    /* Sıralamayı her render'da gerçek sıraya göre uygula. */
+    container.appendChild(row);
+
     if (newA) prevPrices[item.id+'_a'] = newA;
     if (newS) prevPrices[item.id+'_s'] = newS;
   });
+
+  /* Silinen/gizlenen ürün DOM'dan tamamen çıksın. */
+  Array.from(container.querySelectorAll('.price-row')).forEach(function(row){
+    var id = row.dataset.itemId || String(row.id || '').replace(/^rv_/,'');
+    if (!activeIds[id]) row.remove();
+  });
+
+  try {
+    if (window.egilmezFitTV) window.egilmezFitTV();
+  } catch(e) {}
 }
 
 function updateCell(el, row, newVal, oldVal, cls, isAlis) {
@@ -3071,167 +3178,76 @@ setInterval(function() {
     oldSave();
   };
 
-  /* TV iki kolon başlıkları */
-  function makeTVHeader(id){
-    var h=document.createElement('div');h.className='tv-col-header';h.id=id;
-    h.innerHTML='<span>Birim</span><span>Alış</span><span>Satış</span><span class="tv-kk">K. Kartı</span>';
-    return h;
-  }
-  function ensureTVHeaders(){ return; }
+  /* TV eski iki-kolon başlık sistemi v6.4'te tamamen kaldırıldı */
   document.addEventListener('DOMContentLoaded',function(){
     ensureDynamicLists();
     if(location.search.indexOf('admin')!==-1) document.body.classList.remove('portfolio-mode');
     setTimeout(function(){try{renderAdminDoviz();renderAdminHurda();renderUrunList();}catch(e){}},250);
-    ensureTVHeaders();
-    var c=document.getElementById('priceRows'); /* old TV header observer disabled v6.3 */
   });
-  window.addEventListener('load',function(){ /* old TV header timers disabled v6.3 */ });
 })();
 </script>
 
 
-<script id="egilmez-v62-tv-autofit-js">
-(function(){
-  function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
 
-  function removeOldTvHeaders(){
-    ['tvColHeader1','tvColHeader2'].forEach(function(id){
-      var el=document.getElementById(id);
-      if(el && el.parentNode) el.parentNode.removeChild(el);
-    });
-    document.querySelectorAll('.tv-col-header').forEach(function(el){
-      if(el.parentNode) el.parentNode.removeChild(el);
-    });
-  }
+<script id="egilmez-v64-tv-final-engine">
+(function(){
+  var timer = null;
+
+  function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
 
   function fitTV(){
     if(!document.body.classList.contains('tv-mode')) return;
 
-    removeOldTvHeaders();
-
-    var rows = document.querySelectorAll('#priceRows .price-row');
-    var count = rows.length || 1;
+    var container = document.getElementById('priceRows');
     var main = document.querySelector('.desktop-main');
-    if(!main) return;
+    if(!container || !main) return;
 
-    /* Gerçek kullanılabilir yüksekliğe göre satır başına alan */
-    var rect = main.getBoundingClientRect();
-    var mainH = rect.height || (window.innerHeight * .75);
+    var rows = container.querySelectorAll('.price-row');
+    var count = rows.length;
+    if(!count) return;
+
+    var h = main.getBoundingClientRect().height || window.innerHeight * .75;
     var titleH = window.innerHeight <= 760 ? 30 : 36;
-    var headH  = window.innerHeight <= 760 ? 28 : 34;
-    var usable = Math.max(180, mainH - titleH - headH - 4);
+    var headH = window.innerHeight <= 760 ? 28 : 34;
+    var usable = Math.max(180, h - titleH - headH - 4);
     var rowH = usable / count;
 
-    /* Ürün çoğaldıkça otomatik küçülür, azaldıkça büyür */
-    var nameFont  = clamp(rowH * 0.34, 11, 19);
-    var valueFont = clamp(rowH * 0.39, 12, 22);
-    var changeFont= clamp(rowH * 0.18, 7, 10);
-    var pad       = clamp(rowH * 0.08, 1, 6);
-
-    document.body.style.setProperty('--tv-row-font', nameFont.toFixed(1)+'px');
-    document.body.style.setProperty('--tv-value-font', valueFont.toFixed(1)+'px');
-    document.body.style.setProperty('--tv-change-font', changeFont.toFixed(1)+'px');
-    document.body.style.setProperty('--tv-row-pad', pad.toFixed(1)+'px');
+    document.body.style.setProperty('--tv-row-font',
+      clamp(rowH * .34, 10.5, 19).toFixed(1) + 'px');
+    document.body.style.setProperty('--tv-value-font',
+      clamp(rowH * .39, 11.5, 22).toFixed(1) + 'px');
+    document.body.style.setProperty('--tv-change-font',
+      clamp(rowH * .17, 7, 10).toFixed(1) + 'px');
+    document.body.style.setProperty('--tv-row-pad',
+      clamp(rowH * .07, 1, 6).toFixed(1) + 'px');
   }
 
-  var pending=null;
   function scheduleFit(){
-    clearTimeout(pending);
-    pending=setTimeout(fitTV,40);
-  }
-
-  document.addEventListener('DOMContentLoaded',function(){
-    removeOldTvHeaders();
-    scheduleFit();
-
-    var c=document.getElementById('priceRows');
-    if(c && window.MutationObserver){
-      new MutationObserver(function(){
-        /* Ürün ekleme/silme/sıralamada kendiliğinden yeniden sığdır */
-        removeOldTvHeaders();
-        scheduleFit();
-      }).observe(c,{childList:true,subtree:false});
-    }
-  });
-
-  window.addEventListener('load',scheduleFit);
-  window.addEventListener('resize',scheduleFit);
-  document.addEventListener('fullscreenchange',scheduleFit);
-
-  /* renderTable bittikten sonra da yeniden ölç */
-  var oldRender=window.renderTable;
-  if(typeof oldRender==='function'){
-    window.renderTable=function(){
-      var r=oldRender.apply(this,arguments);
-      scheduleFit();
-      return r;
-    };
-  }
-
-  /* applyTVMode sonrası ölç */
-  var oldApply=window.applyTVMode;
-  if(typeof oldApply==='function'){
-    window.applyTVMode=function(){
-      var r=oldApply.apply(this,arguments);
-      scheduleFit();
-      return r;
-    };
-  }
-})();
-</script>
-
-
-<script id="egilmez-v63-stability-fix">
-(function(){
-  var lastCount=-1;
-  var timer=null;
-
-  function stableTvRefit(){
-    if(!document.body.classList.contains('tv-mode')) return;
-    var c=document.getElementById('priceRows');
-    if(!c) return;
-    var count=c.querySelectorAll('.price-row').length;
-    if(count===lastCount && lastCount!==-1) return;
-    lastCount=count;
-
     clearTimeout(timer);
-    timer=setTimeout(function(){
-      try{
-        /* only resize variables; do not add/remove DOM nodes here */
-        var main=document.querySelector('.desktop-main');
-        if(!main) return;
-        var rows=c.querySelectorAll('.price-row');
-        var n=rows.length||1;
-        var h=main.getBoundingClientRect().height || innerHeight*.75;
-        var titleH=innerHeight<=760?30:36;
-        var headH=innerHeight<=760?28:34;
-        var usable=Math.max(180,h-titleH-headH-4);
-        var rowH=usable/n;
-        var clamp=function(v,min,max){return Math.max(min,Math.min(max,v));};
-        document.body.style.setProperty('--tv-row-font',clamp(rowH*.34,11,19).toFixed(1)+'px');
-        document.body.style.setProperty('--tv-value-font',clamp(rowH*.39,12,22).toFixed(1)+'px');
-        document.body.style.setProperty('--tv-change-font',clamp(rowH*.18,7,10).toFixed(1)+'px');
-        document.body.style.setProperty('--tv-row-pad',clamp(rowH*.08,1,6).toFixed(1)+'px');
-      }catch(e){}
-    },80);
+    timer = setTimeout(fitTV, 60);
   }
 
-  document.addEventListener('DOMContentLoaded',function(){
-    var c=document.getElementById('priceRows');
-    if(c && window.MutationObserver){
-      new MutationObserver(function(muts){
-        var changed=false;
-        muts.forEach(function(m){
-          if(m.type==='childList') changed=true;
-        });
-        if(changed) stableTvRefit();
-      }).observe(c,{childList:true});
-    }
-    stableTvRefit();
+  window.egilmezFitTV = scheduleFit;
+
+  document.addEventListener('DOMContentLoaded', scheduleFit);
+  window.addEventListener('load', scheduleFit);
+  window.addEventListener('resize', scheduleFit);
+  document.addEventListener('fullscreenchange', scheduleFit);
+
+  /* Sadece ürün satırı sayısı değişirse ölç; DOM'a müdahale etmez. */
+  document.addEventListener('DOMContentLoaded', function(){
+    var c = document.getElementById('priceRows');
+    if(!c || !window.MutationObserver) return;
+
+    var lastCount = c.querySelectorAll('.price-row').length;
+    new MutationObserver(function(){
+      var nextCount = c.querySelectorAll('.price-row').length;
+      if(nextCount !== lastCount){
+        lastCount = nextCount;
+        scheduleFit();
+      }
+    }).observe(c,{childList:true});
   });
-  window.addEventListener('load',stableTvRefit);
-  window.addEventListener('resize',function(){ lastCount=-1; stableTvRefit(); });
-  document.addEventListener('fullscreenchange',function(){ lastCount=-1; stableTvRefit(); });
 })();
 </script>
 
