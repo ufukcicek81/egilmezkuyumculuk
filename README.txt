@@ -46,3 +46,27 @@ v7 TV AYRI STABIL
 - Ürün sayısına göre yazı ve satırlar otomatik sığar.
 - Döviz ve Hurda TV'de yoktur.
 - Açık/Koyu tema TV'de vardır ve aynı cihazdaki tema tercihini kullanır.
+
+v7.1
+- TV açık modda logo koyu kahve tonuna çevrildi.
+- Müşteri / Admin / TV fiyat güncellemelerinde artış kısa süre yeşil, düşüş kısa süre kırmızı yanıp söner.
+- Yerleşim, TV sığdırma ve Firebase senkron mantığına dokunulmadı.
+
+v7.2 TV BİRİM FİYAT CANLI FIX
+- TV ürün satırları artık sadece ilk kurulum/ayar değişiminde oluşturulur.
+- Her 2 saniyelik piyasa güncellemesinde Alış/Satış/K.Kartı hücreleri doğrudan güncellenir.
+- Has fiyat güncellenip ürün fiyatlarının sabit kalması sorunu giderildi.
+- Artış/düşüş yeşil-kırmızı kısa flash efekti korunur.
+
+v7.3 YÜZDE ORAN STABİL
+- TV'deki yüzde değişim artık her 2 saniyelik güncellemede %0.00'a dönmez.
+- Yüzde hesabı müşteri/admin ekranındaki gibi günün baz fiyatına göre yapılır.
+- Baz fiyat saat 09:00 işlem günü mantığıyla cihazda saklanır.
+- Fiyat değiştikçe yüzde oranı yeni değere göre güncellenir ve ekranda kalır.
+- Yeşil/kırmızı kısa flash efekti anlık fiyat değişiminde çalışmaya devam eder.
+
+Eğilmez Kuyumculuk v7.4 ÜRÜN SIRALAMA FIX
+- Admin ürün listesindeki ↑ / ↓ okları düzeltildi.
+- itemOrder boş veya eski/eksik olsa bile aktif ürünlerden otomatik doğru sıra oluşturulur.
+- Sıra ekranda anında değişir ve Firebase'e kaydedilir.
+- Ürün silme/ekleme, TV ve canlı fiyat mantığına dokunulmadı.

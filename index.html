@@ -1101,6 +1101,20 @@ body.tv-mode .price-row small{
 }
 </style>
 
+
+<style id="egilmez-v71-main-flash">
+@keyframes mainPriceFlashUpV71{
+  0%{background:rgba(40,205,112,.26);box-shadow:0 0 14px rgba(40,205,112,.22)}
+  100%{background:transparent;box-shadow:none}
+}
+@keyframes mainPriceFlashDownV71{
+  0%{background:rgba(244,82,78,.24);box-shadow:0 0 14px rgba(244,82,78,.20)}
+  100%{background:transparent;box-shadow:none}
+}
+.flash-up-v71{animation:mainPriceFlashUpV71 .65s ease-out!important;border-radius:6px}
+.flash-down-v71{animation:mainPriceFlashDownV71 .65s ease-out!important;border-radius:6px}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -1886,8 +1900,8 @@ function renderUrunList() {
 
     html += '<div class="urun-item' + (isHidden ? ' hidden-urun' : '') + '">'
       + '<span class="urun-name"' + (isCustom ? ' style="color:#d4af37"' : '') + '>' + item.label + (isHidden ? ' <small style="color:#666;font-size:11px">(gizli)</small>' : '') + '</span>'
-      + '<button class="urun-vis-btn" onclick="moveItem(\'' + item.id + '\', -1)" title="Yukarı">↑</button>'
-      + '<button class="urun-vis-btn" onclick="moveItem(\'' + item.id + '\', 1)" title="Aşağı">↓</button>'
+      + '<button class="urun-vis-btn" onclick="window.moveItem(\'' + item.id + '\', -1)" title="Yukarı">↑</button>'
+      + '<button class="urun-vis-btn" onclick="window.moveItem(\'' + item.id + '\', 1)" title="Aşağı">↓</button>'
       + '<button class="urun-vis-btn" onclick="toggleUrun(\'' + item.id + '\')" title="' + (isHidden ? 'Goster' : 'Gizle') + '">'
       + (isHidden ? '👁' : '🙈') + '</button>'
       + (isCustom
@@ -1899,25 +1913,56 @@ function renderUrunList() {
 }
 
 function moveItem(id, direction) {
-  if (!settings.itemOrder) {
-    settings.itemOrder = ITEMS.concat(settings.customItems || []).map(function(i){ return i.id; });
-  }
-  var list = settings.itemOrder.slice();
-  var idx = list.indexOf(id);
+  direction = Number(direction) || 0;
+  if (!direction) return;
+
+  /*
+   * Sıralama kaydı boş veya eksik olsa bile ekranda görünen aktif ürünlerden
+   * gerçek bir sıra oluştur. Eski itemOrder yüzünden okların çalışmaması böylece biter.
+   */
+  var active = getActiveItems();
+  var activeIds = active.map(function(i){ return i.id; });
+
+  if (!Array.isArray(settings.itemOrder)) settings.itemOrder = [];
+
+  var order = settings.itemOrder.filter(function(x){
+    return activeIds.indexOf(x) !== -1;
+  });
+
+  activeIds.forEach(function(x){
+    if (order.indexOf(x) === -1) order.push(x);
+  });
+
+  var idx = order.indexOf(id);
   if (idx === -1) return;
+
   var newIdx = idx + direction;
-  if (newIdx < 0 || newIdx >= list.length) return;
-  var tmp = list[idx];
-  list[idx] = list[newIdx];
-  list[newIdx] = tmp;
-  settings.itemOrder = list;
+  if (newIdx < 0 || newIdx >= order.length) return;
+
+  var tmp = order[idx];
+  order[idx] = order[newIdx];
+  order[newIdx] = tmp;
+  settings.itemOrder = order;
+
   try { localStorage.setItem('egilmez_settings_v1', JSON.stringify(settings)); } catch(e) {}
-  try { jsonbinSave(settings, function(){}); } catch(e) {}
-  renderUrunList();
-  document.getElementById('priceRows').innerHTML = '';
-  renderTable();
-  showToast('Sıralama güncellendi');
+
+  /* Önce ekranı anında güncelle, sonra Firebase'e yaz. */
+  try { renderUrunList(); } catch(e) {}
+  try {
+    var pr = document.getElementById('priceRows');
+    if (pr) pr.innerHTML = '';
+    renderTable();
+  } catch(e) {}
+
+  try {
+    jsonbinSave(settings, function(ok){
+      showToast(ok ? 'Sıralama güncellendi' : 'Sıralama yerelde güncellendi');
+    });
+  } catch(e) {
+    showToast('Sıralama güncellendi');
+  }
 }
+window.moveItem = moveItem;
 
 function toggleUrun(id) {
   if (!settings.hiddenItems) settings.hiddenItems = [];
@@ -3040,8 +3085,8 @@ setInterval(function() {
       html+='<div class="manage-pro-row">'
         +'<span class="order-no">'+(index+1)+'</span>'
         +'<span class="name"'+(isCustom?' style="color:#d4af37"':'')+'>'+item.label+'</span>'
-        +'<button class="manage-pro-btn" onclick="moveItem(\''+item.id+'\',-1)" title="Yukarı">↑</button>'
-        +'<button class="manage-pro-btn" onclick="moveItem(\''+item.id+'\',1)" title="Aşağı">↓</button>'
+        +'<button class="manage-pro-btn" onclick="window.moveItem(\''+item.id+'\',-1)" title="Yukarı">↑</button>'
+        +'<button class="manage-pro-btn" onclick="window.moveItem(\''+item.id+'\',1)" title="Aşağı">↓</button>'
         +'<button class="manage-pro-btn del" onclick="'+(isCustom?'deleteUrun':'deleteDefault')+'(\''+item.id+'\')" title="Sil">×</button>'
         +'</div>';
     });
@@ -3259,6 +3304,31 @@ setInterval(function() {
       }
     }).observe(c,{childList:true});
   });
+})();
+</script>
+
+
+<script id="egilmez-v71-top-price-flash">
+(function(){
+  var lastA=null,lastS=null;
+  function flash(el,now,prev){
+    if(!el || prev==null || now==null || now===prev) return;
+    el.classList.remove('flash-up-v71','flash-down-v71');
+    void el.offsetWidth;
+    el.classList.add(now>prev?'flash-up-v71':'flash-down-v71');
+    setTimeout(function(){el.classList.remove('flash-up-v71','flash-down-v71')},700);
+  }
+  setInterval(function(){
+    try{
+      var a=(typeof hasAlis!=='undefined')?Number(hasAlis):null;
+      var s=(typeof hasSatis!=='undefined')?Number(hasSatis):null;
+      var aEl=document.querySelector('#hasAlis,.has-alis,.hasAlis,.status-value[id*="alis"]');
+      var sEl=document.querySelector('#hasSatis,.has-satis,.hasSatis,.status-value[id*="satis"]');
+      if(lastA!==null) flash(aEl,a,lastA);
+      if(lastS!==null) flash(sEl,s,lastS);
+      if(a) lastA=a;if(s) lastS=s;
+    }catch(e){}
+  },500);
 })();
 </script>
 
