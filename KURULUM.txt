@@ -1,6 +1,0 @@
-EĞİLMEZ KUYUMCULUK PREMIUM V4
-1) ZIP içindeki tüm dosyaları GitHub repo köküne yükleyin.
-2) Pages: main / (root).
-3) Müşteri: /egilmezkuyumculuk/
-4) Admin: /egilmezkuyumculuk/admin.html
-5) Firebase: Eğilmez'e ait bağımsız Realtime Database.
