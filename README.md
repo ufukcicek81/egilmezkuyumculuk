@@ -7,3 +7,7 @@
 - Piyasa Canlı kartında Has Alış / Has Satış canlı gösterilir
 - Varlıklarım sadece cihaz bazında Eğilmez uygulamasına özeldir
 - Firebase: Eğilmez Kuyumculuk bağımsız Realtime Database
+
+
+### v5.2
+Açık mod admin Döviz/Hurda panellerindeki sabit siyah inline stiller kaldırıldı; tema sınıfları ile gerçek açık/koyu görünüm sağlandı.

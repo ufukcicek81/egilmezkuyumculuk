@@ -532,6 +532,79 @@ body:not(.light-mode) .header .default-brand-logo{filter:drop-shadow(0 3px 12px 
   body{padding-bottom:18px!important}.header{min-height:126px!important}.header .logo{width:275px!important;max-height:84px!important}.bottom-nav{display:none!important}
 }
 
+
+/* v5.1 — Açık modda admin Döviz/Hurda panelleri */
+body.light-mode #adminEkstra > div {
+  background:#eee8dd !important;
+  border-color:#c9bba8 !important;
+}
+body.light-mode #adminEkstra > div:nth-child(1),
+body.light-mode #adminEkstra > div:nth-child(4) {
+  background:#e4dacb !important;
+}
+body.light-mode #adminEkstra > div:nth-child(1) > span { color:#315f84 !important; }
+body.light-mode #adminEkstra > div:nth-child(4) > span { color:#8a6728 !important; }
+body.light-mode #adminEkstra > div:nth-child(2) > span:first-child,
+body.light-mode #adminEkstra > div:nth-child(5) > span:first-child { color:#66584b !important; }
+body.light-mode #adminEkstra > div:nth-child(2) > span:nth-child(2),
+body.light-mode #adminEkstra > div:nth-child(5) > span:nth-child(2) { color:#1e7148 !important; }
+body.light-mode #adminEkstra > div:nth-child(2) > span:nth-child(3),
+body.light-mode #adminEkstra > div:nth-child(5) > span:nth-child(3) { color:#b6403c !important; }
+body.light-mode #ekstraDovizRows > div,
+body.light-mode #ekstraHurdaRows > div {
+  background:#f3ede3 !important;
+  border-color:#d0c4b3 !important;
+}
+body.light-mode #ekstraDovizRows > div:nth-child(even),
+body.light-mode #ekstraHurdaRows > div:nth-child(even) {
+  background:#e9e1d5 !important;
+}
+body.light-mode #ekstraDovizRows > div > span:first-child,
+body.light-mode #ekstraHurdaRows > div > span:first-child {
+  color:#3a332d !important;
+}
+body.light-mode #ekstraDovizRows > div > span:nth-child(2),
+body.light-mode #ekstraHurdaRows > div > span:nth-child(2) {
+  color:#1e7148 !important;
+}
+body.light-mode #ekstraDovizRows > div > span:nth-child(3),
+body.light-mode #ekstraHurdaRows > div > span:nth-child(3) {
+  color:#b6403c !important;
+}
+body.light-mode #desktopSide > div {
+  background:#eee8dd !important;
+  border-color:#c9bba8 !important;
+}
+body.light-mode #desktopDovizRows > div,
+body.light-mode #desktopHurdaRows > div {
+  background:#f3ede3 !important;
+  border-color:#d0c4b3 !important;
+}
+body.light-mode #desktopDovizRows > div > span:first-child,
+body.light-mode #desktopHurdaRows > div > span:first-child { color:#3a332d !important; }
+body.light-mode #desktopDovizRows > div > span:nth-child(2),
+body.light-mode #desktopHurdaRows > div > span:nth-child(2) { color:#1e7148 !important; }
+body.light-mode #desktopDovizRows > div > span:nth-child(3),
+body.light-mode #desktopHurdaRows > div > span:nth-child(3) { color:#b6403c !important; }
+
+/* v5.2 — Döviz/Hurda teması: inline siyah arka plan kaldırıldı */
+.extra-section-title{background:#101416;border-top:2px solid #2c536b;padding:10px 12px 5px}
+.extra-section-title span{font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.8px}
+.extra-doviz-title span{color:#79b9e8}.extra-hurda-title{border-top-color:#6d5722;margin-top:6px}.extra-hurda-title span{color:#d5b15d}
+.extra-columns,.extra-data-row{display:grid;grid-template-columns:1fr 1fr 1fr}
+.extra-columns{background:#121719;padding:5px 12px;border-bottom:1px solid #2c3337}
+.extra-columns span{font-size:11px;color:#899197}.extra-columns span:nth-child(2){color:#59bd7d;text-align:right}.extra-columns span:nth-child(3){color:#e2705d;text-align:right}
+.extra-data-row{padding:10px 12px;border-bottom:1px solid #2d3438;background:#171c1f}
+.extra-data-row:nth-child(even){background:#14191c}.extra-name,.extra-buy,.extra-sell{font-size:15px;font-weight:650}.extra-name{color:#ede3cf}.extra-buy{color:#62c486;text-align:right}.extra-sell{color:#e47b68;text-align:right}
+.desktop-extra-title{padding:14px 18px}.desktop-extra-columns{padding:7px 18px}.desktop-extra-row{padding:11px 18px}.desktop-extra-name,.desktop-extra-value{font-size:16px}
+body.light-mode .extra-section-title{background:#dfd4c4!important;border-color:#b49563!important}
+body.light-mode .extra-doviz-title span{color:#315f84!important}body.light-mode .extra-hurda-title span{color:#806022!important}
+body.light-mode .extra-columns{background:#e7ded1!important;border-color:#c8baa7!important}
+body.light-mode .extra-columns span:first-child{color:#62574d!important}body.light-mode .extra-columns span:nth-child(2){color:#1f744b!important}body.light-mode .extra-columns span:nth-child(3){color:#b6473f!important}
+body.light-mode .extra-data-row,body.light-mode .extra-data-row:nth-child(even){background:#f1ebe1!important;border-color:#d2c5b3!important}
+body.light-mode .extra-data-row:nth-child(even){background:#e8dfd3!important}
+body.light-mode .extra-name{color:#352e28!important}body.light-mode .extra-buy{color:#1f744b!important}body.light-mode .extra-sell{color:#b6473f!important}
+body.light-mode #adminEkstra,body.light-mode #desktopSide{background:#e8dfd3!important}
 </style>
 </head>
 <body>
@@ -587,24 +660,11 @@ body:not(.light-mode) .header .default-brand-logo{filter:drop-shadow(0 3px 12px 
 
 <!-- Sadece admin modunda görünür -->
 <div id="adminEkstra" style="display:none">
-  <div style="background:#111;border-top:2px solid #1a3a5a;padding:10px 12px 4px">
-    <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7ab0e0">💱 Döviz Kurları</span>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#111;padding:4px 12px 2px;border-bottom:1px solid #222">
-    <span style="font-size:11px;color:#888">Döviz</span>
-    <span style="font-size:11px;color:#5dba6a;text-align:right">Alış</span>
-    <span style="font-size:11px;color:#e07050;text-align:right">Satış</span>
-  </div>
+  <div class="extra-section-title extra-doviz-title"><span>💱 Döviz Kurları</span></div>
+  <div class="extra-columns"><span>Döviz</span><span>Alış</span><span>Satış</span></div>
   <div id="ekstraDovizRows"></div>
-
-  <div style="background:#111;border-top:2px solid #3a3000;padding:10px 12px 4px;margin-top:6px">
-    <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#c8a040">🔩 Hurda Altın</span>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#111;padding:4px 12px 2px;border-bottom:1px solid #222">
-    <span style="font-size:11px;color:#888">Tür</span>
-    <span style="font-size:11px;color:#5dba6a;text-align:right">Alış</span>
-    <span style="font-size:11px;color:#e07050;text-align:right">Satış</span>
-  </div>
+  <div class="extra-section-title extra-hurda-title"><span>🔩 Hurda Altın</span></div>
+  <div class="extra-columns"><span>Tür</span><span>Alış</span><span>Satış</span></div>
   <div id="ekstraHurdaRows"></div>
 </div>
 
@@ -647,24 +707,11 @@ body:not(.light-mode) .header .default-brand-logo{filter:drop-shadow(0 3px 12px 
 
 <!-- Masaüstü sağ panel: döviz + hurda -->
 <div class="desktop-side" id="desktopSide" style="display:none">
-  <div style="background:#111;border-bottom:2px solid #1a3a5a;padding:14px 18px">
-    <span style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7ab0e0">💱 Döviz Kurları</span>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#1a1a1a;padding:6px 18px;border-bottom:1px solid #2a2a2a">
-    <span style="font-size:12px;color:#888">Döviz</span>
-    <span style="font-size:12px;color:#5dba6a;text-align:right">Alış</span>
-    <span style="font-size:12px;color:#e07050;text-align:right">Satış</span>
-  </div>
+  <div class="extra-section-title extra-doviz-title desktop-extra-title"><span>💱 Döviz Kurları</span></div>
+  <div class="extra-columns desktop-extra-columns"><span>Döviz</span><span>Alış</span><span>Satış</span></div>
   <div id="desktopDovizRows"></div>
-
-  <div style="background:#111;border-top:2px solid #3a3000;border-bottom:2px solid #3a3000;padding:14px 18px;margin-top:8px">
-    <span style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#c8a040">🔩 Hurda Altın</span>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#1a1a1a;padding:6px 18px;border-bottom:1px solid #2a2a2a">
-    <span style="font-size:12px;color:#888">Tür</span>
-    <span style="font-size:12px;color:#5dba6a;text-align:right">Alış</span>
-    <span style="font-size:12px;color:#e07050;text-align:right">Satış</span>
-  </div>
+  <div class="extra-section-title extra-hurda-title desktop-extra-title"><span>🔩 Hurda Altın</span></div>
+  <div class="extra-columns desktop-extra-columns"><span>Tür</span><span>Alış</span><span>Satış</span></div>
   <div id="desktopHurdaRows"></div>
 </div>
 </div><!-- desktop-layout -->
@@ -1780,10 +1827,10 @@ function renderDesktopPanel() {
     var duzS  = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'S']) || 0);
     var alis  = liveDoviz[d.id+'Alis']  ? (liveDoviz[d.id+'Alis']  + duzA).toFixed(2) : '—';
     var satis = liveDoviz[d.id+'Satis'] ? (liveDoviz[d.id+'Satis'] + duzS).toFixed(2) : '—';
-    dovizHtml += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:11px 18px;border-bottom:1px solid #2e2e2e;background:#1a1a1a">'
-      + '<span style="font-size:17px;font-weight:600;color:#e8d9b0">' + d.flag + ' ' + d.label + '</span>'
-      + '<span style="font-size:17px;font-weight:600;color:#5dba6a;text-align:right">' + alis + '</span>'
-      + '<span style="font-size:17px;font-weight:600;color:#e07050;text-align:right">' + satis + '</span>'
+    dovizHtml += '<div class="extra-data-row desktop-extra-row">'
+      + '<span class="extra-name desktop-extra-name">' + d.flag + ' ' + d.label + '</span>'
+      + '<span class="extra-buy desktop-extra-value">' + alis + '</span>'
+      + '<span class="extra-sell desktop-extra-value">' + satis + '</span>'
       + '</div>';
   });
   document.getElementById('desktopDovizRows').innerHTML = dovizHtml;
@@ -1795,10 +1842,10 @@ function renderDesktopPanel() {
     var carpS = parseFloat((settings.hurdaCarp && settings.hurdaCarp[h.id+'S']) || h.oran);
     var alis  = hasAlis  ? fmt(Math.round(hasAlis  * carpA)) : '—';
     var satis = hasSatis ? fmt(Math.round(hasSatis * carpS)) : '—';
-    hurdaHtml += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:11px 18px;border-bottom:1px solid #2e2e2e;background:#1a1a1a">'
-      + '<span style="font-size:15px;font-weight:600;color:#e8d9b0">' + h.label + '</span>'
-      + '<span style="font-size:15px;font-weight:600;color:#5dba6a;text-align:right">' + alis + '</span>'
-      + '<span style="font-size:15px;font-weight:600;color:#e07050;text-align:right">' + satis + '</span>'
+    hurdaHtml += '<div class="extra-data-row desktop-extra-row">'
+      + '<span class="extra-name desktop-extra-name">' + h.label + '</span>'
+      + '<span class="extra-buy desktop-extra-value">' + alis + '</span>'
+      + '<span class="extra-sell desktop-extra-value">' + satis + '</span>'
       + '</div>';
   });
   document.getElementById('desktopHurdaRows').innerHTML = hurdaHtml;
@@ -1815,10 +1862,10 @@ function renderEkstraDoviz() {
     var duzS  = parseFloat((settings.dovizDuz && settings.dovizDuz[d.id+'S']) || 0);
     var gosterA = alis  ? (alis  + duzA).toFixed(2) : '—';
     var gosterS = satis ? (satis + duzS).toFixed(2) : '—';
-    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:9px 12px;border-bottom:1px solid #2e2e2e;background:#1a1a1a">'
-      + '<span style="font-size:15px;font-weight:600;color:#e8d9b0">' + d.flag + ' ' + d.label + '</span>'
-      + '<span style="font-size:15px;font-weight:600;color:#f0e6c8;text-align:right">' + gosterA + '</span>'
-      + '<span style="font-size:15px;font-weight:600;color:#f0e6c8;text-align:right">' + gosterS + '</span>'
+    html += '<div class="extra-data-row">'
+      + '<span class="extra-name">' + d.flag + ' ' + d.label + '</span>'
+      + '<span class="extra-buy">' + gosterA + '</span>'
+      + '<span class="extra-sell">' + gosterS + '</span>'
       + '</div>';
   });
   el.innerHTML = html;
@@ -1835,10 +1882,10 @@ function renderEkstraHurda() {
     var carpS = parseFloat((settings.hurdaCarp && settings.hurdaCarp[h.id+'S']) || defS);
     var alis  = hasAlis  ? Math.round(hasAlis  * carpA) : null;
     var satis = hasSatis ? Math.round(hasSatis * carpS) : null;
-    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;padding:9px 12px;border-bottom:1px solid #2e2e2e;background:#1a1a1a">'
-      + '<span style="font-size:15px;font-weight:600;color:#e8d9b0">' + h.label + '</span>'
-      + '<span style="font-size:15px;font-weight:600;color:#f0e6c8;text-align:right">' + (alis ? fmt(alis) : '—') + '</span>'
-      + '<span style="font-size:15px;font-weight:600;color:#f0e6c8;text-align:right">' + (satis ? fmt(satis) : '—') + '</span>'
+    html += '<div class="extra-data-row">'
+      + '<span class="extra-name">' + h.label + '</span>'
+      + '<span class="extra-buy">' + (alis ? fmt(alis) : '—') + '</span>'
+      + '<span class="extra-sell">' + (satis ? fmt(satis) : '—') + '</span>'
       + '</div>';
   });
   el.innerHTML = html;
