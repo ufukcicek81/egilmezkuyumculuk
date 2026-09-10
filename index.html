@@ -9,7 +9,7 @@
 (function(){
   try{
     if(new URLSearchParams(location.search).get('tv')==='1'){
-      location.replace('tv.html?v=88');
+      location.replace('tv.html?v=91');
     }
   }catch(e){}
 })();
@@ -1530,6 +1530,14 @@ body.light-mode .admin-inp{
 }
 </style>
 
+
+<style id="egilmez-v91-admin-speed-css">
+/* Admin overlay tıklamada anında görünür */
+#overlay.open{visibility:visible!important;opacity:1!important}
+#overlay{will-change:opacity}
+.admin-panel,.admin-modal,.overlay-card{contain:layout paint style}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -2444,28 +2452,44 @@ function applyCustomerDisplayLayout(){
     layout.classList.toggle('side-single',any && !(showD&&showH));
   }
 
-  /* Ensure content exists immediately when panel becomes visible */
-  try{ if(showD||showH) renderDesktopPanel(); }catch(e){}
-  try{ if(showD) renderEkstraDoviz(); }catch(e){}
-  try{ if(showH) renderEkstraHurda(); }catch(e){}
+  /* Sadece görünürlüğü yönet. Veri render fonksiyonları ayrı çalışır. */
 }
 
 function openAdmin() {
-  loadTvDisplayConfig(function(){ bindTvDisplayControls(); });
-  loadCustomerDisplayConfig(function(){ bindCustomerDisplayControls(); });
-  document.getElementById('aName').value  = settings.shopName;
-  document.getElementById('aPhone').value = settings.shopPhone || '';
-  var themeSel = document.getElementById('aTheme'); if (themeSel) themeSel.value = settings.theme || 'dark';
-  document.getElementById('aKK').value    = (settings.kkOran || 0).toFixed(2);
-  document.getElementById('aHasDuzA').value = settings.hasDuzA || 0;
-  document.getElementById('aHasDuzS').value = settings.hasDuzS || 0;
-  document.getElementById('adminHasA').textContent = hasAlis  ? fmt(Math.round(hasAlis))  + ' ₺' : '—';
-  document.getElementById('adminHasS').textContent = hasSatis ? fmt(Math.round(hasSatis)) + ' ₺' : '—';
-  updateCustomerLink();
-  renderAdminRows();
-  renderAdminDoviz();
-  renderAdminHurda();
-  document.getElementById('overlay').classList.add('open');
+  /* Paneli önce aç: kullanıcı tıklayınca anında cevap versin. */
+  var overlay = document.getElementById('overlay');
+  if (overlay) overlay.classList.add('open');
+
+  /* Ağ ayarlarını arka planda al; panel açılışını bekletme. */
+  try { loadTvDisplayConfig(function(){ bindTvDisplayControls(); }); } catch(e) {}
+  try { loadCustomerDisplayConfig(function(){ bindCustomerDisplayControls(); }); } catch(e) {}
+
+  /* Hafif alanları hemen doldur. */
+  try {
+    document.getElementById('aName').value  = settings.shopName;
+    document.getElementById('aPhone').value = settings.shopPhone || '';
+    var themeSel = document.getElementById('aTheme');
+    if (themeSel) themeSel.value = settings.theme || 'dark';
+    document.getElementById('aKK').value = (settings.kkOran || 0).toFixed(2);
+    document.getElementById('aHasDuzA').value = settings.hasDuzA || 0;
+    document.getElementById('aHasDuzS').value = settings.hasDuzS || 0;
+    document.getElementById('adminHasA').textContent = hasAlis ? fmt(Math.round(hasAlis)) + ' ₺' : '—';
+    document.getElementById('adminHasS').textContent = hasSatis ? fmt(Math.round(hasSatis)) + ' ₺' : '—';
+    updateCustomerLink();
+  } catch(e) {}
+
+  /* Büyük admin listelerini ilk ekran çizildikten sonra hazırla. */
+  var heavyRender = function(){
+    try { renderAdminRows(); } catch(e) {}
+    try { renderAdminDoviz(); } catch(e) {}
+    try { renderAdminHurda(); } catch(e) {}
+  };
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(heavyRender, {timeout:180});
+  } else {
+    requestAnimationFrame(function(){ setTimeout(heavyRender, 0); });
+  }
 }
 function closeAdmin() { document.getElementById('overlay').classList.remove('open'); }
 
@@ -2473,7 +2497,7 @@ function updateCustomerLink() {
   var base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('customerLink').textContent = base;
   document.getElementById('customerLink').dataset.url = base;
-  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=88';
+  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=91';
   var tvEl = document.getElementById('tvLink');
   if (tvEl) {
     tvEl.textContent = tvUrl;
@@ -2823,7 +2847,7 @@ function shareWA() {
 
 function copyTVLink() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=88');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=91');
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
   } else {
@@ -2836,7 +2860,7 @@ function copyTVLink() {
 
 function openTVScreen() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=88');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=91');
   window.open(link, '_blank');
 }
 
@@ -3134,25 +3158,7 @@ function renderEkstraHurda() {
   el.innerHTML = html;
 }
 
-// hareketli/normal mod canlı senkron
-setInterval(function() {
-  try {
-    if (typeof jsonbinLoad === 'function') {
-      jsonbinLoad(function(data) {
-        if (!data) return;
-        if (isAdminEditing()) return;
-        if (data.aktifMod && data.aktifMod !== aktifMod) {
-          aktifMod = data.aktifMod;
-          try { localStorage.setItem('egilmez_mod_v1', aktifMod); } catch(e) {}
-          updateModBtn();
-          try { document.getElementById('priceRows').innerHTML = ''; } catch(e) {}
-          try { renderTable(); } catch(e) {}
-        }
-      });
-    }
-  } catch(e) {}
-}, 2000);
-
+/* Hareketli/normal mod ayrı 2sn polling kaldırıldı; ana canlı senkron bunu zaten yönetiyor. */
 </script>
 
 <script>
@@ -3275,7 +3281,7 @@ setInterval(function() {
   function startPollingFallback() {
     if (pollTimer) return;
     fetchOnce(true);
-    pollTimer = setInterval(function(){ fetchOnce(false); }, 2000);
+    pollTimer = setInterval(function(){ fetchOnce(false); }, 8000);
   }
 
   function stopPollingFallback() {
@@ -3683,7 +3689,7 @@ setInterval(function() {
       if(t){ var u=document.getElementById('updTime'); var txt=u?u.textContent:''; var m=txt.match(/(\d{1,2}:\d{2}(?::\d{2})?)/); t.textContent=m?m[1]:new Date().toLocaleTimeString('tr-TR'); }
     }catch(e){}
   }
-  setInterval(refreshPremiumStatus,1000);setTimeout(refreshPremiumStatus,300);
+  setInterval(refreshPremiumStatus,3000);setTimeout(refreshPremiumStatus,250);
 })();
 </script>
 
@@ -4007,63 +4013,13 @@ setInterval(function() {
   });
   window.addEventListener('focus',pullTvConfig);
   document.addEventListener('visibilitychange',function(){if(!document.hidden)pullTvConfig()});
-  setInterval(pullTvConfig,1500);
+  setInterval(pullTvConfig,4000);
 })();
 </script>
 
-<script id="egilmez-v87-final-engine">
-(function(){
-  var resizeTimer=null,lastCustomer='';
-  function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-  function fitDesktop(){
-    if(innerWidth<901)return;
-    var layout=document.querySelector('.desktop-layout'),rows=document.getElementById('priceRows');
-    if(!layout||!rows)return;
-    var top=layout.getBoundingClientRect().top;
-    var h=Math.max(280,innerHeight-top-6);
-    layout.style.setProperty('height',h+'px','important');
-    layout.style.setProperty('max-height',h+'px','important');
-    var n=rows.querySelectorAll('.price-row').length||1;
-    rows.style.setProperty('grid-template-rows','repeat('+n+',minmax(0,1fr))','important');
-    var rowH=Math.max(18,(h-80)/n);
-    document.documentElement.style.setProperty('--main-name-fs',clamp(rowH*.31,9.5,15)+'px');
-    document.documentElement.style.setProperty('--main-val-fs',clamp(rowH*.36,10.5,18)+'px');
-    document.documentElement.style.setProperty('--main-chg-fs',clamp(rowH*.15,5.5,9)+'px');
-    ['desktopDovizRows','desktopHurdaRows'].forEach(function(id){
-      var el=document.getElementById(id); if(!el||getComputedStyle(el).display==='none')return;
-      var cnt=el.children.length||1;
-      el.style.setProperty('grid-template-rows','repeat('+cnt+',minmax(0,1fr))','important');
-      var eh=el.getBoundingClientRect().height/cnt;
-      document.documentElement.style.setProperty('--side-name-fs',clamp(eh*.28,9.5,14)+'px');
-      document.documentElement.style.setProperty('--side-val-fs',clamp(eh*.33,10.5,16)+'px');
-    });
-  }
-  function scheduleFit(){clearTimeout(resizeTimer);resizeTimer=setTimeout(fitDesktop,60)}
 
-  function pullCustomerConfig(){
-    if(typeof CUSTOMER_CONFIG_URL==='undefined')return;
-    fetch(CUSTOMER_CONFIG_URL+'?v='+Date.now(),{cache:'no-store'})
-      .then(function(r){return r.ok?r.text():''})
-      .then(function(txt){
-        if(!txt||txt===lastCustomer)return; lastCustomer=txt;
-        var d=null;try{d=JSON.parse(txt)}catch(e){}
-        if(d&&typeof applyCustomerDisplayToAdmin==='function'){
-          applyCustomerDisplayToAdmin(d);applyCustomerDisplayLayout();scheduleFit();
-        }
-      }).catch(function(){});
-  }
+<!-- eski tekrar eden customer polling kaldırıldı -->
 
-  document.addEventListener('DOMContentLoaded',function(){
-    try{renderDesktopPanel()}catch(e){}
-    try{renderEkstraDoviz();renderEkstraHurda()}catch(e){}
-    try{loadCustomerDisplayConfig(function(){applyCustomerDisplayLayout();scheduleFit()})}catch(e){}
-    scheduleFit();
-  });
-  addEventListener('load',scheduleFit);addEventListener('resize',scheduleFit);addEventListener('focus',function(){pullCustomerConfig();scheduleFit()});
-  document.addEventListener('visibilitychange',function(){if(!document.hidden){pullCustomerConfig();scheduleFit()}});
-  setInterval(pullCustomerConfig,1500);
-})();
-</script>
 
 
 <script id="egilmez-v88-final-engine">
@@ -4155,7 +4111,77 @@ setInterval(function() {
   });
 
   /* Config sync only; no constant layout polling */
-  setInterval(pullCustomer,1500);
+  setInterval(pullCustomer,4000);
+})();
+</script>
+
+
+
+
+
+<script id="egilmez-v90-fast-splash">
+(function(){
+  var done=false;
+  function hideSplash(){
+    if(done)return; done=true;
+    var el=document.getElementById('premiumSplash');
+    if(!el)return;
+    el.style.transition='opacity .18s ease';
+    el.style.opacity='0';
+    el.style.pointerEvents='none';
+    setTimeout(function(){
+      if(el&&el.parentNode)el.parentNode.removeChild(el);
+    },200);
+  }
+  document.addEventListener('DOMContentLoaded',function(){setTimeout(hideSplash,250)},{once:true});
+  window.addEventListener('load',hideSplash,{once:true});
+  setTimeout(hideSplash,700);
+})();
+</script>
+
+
+<script id="egilmez-v90-performance-guard">
+(function(){
+  var queued=false;
+  function lightRefresh(){
+    if(queued)return;
+    queued=true;
+    requestAnimationFrame(function(){
+      queued=false;
+      try{
+        if(typeof applyCustomerDisplayLayout==='function')applyCustomerDisplayLayout();
+      }catch(e){}
+    });
+  }
+  addEventListener('resize',lightRefresh,{passive:true});
+  addEventListener('focus',lightRefresh,{passive:true});
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden) lightRefresh();
+  });
+})();
+</script>
+
+
+<script id="egilmez-v91-speed-guard">
+(function(){
+  var lastRefresh=0, queued=false;
+
+  function cheapLayout(){
+    var now=Date.now();
+    if(now-lastRefresh<180) return;
+    lastRefresh=now;
+    if(queued)return;
+    queued=true;
+    requestAnimationFrame(function(){
+      queued=false;
+      try{
+        if(typeof applyCustomerDisplayLayout==='function') applyCustomerDisplayLayout();
+      }catch(e){}
+    });
+  }
+
+  addEventListener('resize',cheapLayout,{passive:true});
+  addEventListener('orientationchange',cheapLayout,{passive:true});
 })();
 </script>
 

@@ -240,6 +240,31 @@ var settings={labor:{},customItems:[],itemOrder:[],hiddenItems:[],deletedItems:[
 var tvDisplay={showDoviz:true,showHurda:true};
 var live={},hasA=0,hasS=0;
 var prevPrice={};
+
+var TV_CACHE_KEY='egilmez_tv_price_cache_v89';
+
+function saveTvPriceCache(){
+  try{
+    localStorage.setItem(TV_CACHE_KEY,JSON.stringify({
+      live:live,hasA:hasA,hasS:hasS,ts:Date.now()
+    }));
+  }catch(e){}
+}
+function restoreTvPriceCache(){
+  try{
+    var c=JSON.parse(localStorage.getItem(TV_CACHE_KEY)||'null');
+    if(!c||!c.ts||Date.now()-c.ts>1800000)return;
+    if(c.live&&typeof c.live==='object')live=c.live;
+    if(Number(c.hasA)>100)hasA=Number(c.hasA);
+    if(Number(c.hasS)>100)hasS=Number(c.hasS);
+    if(hasA>100&&hasS>100){
+      buildStructureIfNeeded();
+      updateValues();
+      byId('time').textContent='yenileniyor…';
+    }
+  }catch(e){}
+}
+
 var builtSignature='';
 var settingsBusy=false,priceBusy=false,tvBusy=false;
 
@@ -487,6 +512,7 @@ async function loadPrices(){
         hasS=s+(Number(settings.hasDuzS)||0);
         byId('time').textContent=new Date().toLocaleTimeString('tr-TR');
         updateValues();
+        saveTvPriceCache();
       }
     }
   }catch(e){}
@@ -495,13 +521,18 @@ async function loadPrices(){
 
 theme();
 buildStructureIfNeeded();
-loadTvDisplay();
-loadSettings();
-loadPrices();
+restoreTvPriceCache();
 
-/* Only data polling. No layout polling => no text jumping/flicker. */
-setInterval(loadTvDisplay,1200);
-setInterval(loadSettings,3000);
+/* İlk açılışta istekleri paralel başlat: bekleme zinciri yok. */
+Promise.allSettled([
+  loadTvDisplay(),
+  loadSettings(),
+  loadPrices()
+]);
+
+/* Dengeli polling: hızlı ama sistemi yormaz. */
+setInterval(loadTvDisplay,4000);
+setInterval(loadSettings,8000);
 setInterval(loadPrices,2000);
 })();
 </script>
