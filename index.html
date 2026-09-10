@@ -1830,6 +1830,182 @@ body.tv-mode .price-row small{
 }
 </style>
 
+
+<style id="egilmez-v8-premium-dashboard">
+:root{
+  --v8-bg:#edf3f8;
+  --v8-card:#f8fbfd;
+  --v8-card2:#e7eef4;
+  --v8-line:#cad6df;
+  --v8-text:#172235;
+  --v8-muted:#64748b;
+  --v8-red:#e21a1a;
+  --v8-green:#0f7f32;
+  --v8-blue:#1267d6;
+  --v8-gold:#b88624;
+}
+body.light-mode{
+  background:linear-gradient(180deg,#f5f9fc 0%,#eaf1f6 100%)!important;
+  color:var(--v8-text)!important;
+}
+body:not(.light-mode){
+  --v8-bg:#0d141b;
+  --v8-card:#111a22;
+  --v8-card2:#18232d;
+  --v8-line:#2b3b48;
+  --v8-text:#edf5fb;
+  --v8-muted:#9fb0be;
+  --v8-red:#ff6a67;
+  --v8-green:#55d486;
+  --v8-blue:#69b8ff;
+  background:linear-gradient(180deg,#0b1117,#101820)!important;
+}
+
+/* Üst alan */
+.header{
+  border-bottom:1px solid var(--v8-line)!important;
+  background:rgba(255,255,255,.02)!important;
+}
+.brand-wrap .logo{
+  object-fit:contain!important;
+}
+.market-status{
+  border:1px solid var(--v8-line)!important;
+  border-radius:16px!important;
+  background:var(--v8-card)!important;
+  box-shadow:0 4px 16px rgba(35,55,70,.08)!important;
+}
+.status-cell+ .status-cell{border-left:1px solid var(--v8-line)!important}
+.status-title{color:var(--v8-text)!important;font-weight:900!important}
+.status-label,.status-sub{color:var(--v8-muted)!important}
+.status-value{color:var(--v8-text)!important;font-weight:950!important}
+.status-price:last-child .status-value{color:var(--v8-green)!important}
+
+/* Ana kartlar */
+.desktop-main,
+.desktop-side{
+  background:var(--v8-card)!important;
+  border:1px solid var(--v8-line)!important;
+  border-radius:16px!important;
+  box-shadow:0 5px 18px rgba(28,45,58,.09)!important;
+}
+.desktop-main:before{
+  content:"🪙  Altın Fiyatları"!important;
+  color:var(--v8-text)!important;
+  background:var(--v8-card)!important;
+  border-bottom:1px solid var(--v8-line)!important;
+  font-weight:950!important;
+}
+.table-header,
+.extra-columns{
+  background:var(--v8-card2)!important;
+  border-bottom:1px solid var(--v8-line)!important;
+}
+.table-header span,
+.extra-columns span{color:var(--v8-muted)!important;font-weight:850!important}
+.table-header span:nth-child(2), .extra-columns span:nth-child(2){color:var(--v8-red)!important}
+.table-header span:nth-child(3), .extra-columns span:nth-child(3){color:var(--v8-green)!important}
+.table-header span:nth-child(4){color:var(--v8-blue)!important}
+
+.price-row{
+  border-bottom:1px solid var(--v8-line)!important;
+  background:transparent!important;
+}
+.price-row:nth-child(even){background:rgba(120,145,165,.055)!important}
+.price-row .birim{color:var(--v8-text)!important;font-weight:900!important}
+.price-row .alis{color:var(--v8-red)!important;font-weight:950!important}
+.price-row .satis{color:var(--v8-green)!important;font-weight:950!important}
+.price-row .kk{color:var(--v8-blue)!important;font-weight:950!important}
+.change-rate{font-weight:850!important}
+.price-row .alis .change-rate{color:var(--v8-red)!important}
+.price-row .satis .change-rate{color:var(--v8-green)!important}
+
+/* Sağ panel */
+.extra-section-title{
+  background:var(--v8-card)!important;
+  border-bottom:1px solid var(--v8-line)!important;
+}
+.extra-doviz-title span{color:var(--v8-blue)!important;font-weight:950!important}
+.extra-hurda-title span{color:var(--v8-text)!important;font-weight:950!important}
+.extra-data-row{
+  border-bottom:1px solid var(--v8-line)!important;
+  background:transparent!important;
+}
+.extra-data-row:nth-child(even){background:rgba(120,145,165,.05)!important}
+.extra-name{color:var(--v8-text)!important;font-weight:850!important}
+.extra-buy{color:var(--v8-red)!important;font-weight:950!important}
+.extra-sell{color:var(--v8-green)!important;font-weight:950!important}
+
+/* Masaüstü = görseldeki 70/30 */
+@media (min-width:901px){
+  .desktop-layout{
+    grid-template-columns:minmax(0,70fr) minmax(300px,30fr)!important;
+    gap:12px!important;
+  }
+  #desktopSide{
+    display:grid!important;
+    width:auto!important;
+    max-width:none!important;
+  }
+  .desktop-main{min-width:0!important}
+  .price-row .birim{font-size:clamp(12px,1.05vw,16px)!important}
+  .price-row .alis,.price-row .satis,.price-row .kk{
+    font-size:clamp(14px,1.2vw,19px)!important;
+  }
+  #desktopSide .extra-name{
+    font-size:clamp(11px,.95vw,15px)!important;
+  }
+  #desktopSide .extra-buy,#desktopSide .extra-sell{
+    font-size:clamp(12px,1.05vw,17px)!important;
+  }
+}
+
+/* Müşteri ekranında döviz/hurda da görünsün */
+@media (min-width:901px){
+  body:not(.admin-route) #desktopSide{display:grid!important}
+}
+@media (max-width:900px){
+  body:not(.admin-route) #adminEkstra{
+    display:block!important;
+    margin-top:12px!important;
+    background:var(--v8-card)!important;
+    border:1px solid var(--v8-line)!important;
+    border-radius:16px!important;
+    overflow:hidden!important;
+  }
+  body:not(.admin-route) #adminEkstra .extra-section-title,
+  body:not(.admin-route) #adminEkstra .extra-columns,
+  body:not(.admin-route) #adminEkstra .extra-data-row{
+    display:grid!important;
+  }
+}
+
+/* Üstteki eski kayan döviz bandını kaldır: yeni panel yeterli */
+.doviz-bant{display:none!important}
+
+/* Butonlar */
+.top-switcher{
+  background:var(--v8-card)!important;border:1px solid var(--v8-line)!important;
+}
+.top-switch-btn{color:var(--v8-muted)!important}
+.top-switch-btn.active{
+  background:linear-gradient(135deg,#d8b45a,#b78628)!important;
+  color:#1e1a10!important;font-weight:900!important;
+}
+.theme-btn{border-color:var(--v8-line)!important}
+
+/* Mobilde ferah ama kompakt */
+@media (max-width:900px){
+  .header{min-height:92px!important}
+  .market-status{margin:8px 12px!important}
+  .desktop-layout{display:block!important;width:auto!important;margin:0 12px!important}
+  .desktop-main{border-radius:16px!important}
+  .price-row .alis{color:var(--v8-red)!important}
+  .price-row .satis{color:var(--v8-green)!important}
+  .price-row .kk{color:var(--v8-blue)!important}
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -4150,6 +4326,54 @@ setInterval(function() {
   addEventListener('load',fit);
   addEventListener('resize',schedule);
   setTimeout(fit,150);setTimeout(fit,600);setTimeout(fit,1500);
+})();
+</script>
+
+
+<script id="egilmez-v8-side-panel-all-screens">
+(function(){
+  window.renderDesktopPanel = function(){
+    var side=document.getElementById('desktopSide');
+    if(!side)return;
+    var isDesktop=window.innerWidth>=901;
+    side.style.display=isDesktop?'grid':'none';
+    if(!isDesktop)return;
+    if(!liveDoviz)liveDoviz={};
+
+    var dhtml='';
+    DOVIZLER.forEach(function(d){
+      var duzA=parseFloat((settings.dovizDuz&&settings.dovizDuz[d.id+'A'])||0);
+      var duzS=parseFloat((settings.dovizDuz&&settings.dovizDuz[d.id+'S'])||0);
+      var a=liveDoviz[d.id+'Alis']?(liveDoviz[d.id+'Alis']+duzA).toFixed(2):'—';
+      var s=liveDoviz[d.id+'Satis']?(liveDoviz[d.id+'Satis']+duzS).toFixed(2):'—';
+      dhtml+='<div class="extra-data-row desktop-extra-row">'
+        +'<span class="extra-name desktop-extra-name">'+d.flag+' '+d.label+'</span>'
+        +'<span class="extra-buy desktop-extra-value">'+a+'</span>'
+        +'<span class="extra-sell desktop-extra-value">'+s+'</span></div>';
+    });
+    var de=document.getElementById('desktopDovizRows'); if(de)de.innerHTML=dhtml;
+
+    var hhtml='';
+    HURDALAR.forEach(function(h){
+      var ca=parseFloat((settings.hurdaCarp&&settings.hurdaCarp[h.id+'A'])||h.oran*.99);
+      var cs=parseFloat((settings.hurdaCarp&&settings.hurdaCarp[h.id+'S'])||h.oran);
+      var a=hasAlis?fmt(Math.round(hasAlis*ca)):'—';
+      var s=hasSatis?fmt(Math.round(hasSatis*cs)):'—';
+      hhtml+='<div class="extra-data-row desktop-extra-row">'
+        +'<span class="extra-name desktop-extra-name">'+h.label+'</span>'
+        +'<span class="extra-buy desktop-extra-value">'+a+'</span>'
+        +'<span class="extra-sell desktop-extra-value">'+s+'</span></div>';
+    });
+    var he=document.getElementById('desktopHurdaRows'); if(he)he.innerHTML=hhtml;
+  };
+
+  function refreshAllPanels(){
+    try{renderDesktopPanel();}catch(e){}
+    try{renderEkstraDoviz();renderEkstraHurda();}catch(e){}
+  }
+  addEventListener('load',function(){setTimeout(refreshAllPanels,250)});
+  addEventListener('resize',refreshAllPanels);
+  setInterval(refreshAllPanels,2500);
 })();
 </script>
 
