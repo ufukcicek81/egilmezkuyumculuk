@@ -9,7 +9,7 @@
 (function(){
   try{
     if(new URLSearchParams(location.search).get('tv')==='1'){
-      location.replace('tv.html?v=70');
+      location.replace('tv.html?v=81');
     }
   }catch(e){}
 })();
@@ -2006,6 +2006,188 @@ body:not(.light-mode){
 }
 </style>
 
+
+<style id="egilmez-v81-final-fixes">
+/* Üst Has fiyat renkleri */
+#statusHasA{color:var(--v8-red)!important;font-weight:950!important}
+#statusHasS{color:var(--v8-green)!important;font-weight:950!important}
+
+/* Admin TV seçenek switchleri */
+.tv-opt-switch{position:relative;display:inline-block;width:52px;height:28px}
+.tv-opt-switch input{opacity:0;width:0;height:0}
+.tv-opt-slider{
+  position:absolute;inset:0;cursor:pointer;border-radius:20px;
+  background:#555;transition:.2s;border:1px solid #777;
+}
+.tv-opt-slider:before{
+  content:"";position:absolute;width:22px;height:22px;left:2px;top:2px;
+  border-radius:50%;background:#fff;transition:.2s;
+}
+.tv-opt-switch input:checked + .tv-opt-slider{background:#2f9b61;border-color:#43b778}
+.tv-opt-switch input:checked + .tv-opt-slider:before{transform:translateX(24px)}
+
+/* PC müşteri ekranı: üst yarıda kalma/kesilme yok, tüm fiyatlar tek ekrana sığar */
+@media (min-width:901px){
+  body:not(.admin-route){
+    width:100vw!important;
+    height:100vh!important;
+    min-height:0!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    display:flex!important;
+    flex-direction:column!important;
+  }
+
+  body:not(.admin-route) .header{
+    flex:0 0 72px!important;
+    height:72px!important;
+    min-height:72px!important;
+    padding:3px 20px!important;
+  }
+  body:not(.admin-route) .brand-wrap{
+    height:66px!important;
+    min-height:66px!important;
+  }
+  body:not(.admin-route) .header .logo{
+    height:62px!important;
+    max-height:62px!important;
+    width:auto!important;
+  }
+
+  body:not(.admin-route) .market-status{
+    flex:0 0 64px!important;
+    height:64px!important;
+    min-height:64px!important;
+    width:min(930px,90vw)!important;
+    margin:4px auto 5px!important;
+  }
+  body:not(.admin-route) .market-status .status-cell{
+    height:62px!important;
+    min-height:62px!important;
+    padding:5px 14px!important;
+  }
+
+  body:not(.admin-route) .top-switcher{
+    flex:0 0 44px!important;
+    height:44px!important;
+    min-height:44px!important;
+    width:min(930px,90vw)!important;
+    margin:0 auto 6px!important;
+  }
+
+  body:not(.admin-route) .desktop-layout{
+    flex:1 1 auto!important;
+    width:calc(100vw - 18px)!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0 9px 6px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,70fr) minmax(300px,30fr)!important;
+    gap:10px!important;
+    overflow:hidden!important;
+    align-items:stretch!important;
+  }
+
+  body:not(.admin-route) .desktop-main{
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:40px 31px minmax(0,1fr) 22px!important;
+  }
+
+  body:not(.admin-route) .desktop-main:before{
+    height:40px!important;
+    min-height:40px!important;
+    padding:0 14px!important;
+    display:flex!important;
+    align-items:center!important;
+  }
+
+  body:not(.admin-route) .table-header{
+    height:31px!important;
+    min-height:31px!important;
+    padding:0 12px!important;
+  }
+
+  body:not(.admin-route) #priceRows{
+    min-height:0!important;
+    height:100%!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-auto-rows:minmax(0,1fr)!important;
+  }
+
+  body:not(.admin-route) .price-row{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:1px 12px!important;
+    overflow:hidden!important;
+  }
+
+  body:not(.admin-route) .price-row .birim{
+    font-size:clamp(10px,.95vw,15px)!important;
+    line-height:1!important;
+  }
+  body:not(.admin-route) .price-row .alis,
+  body:not(.admin-route) .price-row .satis,
+  body:not(.admin-route) .price-row .kk{
+    font-size:clamp(12px,1.1vw,17px)!important;
+    line-height:1!important;
+  }
+  body:not(.admin-route) .change-rate{
+    font-size:7px!important;
+    line-height:1!important;
+    margin-top:1px!important;
+  }
+
+  body:not(.admin-route) .update-bar{
+    height:22px!important;
+    min-height:22px!important;
+    padding:0!important;
+  }
+
+  body:not(.admin-route) #desktopSide{
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:36px 25px minmax(0,1.15fr) 36px 25px minmax(0,.85fr)!important;
+  }
+
+  body:not(.admin-route) #desktopDovizRows,
+  body:not(.admin-route) #desktopHurdaRows{
+    min-height:0!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-auto-rows:minmax(0,1fr)!important;
+  }
+
+  body:not(.admin-route) #desktopDovizRows > *,
+  body:not(.admin-route) #desktopHurdaRows > *{
+    min-height:0!important;
+    height:auto!important;
+    padding:1px 10px!important;
+    overflow:hidden!important;
+  }
+}
+
+/* 1366x768 gibi alçak laptoplar */
+@media (min-width:901px) and (max-height:780px){
+  body:not(.admin-route) .header{flex-basis:58px!important;height:58px!important;min-height:58px!important}
+  body:not(.admin-route) .brand-wrap{height:54px!important;min-height:54px!important}
+  body:not(.admin-route) .header .logo{height:50px!important;max-height:50px!important}
+  body:not(.admin-route) .market-status{flex-basis:54px!important;height:54px!important;min-height:54px!important}
+  body:not(.admin-route) .market-status .status-cell{height:52px!important;min-height:52px!important}
+  body:not(.admin-route) .top-switcher{flex-basis:38px!important;height:38px!important;min-height:38px!important}
+  body:not(.admin-route) .desktop-main{grid-template-rows:34px 26px minmax(0,1fr) 18px!important}
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -2251,7 +2433,27 @@ body:not(.light-mode){
       </div>
     </div>
 
-    <div class="sec-title">TV Ekranı Linki</div>
+    
+    <div class="sec-title">TV Görünüm Ayarları</div>
+    <div class="admin-row">
+      <span class="row-label">Döviz Kurlarını Göster</span>
+      <label class="tv-opt-switch">
+        <input type="checkbox" id="aTvShowDoviz">
+        <span class="tv-opt-slider"></span>
+      </label>
+    </div>
+    <div class="admin-row">
+      <span class="row-label">Hurda Altını Göster</span>
+      <label class="tv-opt-switch">
+        <input type="checkbox" id="aTvShowHurda">
+        <span class="tv-opt-slider"></span>
+      </label>
+    </div>
+    <div class="hint-box" style="margin-bottom:4px">
+      TV ekranında istersen sadece altın fiyatlarını, istersen Döviz ve Hurda panelleriyle birlikte gösterebilirsin.
+    </div>
+
+<div class="sec-title">TV Ekranı Linki</div>
     <div class="share-box" style="background:#101826;border-color:#203a5a">
       <p>📺 TV'de bu adresi açın</p>
       <span class="share-link" id="tvLink">Yükleniyor...</span>
@@ -2322,7 +2524,7 @@ var APP_ID = 'egilmez-kuyumculuk-v1';
 function makeDefaults() {
   var l = {};
   ITEMS.forEach(function(i) { l[i.id] = { a: i.defA, s: i.defS }; });
-  return { appId:APP_ID, shopName:'EĞİLMEZ KUYUMCULUK', shopPhone:'', logoData:'', theme:'dark', labor:l, customItems:[], kkOran:0 };
+  return { appId:APP_ID, shopName:'EĞİLMEZ KUYUMCULUK', shopPhone:'', logoData:'', theme:'dark', labor:l, customItems:[], kkOran:0, tvShowDoviz:true, tvShowHurda:true };
 }
 
 // Aktif urun listesini dondur (varsayilan + ozel, gizliler haric)
@@ -2435,6 +2637,8 @@ if (typeof settings.logoData !== 'string') settings.logoData = '';
 if (typeof settings.customLogoEnabled !== 'boolean') settings.customLogoEnabled = false;
 if (!settings.theme) settings.theme = 'dark';
 if (typeof settings.shopPhone !== 'string') settings.shopPhone = '';
+    if (typeof settings.tvShowDoviz !== 'boolean') settings.tvShowDoviz = true;
+    if (typeof settings.tvShowHurda !== 'boolean') settings.tvShowHurda = true;
 var hasAlis  = parseFloat(localStorage.getItem('egilmez_ha_v1') || '0') || null;
 var hasSatis = parseFloat(localStorage.getItem('egilmez_hs_v1') || '0') || null;
 var prevPrices = {};
@@ -2703,6 +2907,8 @@ function openAdmin() {
   document.getElementById('aName').value  = settings.shopName;
   document.getElementById('aPhone').value = settings.shopPhone || '';
   var themeSel = document.getElementById('aTheme'); if (themeSel) themeSel.value = settings.theme || 'dark';
+  var tvD = document.getElementById('aTvShowDoviz'); if (tvD) tvD.checked = settings.tvShowDoviz !== false;
+  var tvH = document.getElementById('aTvShowHurda'); if (tvH) tvH.checked = settings.tvShowHurda !== false;
   document.getElementById('aKK').value    = (settings.kkOran || 0).toFixed(2);
   document.getElementById('aHasDuzA').value = settings.hasDuzA || 0;
   document.getElementById('aHasDuzS').value = settings.hasDuzS || 0;
@@ -2720,7 +2926,7 @@ function updateCustomerLink() {
   var base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('customerLink').textContent = base;
   document.getElementById('customerLink').dataset.url = base;
-  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=70';
+  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=81';
   var tvEl = document.getElementById('tvLink');
   if (tvEl) {
     tvEl.textContent = tvUrl;
@@ -2990,6 +3196,10 @@ function saveAdmin() {
   settings.kkOran    = parseFloat(document.getElementById('aKK').value) || 0;
   settings.hasDuzA   = parseFloat(document.getElementById('aHasDuzA').value) || 0;
   settings.hasDuzS   = parseFloat(document.getElementById('aHasDuzS').value) || 0;
+  var tvD = document.getElementById('aTvShowDoviz');
+  var tvH = document.getElementById('aTvShowHurda');
+  settings.tvShowDoviz = tvD ? !!tvD.checked : (settings.tvShowDoviz !== false);
+  settings.tvShowHurda = tvH ? !!tvH.checked : (settings.tvShowHurda !== false);
   // Şifre değiştir
   var p1 = document.getElementById('aNewPass').value;
   var p2 = document.getElementById('aNewPass2').value;
@@ -3065,7 +3275,7 @@ function shareWA() {
 
 function copyTVLink() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=70');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=81');
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
   } else {
@@ -3078,7 +3288,7 @@ function copyTVLink() {
 
 function openTVScreen() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=70');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=81');
   window.open(link, '_blank');
 }
 
@@ -4374,6 +4584,38 @@ setInterval(function() {
   addEventListener('load',function(){setTimeout(refreshAllPanels,250)});
   addEventListener('resize',refreshAllPanels);
   setInterval(refreshAllPanels,2500);
+})();
+</script>
+
+
+<script id="egilmez-v81-customer-fit">
+(function(){
+  var timer=null;
+  function fitCustomer(){
+    if(innerWidth<901 || document.body.classList.contains('admin-route')) return;
+    var layout=document.querySelector('.desktop-layout');
+    var rows=document.getElementById('priceRows');
+    if(!layout||!rows)return;
+
+    var top=layout.getBoundingClientRect().top;
+    var h=Math.max(300,innerHeight-top-6);
+    layout.style.setProperty('height',h+'px','important');
+
+    var n=rows.querySelectorAll('.price-row').length||1;
+    rows.style.setProperty('grid-template-rows','repeat('+n+',minmax(0,1fr))','important');
+
+    var side=document.getElementById('desktopSide');
+    if(side)side.style.setProperty('height',h+'px','important');
+  }
+  function schedule(){clearTimeout(timer);timer=setTimeout(fitCustomer,40)}
+  addEventListener('load',schedule);
+  addEventListener('resize',schedule);
+  document.addEventListener('DOMContentLoaded',function(){
+    schedule();
+    var r=document.getElementById('priceRows');
+    if(r&&window.MutationObserver)new MutationObserver(schedule).observe(r,{childList:true});
+  });
+  setTimeout(schedule,300);setTimeout(schedule,1000);
 })();
 </script>
 

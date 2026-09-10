@@ -47,6 +47,16 @@ body:not(.dark) .logo{filter:brightness(0) saturate(100%) sepia(20%) saturate(65
 .flash-up{animation:flashUp .65s ease-out}.flash-down{animation:flashDown .65s ease-out}
 @media(max-height:760px){.app{grid-template-rows:56px 58px minmax(0,1fr);gap:5px;padding:6px 9px}.logo{height:52px}.theme{top:7px;height:36px}.status>div{padding:4px 10px}.live{font-size:15px}.sub,.lab{font-size:9px}.val{font-size:21px}.title,.side-title{height:auto;font-size:15px}.gold{grid-template-rows:32px 25px minmax(0,1fr)}.sidecard{grid-template-rows:32px 24px minmax(0,1fr)}}
 </style>
+
+<style id="egilmez-v81-tv-options">
+#hasA{color:var(--red)!important}
+#hasS{color:var(--green)!important}
+.dashboard.only-gold{grid-template-columns:1fr!important}
+.dashboard.only-gold #sidePanel{display:none!important}
+#sidePanel.one-card{grid-template-rows:minmax(0,1fr)!important}
+#sidePanel.one-card .sidecard{min-height:0!important}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -59,19 +69,19 @@ body:not(.dark) .logo{filter:brightness(0) saturate(100%) sepia(20%) saturate(65
     <div><div class="lab">Has Alış</div><div class="val" id="hasA">—</div></div>
     <div><div class="lab">Has Satış</div><div class="val" id="hasS">—</div></div>
   </div>
-  <div class="dashboard">
+  <div class="dashboard" id="dashboard">
     <div class="card gold">
       <div class="title">🪙 Altın Fiyatları</div>
       <div class="head"><span>Birim</span><span>Alış</span><span>Satış</span><span>K. Kartı</span></div>
       <div class="rows" id="goldRows"></div>
     </div>
-    <div class="side">
-      <div class="card sidecard fx">
+    <div class="side" id="sidePanel">
+      <div class="card sidecard fx" id="fxCard">
         <div class="side-title">💱 DÖVİZ KURLARI</div>
         <div class="side-head"><span>Döviz</span><span>Alış</span><span>Satış</span></div>
         <div class="side-rows" id="fxRows"></div>
       </div>
-      <div class="card sidecard">
+      <div class="card sidecard" id="scrapCard">
         <div class="side-title">🪙 HURDA ALTIN</div>
         <div class="side-head"><span>Tür</span><span>Alış</span><span>Satış</span></div>
         <div class="side-rows" id="scrapRows"></div>
@@ -84,7 +94,7 @@ body:not(.dark) .logo{filter:brightness(0) saturate(100%) sepia(20%) saturate(65
 'use strict';
 var FB='https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebasedatabase.app/ayarlar.json';
 var WORKER='https://altin-proxy.ufuk87900.workers.dev';
-var settings={labor:{},laborH:{},customItems:[],kkOran:0,dovizDuz:{},hurdaCarp:{},theme:'light'};
+var settings={labor:{},laborH:{},customItems:[],kkOran:0,dovizDuz:{},hurdaCarp:{},theme:'light',tvShowDoviz:true,tvShowHurda:true};
 var hasA=0,hasS=0,live={},prev={},busy1=false,busy2=false;
 var ITEMS=[
 {id:'has24',label:'24 Ayar',defA:1,defS:1.003},{id:'ayar22',label:'22 Ayar',defA:.91,defS:.922},
@@ -100,7 +110,29 @@ function allItems(){var a=ITEMS.concat(settings.customItems||[]),map={},out=[];(
 function lab(i){return (settings.labor&&settings.labor[i.id])||{a:i.defA||1,s:i.defS||1}}
 function pct(key,n){var o=prev[key],t='%0.00';if(o&&n&&o!==n){var d=(n-o)/o*100;t=(d>0?'+':'')+d.toFixed(2)+'%'}prev[key]=n;return t}
 function flash(key,n){var o=prev[key];if(o&&n&&o!==n)return n>o?' flash-up':' flash-down';return''}
+
+function applyTvPanelOptions(){
+  if(typeof settings.tvShowDoviz!=='boolean')settings.tvShowDoviz=true;
+  if(typeof settings.tvShowHurda!=='boolean')settings.tvShowHurda=true;
+
+  var fx=document.getElementById('fxCard');
+  var hu=document.getElementById('scrapCard');
+  var side=document.getElementById('sidePanel');
+  var dash=document.getElementById('dashboard');
+
+  if(fx)fx.style.display=settings.tvShowDoviz?'grid':'none';
+  if(hu)hu.style.display=settings.tvShowHurda?'grid':'none';
+
+  var any=settings.tvShowDoviz||settings.tvShowHurda;
+  if(dash)dash.classList.toggle('only-gold',!any);
+  if(side){
+    side.style.display=any?'grid':'none';
+    side.classList.toggle('one-card', any && !(settings.tvShowDoviz&&settings.tvShowHurda));
+  }
+}
+
 function render(){
+  applyTvPanelOptions();
   document.getElementById('hasA').textContent=hasA?fmt(hasA):'—';document.getElementById('hasS').textContent=hasS?fmt(hasS):'—';
   if(settings.logoData&&settings.customLogoEnabled)document.getElementById('logo').src=settings.logoData;
   var list=allItems(),g='';var kk=Number(settings.kkOran)||0;
