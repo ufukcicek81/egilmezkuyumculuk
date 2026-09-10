@@ -9,7 +9,7 @@
 (function(){
   try{
     if(new URLSearchParams(location.search).get('tv')==='1'){
-      location.replace('tv.html?v=93');
+      location.replace('tv.html?v=95');
     }
   }catch(e){}
 })();
@@ -1578,6 +1578,51 @@ body.light-mode .admin-inp{
 }
 </style>
 
+
+<style id="egilmez-v94-mobile-admin-single-extra">
+@media (max-width:900px){
+  /* Mobil admin: sadece TEK Döviz/Hurda bloğu */
+  body.admin-route #desktopSide,
+  body.admin-route .desktop-side,
+  body.admin-route #desktopDovizCard,
+  body.admin-route #desktopHurdaCard{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    overflow:hidden!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+  }
+
+  body.admin-route #adminEkstra{
+    display:block!important;
+    visibility:visible!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    margin:10px 12px 16px!important;
+    padding:0!important;
+  }
+
+  body.admin-route #adminEkstra .mobile-extra-card{
+    display:block!important;
+    visibility:visible!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:hidden!important;
+  }
+
+  /* Aynı başlığın/section'ın legacy kopyası varsa gizle */
+  body.admin-route .desktop-layout > #adminEkstra ~ #adminEkstra,
+  body.admin-route #adminEkstra + #adminEkstra{
+    display:none!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -2550,7 +2595,7 @@ function updateCustomerLink() {
   var base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('customerLink').textContent = base;
   document.getElementById('customerLink').dataset.url = base;
-  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=93';
+  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=95';
   var tvEl = document.getElementById('tvLink');
   if (tvEl) {
     tvEl.textContent = tvUrl;
@@ -2900,7 +2945,7 @@ function shareWA() {
 
 function copyTVLink() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=93');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=95');
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
   } else {
@@ -2913,7 +2958,7 @@ function copyTVLink() {
 
 function openTVScreen() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=93');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=95');
   window.open(link, '_blank');
 }
 
@@ -4307,6 +4352,39 @@ function renderEkstraHurda() {
   }).catch(function(){}).finally(function(){
     try{localStorage.setItem(FLAG,'1');}catch(e){}
   });
+})();
+</script>
+
+
+<script id="egilmez-v94-mobile-admin-guard">
+(function(){
+  function enforceSingleAdminExtra(){
+    var isAdmin=document.body.classList.contains('admin-route');
+    if(!isAdmin || innerWidth>900) return;
+
+    var side=document.getElementById('desktopSide');
+    if(side){
+      side.style.setProperty('display','none','important');
+      side.setAttribute('aria-hidden','true');
+    }
+
+    var extra=document.getElementById('adminEkstra');
+    if(extra){
+      extra.style.setProperty('display','block','important');
+      extra.removeAttribute('aria-hidden');
+    }
+
+    /* duplicate #adminEkstra id oluşmuşsa ilkini bırak */
+    var extras=document.querySelectorAll('#adminEkstra');
+    for(var i=1;i<extras.length;i++){
+      extras[i].style.setProperty('display','none','important');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded',enforceSingleAdminExtra,{once:true});
+  addEventListener('load',enforceSingleAdminExtra,{once:true});
+  addEventListener('resize',enforceSingleAdminExtra,{passive:true});
+  addEventListener('orientationchange',enforceSingleAdminExtra,{passive:true});
 })();
 </script>
 

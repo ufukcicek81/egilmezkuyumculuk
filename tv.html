@@ -319,6 +319,63 @@ body:not(.dark) .logo{
 }
 </style>
 
+
+<style id="egilmez-v94-tv-gold-only-fit">
+/* TV: Döviz + Hurda kapalıysa Altın paneli tüm kullanılabilir alanı doldurur */
+.dashboard.only-gold{
+  grid-template-columns:1fr!important;
+}
+.dashboard.only-gold #sidePanel{
+  display:none!important;
+}
+.dashboard.only-gold .gold{
+  width:100%!important;
+  max-width:none!important;
+  height:100%!important;
+}
+
+/* Gold-only modda biraz daha büyük ve okunaklı rakamlar */
+.dashboard.only-gold .name{
+  font-size:clamp(18px,1.55vw,28px)!important;
+}
+.dashboard.only-gold .num{
+  font-size:clamp(23px,2.05vw,36px)!important;
+}
+.dashboard.only-gold .chg{
+  font-size:clamp(9px,.8vw,14px)!important;
+}
+.dashboard.only-gold .title{
+  font-size:24px!important;
+}
+.dashboard.only-gold .head{
+  font-size:14px!important;
+}
+
+/* 1366x768 benzeri ekranlarda gold-only taşmasın */
+@media (max-height:820px){
+  .dashboard.only-gold .name{
+    font-size:clamp(15px,1.3vw,22px)!important;
+  }
+  .dashboard.only-gold .num{
+    font-size:clamp(18px,1.65vw,28px)!important;
+  }
+  .dashboard.only-gold .chg{
+    font-size:clamp(7px,.65vw,11px)!important;
+  }
+  .dashboard.only-gold .title{
+    font-size:20px!important;
+  }
+  .dashboard.only-gold .head{
+    font-size:12px!important;
+  }
+}
+</style>
+
+
+<style id="egilmez-v95-live-list-sync">
+#goldRows .row{transition:opacity .12s ease}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -507,14 +564,35 @@ function applyPanelOptions(){
   var showH=tvDisplay.showHurda!==false;
   var fx=byId('fxCard'),hu=byId('scrapCard'),side=byId('sidePanel'),dash=byId('dashboard');
 
-  fx.hidden=!showD; hu.hidden=!showH;
-  fx.style.display=showD?'grid':'none';
-  hu.style.display=showH?'grid':'none';
+  if(fx){
+    fx.hidden=!showD;
+    fx.style.setProperty('display',showD?'grid':'none','important');
+  }
+  if(hu){
+    hu.hidden=!showH;
+    hu.style.setProperty('display',showH?'grid':'none','important');
+  }
 
   var any=showD||showH;
-  side.style.display=any?'grid':'none';
-  dash.classList.toggle('only-gold',!any);
-  side.classList.toggle('one',any && !(showD&&showH));
+
+  if(side){
+    side.style.setProperty('display',any?'grid':'none','important');
+    side.classList.toggle('one',any && !(showD&&showH));
+  }
+
+  if(dash){
+    dash.classList.toggle('only-gold',!any);
+    if(!any){
+      dash.style.setProperty('grid-template-columns','1fr','important');
+    }else{
+      dash.style.removeProperty('grid-template-columns');
+    }
+  }
+
+  /* opsiyon değiştiğinde bir defalık reflow */
+  requestAnimationFrame(function(){
+    document.documentElement.style.setProperty('--goldRows',String(Math.max(1,allItems().length)));
+  });
 }
 
 function setNumber(el,value,key){
@@ -616,27 +694,71 @@ async function loadTvDisplay(){
   tvBusy=false;
 }
 
+
+function applySettingsSnapshot(d){
+  if(!d || typeof d!=='object') return;
+
+  var oldStructure = structureSignature();
+
+  /* Normal ayarları uygula */
+  settings = Object.assign(settings, d);
+
+  /* Firebase'de bir liste tamamen silindiyse eski cihaz belleğinde kalmasın.
+     Bu bölüm özellikle TV'de silinen ürünün yenilemeden kaybolmaması sorununu çözer. */
+  settings.customItems = Array.isArray(d.customItems) ? d.customItems : [];
+  settings.itemOrder   = Array.isArray(d.itemOrder)   ? d.itemOrder   : [];
+  settings.hiddenItems = Array.isArray(d.hiddenItems) ? d.hiddenItems : [];
+  settings.deletedItems= Array.isArray(d.deletedItems)? d.deletedItems: [];
+  settings.dovizItems  = Array.isArray(d.dovizItems)  ? d.dovizItems  : [];
+  settings.hurdaItems  = Array.isArray(d.hurdaItems)  ? d.hurdaItems  : [];
+
+  var newStructure = structureSignature();
+  if(oldStructure !== newStructure){
+    builtSignature='';
+    buildStructureIfNeeded();
+  }
+
+  theme();
+  updateValues();
+}
+
+function startSettingsRealtime(){
+  if(!window.EventSource) return;
+
+  try{
+    var es = new EventSource(SETTINGS_URL);
+
+    function handle(ev){
+      try{
+        var msg = JSON.parse(ev.data||'{}');
+        if(!msg || typeof msg!=='object') return;
+
+        /* İlk PUT genelde tam snapshot'tır. PATCH gelirse güvenli şekilde
+           tam ayarı REST'ten bir kez yenile. */
+        if(msg.path==='/' && msg.data && typeof msg.data==='object'){
+          applySettingsSnapshot(msg.data);
+        }else{
+          loadSettings();
+        }
+      }catch(e){}
+    }
+
+    es.addEventListener('put',handle);
+    es.addEventListener('patch',handle);
+
+    es.onerror=function(){
+      /* EventSource kendi kendine yeniden bağlanır; 8sn fallback polling zaten aktif. */
+    };
+  }catch(e){}
+}
+
 async function loadSettings(){
   if(settingsBusy)return; settingsBusy=true;
   try{
     var r=await fetch(SETTINGS_URL+'?v='+Date.now(),{cache:'no-store'});
     if(r.ok){
       var d=await r.json();
-      if(d&&typeof d==='object'){
-        var oldSig=JSON.stringify({
-          customItems:settings.customItems,itemOrder:settings.itemOrder,
-          hiddenItems:settings.hiddenItems,deletedItems:settings.deletedItems,
-          dovizItems:settings.dovizItems,hurdaItems:settings.hurdaItems
-        });
-        settings=Object.assign(settings,d);
-        var newSig=JSON.stringify({
-          customItems:settings.customItems,itemOrder:settings.itemOrder,
-          hiddenItems:settings.hiddenItems,deletedItems:settings.deletedItems,
-          dovizItems:settings.dovizItems,hurdaItems:settings.hurdaItems
-        });
-        if(oldSig!==newSig)builtSignature='';
-        theme();buildStructureIfNeeded();updateValues();
-      }
+      if(d&&typeof d==='object') applySettingsSnapshot(d);
     }
   }catch(e){}
   settingsBusy=false;
@@ -672,6 +794,9 @@ Promise.allSettled([
   loadSettings(),
   loadPrices()
 ]);
+
+/* Ürün ekleme/silme/sıralama TV'ye yenilemesiz gelsin. */
+startSettingsRealtime();
 
 /* Dengeli polling: hızlı ama sistemi yormaz. */
 setInterval(loadTvDisplay,4000);
