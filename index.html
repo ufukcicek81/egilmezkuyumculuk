@@ -9,7 +9,7 @@
 (function(){
   try{
     if(new URLSearchParams(location.search).get('tv')==='1'){
-      location.replace('tv.html?v=87');
+      location.replace('tv.html?v=88');
     }
   }catch(e){}
 })();
@@ -1190,6 +1190,346 @@ body.light-mode .price-row:nth-child(odd),body.light-mode .extra-data-row:nth-ch
 }
 </style>
 
+
+<style id="egilmez-v88-final-override">
+/* =========================
+   LIGHT MODE: PURE WHITE
+   ========================= */
+body.light-mode{
+  --v8-bg:#ffffff!important;
+  --v8-card:#ffffff!important;
+  --v8-card2:#f3f6f8!important;
+  --v8-line:#d5dee5!important;
+  --v8-text:#162231!important;
+  --v8-muted:#657585!important;
+  --v8-red:#d92c2c!important;
+  --v8-green:#16824f!important;
+  --v8-blue:#2f77b7!important;
+  background:#ffffff!important;
+  color:#162231!important;
+}
+body.light-mode .header,
+body.light-mode .market-status,
+body.light-mode .desktop-layout,
+body.light-mode .desktop-main,
+body.light-mode #desktopSide,
+body.light-mode #desktopSide .desktop-side-card,
+body.light-mode #adminEkstra,
+body.light-mode #adminEkstra .mobile-extra-card,
+body.light-mode .top-switcher,
+body.light-mode .update-bar,
+body.light-mode .admin-panel,
+body.light-mode .admin-header,
+body.light-mode .admin-row,
+body.light-mode .sec-title,
+body.light-mode .hint-box,
+body.light-mode .overlay-card,
+body.light-mode .modal,
+body.light-mode .modal-content{
+  background:#ffffff!important;
+  color:#162231!important;
+  border-color:#d5dee5!important;
+}
+body.light-mode .table-header,
+body.light-mode .extra-columns,
+body.light-mode #desktopSide .desktop-extra-columns{
+  background:#f3f6f8!important;
+  border-color:#d5dee5!important;
+}
+body.light-mode .price-row:nth-child(even),
+body.light-mode .extra-data-row:nth-child(even){
+  background:#f7f9fb!important;
+}
+body.light-mode .price-row:nth-child(odd),
+body.light-mode .extra-data-row:nth-child(odd){
+  background:#ffffff!important;
+}
+body.light-mode .upd-text{
+  background:#f3f6f8!important;
+  color:#526170!important;
+  border-color:#d5dee5!important;
+}
+body.light-mode .top-switch-btn{
+  color:#4d5d6d!important;
+}
+body.light-mode .top-switch-btn.active{
+  background:#eef2f5!important;
+  color:#172235!important;
+  box-shadow:none!important;
+}
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea,
+body.light-mode .admin-inp{
+  background:#ffffff!important;
+  color:#172235!important;
+  border-color:#cbd6de!important;
+}
+
+/* Price colors on all normal/admin customer screens */
+#statusHasA{color:#d92c2c!important;font-weight:950!important}
+#statusHasS{color:#16824f!important;font-weight:950!important}
+.price-row .alis,.extra-buy{color:#d92c2c!important;font-weight:950!important}
+.price-row .satis,.extra-sell{color:#16824f!important;font-weight:950!important}
+.price-row .kk{color:#2f77b7!important;font-weight:950!important}
+.table-header span:nth-child(2),.extra-columns span:nth-child(2){color:#d92c2c!important;font-weight:900!important}
+.table-header span:nth-child(3),.extra-columns span:nth-child(3){color:#16824f!important;font-weight:900!important}
+.table-header span:nth-child(4){color:#2f77b7!important;font-weight:900!important}
+
+/* =========================
+   DESKTOP ADMIN + CUSTOMER
+   ========================= */
+@media (min-width:901px){
+  html,body{width:100%!important;height:100%!important;min-height:0!important;margin:0!important}
+  body{overflow:hidden!important}
+
+  .desktop-layout{
+    display:grid!important;
+    grid-template-columns:minmax(0,68fr) minmax(310px,32fr)!important;
+    gap:10px!important;
+    width:calc(100vw - 16px)!important;
+    margin:0 8px 5px!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    align-items:stretch!important;
+  }
+  .desktop-layout.side-hidden{
+    grid-template-columns:1fr!important;
+  }
+
+  .desktop-main{
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:36px 28px minmax(0,1fr) 30px!important;
+    border-radius:14px!important;
+  }
+  .desktop-main:before{
+    height:36px!important;
+    min-height:36px!important;
+    padding:0 12px!important;
+    font-size:16px!important;
+    display:flex!important;
+    align-items:center!important;
+  }
+  .table-header{
+    height:28px!important;
+    min-height:28px!important;
+    padding:0 11px!important;
+  }
+  .table-header span{
+    font-size:11.5px!important;
+  }
+
+  #priceRows{
+    min-height:0!important;
+    height:100%!important;
+    overflow:hidden!important;
+    display:grid!important;
+  }
+  .price-row{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:1px 11px!important;
+    overflow:hidden!important;
+    align-items:center!important;
+  }
+  .price-row .birim{
+    font-size:var(--v88-main-name,14px)!important;
+    line-height:1.05!important;
+    font-weight:900!important;
+  }
+  .price-row .alis,
+  .price-row .satis,
+  .price-row .kk{
+    font-size:var(--v88-main-val,17px)!important;
+    line-height:1!important;
+    font-weight:950!important;
+  }
+  .change-rate{
+    font-size:var(--v88-main-chg,7.5px)!important;
+    line-height:1!important;
+    margin-top:2px!important;
+  }
+
+  .update-bar{
+    height:30px!important;
+    min-height:30px!important;
+    margin:0!important;
+    padding:0 6px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    overflow:visible!important;
+  }
+  .upd-text{
+    font-size:10.5px!important;
+    line-height:1!important;
+    padding:5px 14px!important;
+    white-space:nowrap!important;
+  }
+  .upd-src{display:none!important}
+
+  #desktopSide{
+    position:static!important;
+    width:auto!important;
+    max-width:none!important;
+    min-width:310px!important;
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    gap:8px!important;
+  }
+  body.admin-route #desktopSide,
+  body:not(.admin-route) #desktopSide.customer-side-visible{
+    display:grid!important;
+  }
+  body:not(.admin-route) #desktopSide:not(.customer-side-visible){
+    display:none!important;
+  }
+
+  #desktopSide.two-panels{
+    grid-template-rows:minmax(0,1.08fr) minmax(0,.92fr)!important;
+  }
+  #desktopSide.one-panel{
+    grid-template-rows:minmax(0,1fr)!important;
+  }
+  #desktopSide .desktop-side-card{
+    position:static!important;
+    inset:auto!important;
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:36px 26px minmax(0,1fr)!important;
+    border-radius:14px!important;
+  }
+  #desktopSide .desktop-extra-title{
+    height:36px!important;
+    min-height:36px!important;
+    padding:0 10px!important;
+    display:flex!important;
+    align-items:center!important;
+    font-size:14px!important;
+  }
+  #desktopSide .desktop-extra-columns{
+    height:26px!important;
+    min-height:26px!important;
+    padding:0 10px!important;
+  }
+  #desktopSide .desktop-extra-columns span{
+    font-size:10px!important;
+  }
+  #desktopSide .desktop-side-rows{
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    display:grid!important;
+  }
+  #desktopSide .desktop-extra-row{
+    min-height:0!important;
+    height:auto!important;
+    max-height:none!important;
+    padding:1px 10px!important;
+    align-items:center!important;
+    overflow:hidden!important;
+  }
+  #desktopSide .desktop-extra-name{
+    font-size:var(--v88-side-name,13px)!important;
+    line-height:1!important;
+    font-weight:900!important;
+  }
+  #desktopSide .desktop-extra-value{
+    font-size:var(--v88-side-val,16px)!important;
+    line-height:1!important;
+    font-weight:950!important;
+  }
+}
+
+/* =========================
+   MOBILE CUSTOMER EXTRAS
+   ========================= */
+@media (max-width:900px){
+  body:not(.admin-route) #adminEkstra.customer-extra-visible{
+    display:block!important;
+    background:#ffffff!important;
+    margin:10px 12px 16px!important;
+    padding:0!important;
+    border:0!important;
+    overflow:visible!important;
+  }
+  body:not(.admin-route) #adminEkstra:not(.customer-extra-visible){
+    display:none!important;
+  }
+  body:not(.admin-route) #adminEkstra .mobile-extra-card{
+    display:block!important;
+    background:#ffffff!important;
+    border:1px solid #d5dee5!important;
+    border-radius:14px!important;
+    overflow:hidden!important;
+    margin:0 0 10px!important;
+  }
+  body:not(.admin-route) #adminEkstra .mobile-extra-card.customer-card-hidden{
+    display:none!important;
+  }
+  body:not(.admin-route) #adminEkstra .extra-section-title{
+    height:40px!important;
+    padding:0 13px!important;
+    display:flex!important;
+    align-items:center!important;
+    background:#ffffff!important;
+    font-size:15px!important;
+    font-weight:900!important;
+  }
+  body:not(.admin-route) #adminEkstra .extra-columns{
+    height:30px!important;
+    padding:0 13px!important;
+    background:#f3f6f8!important;
+  }
+  body:not(.admin-route) #adminEkstra .extra-columns span{
+    font-size:11px!important;
+  }
+  body:not(.admin-route) #adminEkstra .extra-data-row{
+    min-height:48px!important;
+    padding:7px 13px!important;
+    background:#ffffff!important;
+  }
+  body:not(.admin-route) #adminEkstra .extra-data-row:nth-child(even){
+    background:#f7f9fb!important;
+  }
+  body:not(.admin-route) #adminEkstra .extra-name{
+    font-size:15px!important;
+    font-weight:900!important;
+  }
+  body:not(.admin-route) #adminEkstra .extra-buy,
+  body:not(.admin-route) #adminEkstra .extra-sell{
+    font-size:16px!important;
+    font-weight:950!important;
+  }
+
+  /* Main customer text slightly larger */
+  body:not(.admin-route) .price-row .birim{
+    font-size:17px!important;
+    font-weight:900!important;
+  }
+  body:not(.admin-route) .price-row .alis,
+  body:not(.admin-route) .price-row .satis,
+  body:not(.admin-route) .price-row .kk{
+    font-size:19px!important;
+    font-weight:950!important;
+  }
+  body:not(.admin-route) .change-rate{
+    font-size:10px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -2054,6 +2394,7 @@ function applyCustomerDisplayLayout(){
   var isAdmin=document.body.classList.contains('admin-route');
   var showD=isAdmin ? true : customerDisplayConfig.showDoviz!==false;
   var showH=isAdmin ? true : customerDisplayConfig.showHurda!==false;
+
   var side=document.getElementById('desktopSide');
   var dCard=document.getElementById('desktopDovizCard');
   var hCard=document.getElementById('desktopHurdaCard');
@@ -2061,19 +2402,52 @@ function applyCustomerDisplayLayout(){
   var md=document.getElementById('mobileDovizCard');
   var mh=document.getElementById('mobileHurdaCard');
   var layout=document.querySelector('.desktop-layout');
-
-  if(dCard)dCard.style.display=showD?'grid':'none';
-  if(hCard)hCard.style.display=showH?'grid':'none';
-  if(md)md.style.display=showD?'block':'none';
-  if(mh)mh.style.display=showH?'block':'none';
-
   var any=showD||showH;
-  if(side)side.style.display=(innerWidth>=901&&any)?'grid':'none';
-  if(mobile)mobile.style.display=(innerWidth<901&&any)?'block':'none';
+
+  if(dCard){
+    dCard.classList.toggle('customer-card-hidden',!showD);
+    dCard.style.setProperty('display',showD?'grid':'none','important');
+  }
+  if(hCard){
+    hCard.classList.toggle('customer-card-hidden',!showH);
+    hCard.style.setProperty('display',showH?'grid':'none','important');
+  }
+  if(md){
+    md.classList.toggle('customer-card-hidden',!showD);
+    md.style.setProperty('display',showD?'block':'none','important');
+  }
+  if(mh){
+    mh.classList.toggle('customer-card-hidden',!showH);
+    mh.style.setProperty('display',showH?'block':'none','important');
+  }
+
+  if(side){
+    side.classList.toggle('customer-side-visible',(!isAdmin && any));
+    side.classList.toggle('two-panels',showD&&showH);
+    side.classList.toggle('one-panel',any && !(showD&&showH));
+    if(isAdmin){
+      side.style.setProperty('display','grid','important');
+    }else{
+      side.style.setProperty('display',(innerWidth>=901&&any)?'grid':'none','important');
+    }
+  }
+
+  if(mobile){
+    mobile.classList.toggle('customer-extra-visible',(!isAdmin && innerWidth<901 && any));
+    if(!isAdmin){
+      mobile.style.setProperty('display',(innerWidth<901&&any)?'block':'none','important');
+    }
+  }
+
   if(layout){
-    layout.classList.toggle('side-hidden',!any);
+    layout.classList.toggle('side-hidden',(!isAdmin && !any));
     layout.classList.toggle('side-single',any && !(showD&&showH));
   }
+
+  /* Ensure content exists immediately when panel becomes visible */
+  try{ if(showD||showH) renderDesktopPanel(); }catch(e){}
+  try{ if(showD) renderEkstraDoviz(); }catch(e){}
+  try{ if(showH) renderEkstraHurda(); }catch(e){}
 }
 
 function openAdmin() {
@@ -2099,7 +2473,7 @@ function updateCustomerLink() {
   var base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('customerLink').textContent = base;
   document.getElementById('customerLink').dataset.url = base;
-  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=87';
+  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=88';
   var tvEl = document.getElementById('tvLink');
   if (tvEl) {
     tvEl.textContent = tvUrl;
@@ -2449,7 +2823,7 @@ function shareWA() {
 
 function copyTVLink() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=87');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=88');
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
   } else {
@@ -2462,7 +2836,7 @@ function copyTVLink() {
 
 function openTVScreen() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=87');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=88');
   window.open(link, '_blank');
 }
 
@@ -3688,6 +4062,100 @@ setInterval(function() {
   addEventListener('load',scheduleFit);addEventListener('resize',scheduleFit);addEventListener('focus',function(){pullCustomerConfig();scheduleFit()});
   document.addEventListener('visibilitychange',function(){if(!document.hidden){pullCustomerConfig();scheduleFit()}});
   setInterval(pullCustomerConfig,1500);
+})();
+</script>
+
+
+<script id="egilmez-v88-final-engine">
+(function(){
+  var timer=null,lastCustomerText='';
+
+  function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+
+  function fitDesktop(){
+    if(innerWidth<901)return;
+
+    var layout=document.querySelector('.desktop-layout');
+    var rows=document.getElementById('priceRows');
+    if(!layout||!rows)return;
+
+    var top=layout.getBoundingClientRect().top;
+    var available=Math.max(300,window.innerHeight-top-5);
+    layout.style.setProperty('height',available+'px','important');
+    layout.style.setProperty('max-height',available+'px','important');
+
+    var n=rows.querySelectorAll('.price-row').length||1;
+    rows.style.setProperty('grid-template-rows','repeat('+n+',minmax(0,1fr))','important');
+
+    /* 36 title + 28 header + 30 update */
+    var usable=Math.max(180,available-94);
+    var rh=usable/n;
+    document.documentElement.style.setProperty('--v88-main-name',clamp(rh*.35,11.5,17)+'px');
+    document.documentElement.style.setProperty('--v88-main-val',clamp(rh*.41,13,20)+'px');
+    document.documentElement.style.setProperty('--v88-main-chg',clamp(rh*.19,6.5,10)+'px');
+
+    var side=document.getElementById('desktopSide');
+    if(side){
+      var visibleCards=Array.prototype.slice.call(side.querySelectorAll('.desktop-side-card')).filter(function(el){
+        return getComputedStyle(el).display!=='none';
+      });
+
+      visibleCards.forEach(function(card){
+        var data=card.querySelector('.desktop-side-rows');
+        if(!data)return;
+        var count=data.children.length||1;
+        data.style.setProperty('grid-template-rows','repeat('+count+',minmax(0,1fr))','important');
+        var h=data.getBoundingClientRect().height/count;
+        document.documentElement.style.setProperty('--v88-side-name',clamp(h*.32,10.5,15.5)+'px');
+        document.documentElement.style.setProperty('--v88-side-val',clamp(h*.38,12,18)+'px');
+      });
+    }
+  }
+
+  function refreshCustomer(){
+    try{
+      if(typeof renderDesktopPanel==='function')renderDesktopPanel();
+      if(typeof renderEkstraDoviz==='function')renderEkstraDoviz();
+      if(typeof renderEkstraHurda==='function')renderEkstraHurda();
+      if(typeof applyCustomerDisplayLayout==='function')applyCustomerDisplayLayout();
+    }catch(e){}
+    fitDesktop();
+  }
+
+  function pullCustomer(){
+    if(typeof CUSTOMER_CONFIG_URL==='undefined')return;
+    fetch(CUSTOMER_CONFIG_URL+'?v='+Date.now(),{cache:'no-store'})
+      .then(function(r){return r.ok?r.text():''})
+      .then(function(txt){
+        if(!txt||txt===lastCustomerText)return;
+        lastCustomerText=txt;
+        var d=null;try{d=JSON.parse(txt)}catch(e){}
+        if(d&&typeof applyCustomerDisplayToAdmin==='function'){
+          applyCustomerDisplayToAdmin(d);
+          refreshCustomer();
+        }
+      }).catch(function(){});
+  }
+
+  function schedule(){
+    clearTimeout(timer);
+    timer=setTimeout(function(){refreshCustomer();},50);
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    setTimeout(schedule,80);
+    setTimeout(schedule,400);
+    setTimeout(schedule,1000);
+  });
+  addEventListener('load',schedule);
+  addEventListener('resize',schedule);
+  addEventListener('focus',function(){pullCustomer();schedule()});
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden){pullCustomer();schedule()}
+  });
+
+  /* Config sync only; no constant layout polling */
+  setInterval(pullCustomer,1500);
 })();
 </script>
 
