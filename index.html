@@ -9,7 +9,7 @@
 (function(){
   try{
     if(new URLSearchParams(location.search).get('tv')==='1'){
-      location.replace('tv.html?v=82');
+      location.replace('tv.html?v=83');
     }
   }catch(e){}
 })();
@@ -2255,6 +2255,154 @@ body.light-mode #statusHasS,
 body:not(.light-mode) #statusHasS{color:var(--v8-green)!important}
 </style>
 
+
+<style id="egilmez-v83-tv-parity">
+/* Admin + müşteri PC: TV ekranı ile aynı oran, renk ve okunaklılık */
+@media (min-width:901px){
+  body.admin-route .desktop-layout,
+  body:not(.admin-route) .desktop-layout{
+    grid-template-columns:minmax(0,70fr) minmax(320px,30fr)!important;
+    gap:10px!important;
+  }
+
+  body.admin-route .desktop-layout.customer-gold-only,
+  body:not(.admin-route) .desktop-layout.customer-gold-only{
+    grid-template-columns:1fr!important;
+  }
+
+  body.admin-route .price-row .birim,
+  body:not(.admin-route) .price-row .birim{
+    font-size:clamp(13px,1.08vw,17px)!important;
+    font-weight:900!important;
+  }
+
+  body.admin-route .price-row .alis,
+  body:not(.admin-route) .price-row .alis{
+    color:var(--v8-red)!important;
+    font-size:clamp(16px,1.38vw,21px)!important;
+    font-weight:950!important;
+  }
+
+  body.admin-route .price-row .satis,
+  body:not(.admin-route) .price-row .satis{
+    color:var(--v8-green)!important;
+    font-size:clamp(16px,1.38vw,21px)!important;
+    font-weight:950!important;
+  }
+
+  body.admin-route .price-row .kk,
+  body:not(.admin-route) .price-row .kk{
+    color:var(--v8-blue)!important;
+    font-size:clamp(16px,1.38vw,21px)!important;
+    font-weight:950!important;
+  }
+
+  body.admin-route .change-rate,
+  body:not(.admin-route) .change-rate{
+    font-size:clamp(7px,.62vw,10px)!important;
+    font-weight:850!important;
+  }
+
+  body.admin-route #desktopSide,
+  body:not(.admin-route) #desktopSide{
+    min-width:320px!important;
+    width:auto!important;
+    max-width:none!important;
+  }
+
+  body.admin-route #desktopSide .desktop-extra-title,
+  body:not(.admin-route) #desktopSide .desktop-extra-title{
+    min-height:38px!important;
+    font-size:16px!important;
+  }
+
+  body.admin-route #desktopSide .desktop-extra-name,
+  body:not(.admin-route) #desktopSide .desktop-extra-name{
+    font-size:clamp(12px,1vw,16px)!important;
+    font-weight:900!important;
+  }
+
+  body.admin-route #desktopSide .extra-buy,
+  body.admin-route #desktopSide .desktop-extra-value:nth-child(2),
+  body:not(.admin-route) #desktopSide .extra-buy,
+  body:not(.admin-route) #desktopSide .desktop-extra-value:nth-child(2){
+    color:var(--v8-red)!important;
+    font-size:clamp(13px,1.1vw,18px)!important;
+    font-weight:950!important;
+  }
+
+  body.admin-route #desktopSide .extra-sell,
+  body:not(.admin-route) #desktopSide .extra-sell{
+    color:var(--v8-green)!important;
+    font-size:clamp(13px,1.1vw,18px)!important;
+    font-weight:950!important;
+  }
+
+  /* Ekran kısa ise yine tüm satırlar sığsın */
+  body.admin-route #priceRows,
+  body:not(.admin-route) #priceRows{
+    grid-auto-rows:minmax(0,1fr)!important;
+  }
+}
+
+/* Müşteri mobil: opsiyona göre Döviz/Hurda göster/gizle */
+@media (max-width:900px){
+  body:not(.admin-route) #adminEkstra{
+    display:block!important;
+  }
+}
+
+/* Açık mod: TV ile aynı saf beyaz ton */
+body.light-mode,
+body.light-mode .header,
+body.light-mode .market-status,
+body.light-mode .desktop-main,
+body.light-mode #desktopSide,
+body.light-mode .desktop-side,
+body.light-mode .top-switcher{
+  background:#ffffff!important;
+}
+body.light-mode .table-header,
+body.light-mode .extra-columns,
+body.light-mode #desktopSide .desktop-extra-columns{
+  background:#f4f7f9!important;
+}
+</style>
+
+
+<style id="egilmez-v84-dynamic-side-css">
+@media (min-width:901px){
+  #desktopSide{
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+
+  #desktopSide > *{
+    min-height:0!important;
+  }
+
+  #desktopDovizRows,
+  #desktopHurdaRows{
+    min-height:0!important;
+    height:100%!important;
+    overflow:hidden!important;
+  }
+
+  #desktopDovizRows > *,
+  #desktopHurdaRows > *{
+    min-height:0!important;
+    max-height:none!important;
+    overflow:hidden!important;
+  }
+
+  /* single side-panel mode: main content keeps 70/30; if side hidden, gold fills all */
+  .desktop-layout.customer-gold-only{
+    grid-template-columns:1fr!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -2520,6 +2668,25 @@ body:not(.light-mode) #statusHasS{color:var(--v8-green)!important}
       TV ekranında istersen sadece altın fiyatlarını, istersen Döviz ve Hurda panelleriyle birlikte gösterebilirsin.
     </div>
 
+    <div class="sec-title">Müşteri Ekranı Görünüm Ayarları</div>
+    <div class="admin-row">
+      <span class="row-label">Döviz Kurlarını Göster</span>
+      <label class="tv-opt-switch">
+        <input type="checkbox" id="aCustomerShowDoviz">
+        <span class="tv-opt-slider"></span>
+      </label>
+    </div>
+    <div class="admin-row">
+      <span class="row-label">Hurda Altını Göster</span>
+      <label class="tv-opt-switch">
+        <input type="checkbox" id="aCustomerShowHurda">
+        <span class="tv-opt-slider"></span>
+      </label>
+    </div>
+    <div class="hint-box" style="margin-bottom:4px">
+      Müşteri ekranında Döviz ve Hurda bölümlerini ayrı ayrı açıp kapatabilirsin.
+    </div>
+
 <div class="sec-title">TV Ekranı Linki</div>
     <div class="share-box" style="background:#101826;border-color:#203a5a">
       <p>📺 TV'de bu adresi açın</p>
@@ -2629,6 +2796,9 @@ function parseHash() {
 // ── FIREBASE AYARLARI ─────────────────────────────────────────────────────────
 var FIREBASE_URL = 'https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebasedatabase.app/ayarlar.json';
 var TV_CONFIG_URL = 'https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebasedatabase.app/tvDisplay.json';
+var CUSTOMER_CONFIG_URL = 'https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebasedatabase.app/customerDisplay.json';
+var customerDisplayConfig = { showDoviz:true, showHurda:true };
+
 var tvDisplayConfig = { showDoviz:true, showHurda:true };
 
 
@@ -3043,8 +3213,79 @@ function bindTvDisplayControls(){
   h.addEventListener('change', push);
 }
 
+
+function normalizeCustomerDisplay(data){
+  data = data && typeof data === 'object' ? data : {};
+  return {
+    showDoviz: data.showDoviz !== false,
+    showHurda: data.showHurda !== false
+  };
+}
+function applyCustomerDisplayToAdmin(data){
+  customerDisplayConfig = normalizeCustomerDisplay(data);
+  var d=document.getElementById('aCustomerShowDoviz');
+  var h=document.getElementById('aCustomerShowHurda');
+  if(d)d.checked=customerDisplayConfig.showDoviz;
+  if(h)h.checked=customerDisplayConfig.showHurda;
+  applyCustomerDisplayLayout();
+}
+function loadCustomerDisplayConfig(cb){
+  fetch(CUSTOMER_CONFIG_URL+'?v='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.ok?r.json():null})
+    .then(function(data){applyCustomerDisplayToAdmin(data);if(cb)cb(customerDisplayConfig)})
+    .catch(function(){if(cb)cb(customerDisplayConfig)});
+}
+function saveCustomerDisplayConfig(showDoviz,showHurda,cb){
+  var payload={showDoviz:!!showDoviz,showHurda:!!showHurda,updatedAt:Date.now()};
+  fetch(CUSTOMER_CONFIG_URL,{
+    method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)
+  }).then(function(r){if(!r.ok)throw new Error('customer display save');return r.json()})
+    .then(function(){applyCustomerDisplayToAdmin(payload);if(cb)cb(true)})
+    .catch(function(){if(cb)cb(false)});
+}
+function bindCustomerDisplayControls(){
+  var d=document.getElementById('aCustomerShowDoviz');
+  var h=document.getElementById('aCustomerShowHurda');
+  if(!d||!h||d.dataset.bound==='1')return;
+  d.dataset.bound=h.dataset.bound='1';
+  function push(){
+    saveCustomerDisplayConfig(d.checked,h.checked,function(ok){
+      showToast(ok?'✅ Müşteri görünümü güncellendi':'⚠ Müşteri görünümü kaydedilemedi');
+    });
+  }
+  d.addEventListener('change',push);h.addEventListener('change',push);
+}
+function applyCustomerDisplayLayout(){
+  if(document.body.classList.contains('admin-route')) return;
+  var side=document.getElementById('desktopSide');
+  var dx=document.getElementById('desktopDovizRows');
+  var hx=document.getElementById('desktopHurdaRows');
+  if(!side)return;
+
+  var showD=customerDisplayConfig.showDoviz!==false;
+  var showH=customerDisplayConfig.showHurda!==false;
+
+  // Locate each section wrappers from row containers
+  var dWrap=dx;
+  while(dWrap && dWrap.parentElement!==side)dWrap=dWrap.parentElement;
+  var hWrap=hx;
+  while(hWrap && hWrap.parentElement!==side)hWrap=hWrap.parentElement;
+
+  if(dWrap)dWrap.style.display=showD?'contents':'none';
+  if(hWrap)hWrap.style.display=showH?'contents':'none';
+
+  var any=showD||showH;
+  side.style.display=(innerWidth>=901 && any)?'grid':'none';
+  var layout=document.querySelector('.desktop-layout');
+  if(layout && innerWidth>=901){
+    layout.classList.toggle('customer-gold-only',!any);
+    layout.classList.toggle('customer-one-side',any && !(showD&&showH));
+  }
+}
+
 function openAdmin() {
   loadTvDisplayConfig(function(){ bindTvDisplayControls(); });
+  loadCustomerDisplayConfig(function(){ bindCustomerDisplayControls(); });
   document.getElementById('aName').value  = settings.shopName;
   document.getElementById('aPhone').value = settings.shopPhone || '';
   var themeSel = document.getElementById('aTheme'); if (themeSel) themeSel.value = settings.theme || 'dark';
@@ -3065,7 +3306,7 @@ function updateCustomerLink() {
   var base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('customerLink').textContent = base;
   document.getElementById('customerLink').dataset.url = base;
-  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=82';
+  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=83';
   var tvEl = document.getElementById('tvLink');
   if (tvEl) {
     tvEl.textContent = tvUrl;
@@ -3415,7 +3656,7 @@ function shareWA() {
 
 function copyTVLink() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=82');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=83');
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
   } else {
@@ -3428,7 +3669,7 @@ function copyTVLink() {
 
 function openTVScreen() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=82');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=83');
   window.open(link, '_blank');
 }
 
@@ -4788,6 +5029,171 @@ setInterval(function() {
   window.addEventListener('focus',pullTvConfig);
   document.addEventListener('visibilitychange',function(){if(!document.hidden)pullTvConfig()});
   setInterval(pullTvConfig,1500);
+})();
+</script>
+
+
+<script id="egilmez-v83-customer-live-sync">
+(function(){
+  var lastCustomerText='';
+  function pullCustomer(){
+    if(typeof CUSTOMER_CONFIG_URL==='undefined')return;
+    fetch(CUSTOMER_CONFIG_URL+'?v='+Date.now(),{cache:'no-store'})
+      .then(function(r){return r.ok?r.text():''})
+      .then(function(txt){
+        if(!txt||txt===lastCustomerText)return;
+        lastCustomerText=txt;
+        var d=null;try{d=JSON.parse(txt)}catch(e){}
+        if(d&&typeof applyCustomerDisplayToAdmin==='function')applyCustomerDisplayToAdmin(d);
+      }).catch(function(){});
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    setTimeout(function(){
+      try{bindCustomerDisplayControls()}catch(e){}
+      pullCustomer();
+    },200);
+  });
+  addEventListener('focus',pullCustomer);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)pullCustomer()});
+  addEventListener('resize',function(){try{applyCustomerDisplayLayout()}catch(e){}});
+  setInterval(pullCustomer,1200);
+})();
+</script>
+
+
+<script id="egilmez-v83-customer-bootstrap">
+document.addEventListener('DOMContentLoaded',function(){
+  try{loadCustomerDisplayConfig(function(){applyCustomerDisplayLayout();});}catch(e){}
+});
+</script>
+
+
+<script id="egilmez-v84-dynamic-side-fit">
+(function(){
+  function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+
+  function findSectionWrap(side, rowsEl){
+    if(!side || !rowsEl) return null;
+    var p = rowsEl;
+    while(p && p.parentElement !== side) p = p.parentElement;
+    return p || null;
+  }
+
+  function sizeRows(rowsEl, visible){
+    if(!rowsEl || !visible) return;
+    var children = Array.prototype.slice.call(rowsEl.children).filter(function(el){
+      return getComputedStyle(el).display !== 'none';
+    });
+    var count = children.length || 1;
+    var h = rowsEl.getBoundingClientRect().height;
+    var rh = h / count;
+
+    rowsEl.style.setProperty('display','grid','important');
+    rowsEl.style.setProperty('grid-template-rows','repeat('+count+', minmax(0,1fr))','important');
+    rowsEl.style.setProperty('grid-auto-rows','unset','important');
+    rowsEl.style.setProperty('align-content','stretch','important');
+
+    var nameFs = clamp(rh * 0.28, 10, 16);
+    var valFs  = clamp(rh * 0.33, 11, 18);
+
+    children.forEach(function(row){
+      row.style.setProperty('height','auto','important');
+      row.style.setProperty('min-height','0','important');
+      row.style.setProperty('max-height','none','important');
+      row.style.setProperty('padding-top','1px','important');
+      row.style.setProperty('padding-bottom','1px','important');
+      row.style.setProperty('align-items','center','important');
+
+      row.querySelectorAll('.extra-name,.desktop-extra-name,.side-name').forEach(function(el){
+        el.style.setProperty('font-size',nameFs+'px','important');
+        el.style.setProperty('line-height','1','important');
+      });
+      row.querySelectorAll('.extra-buy,.extra-sell,.desktop-extra-value,.side-num').forEach(function(el){
+        el.style.setProperty('font-size',valFs+'px','important');
+        el.style.setProperty('line-height','1','important');
+      });
+    });
+  }
+
+  function fitSidePanel(){
+    if(innerWidth < 901) return;
+
+    var side = document.getElementById('desktopSide');
+    var dRows = document.getElementById('desktopDovizRows');
+    var hRows = document.getElementById('desktopHurdaRows');
+    if(!side) return;
+
+    var dWrap = findSectionWrap(side,dRows);
+    var hWrap = findSectionWrap(side,hRows);
+
+    // Determine actual visibility from current option state / styles.
+    var showD = !!(dWrap && getComputedStyle(dWrap).display !== 'none');
+    var showH = !!(hWrap && getComputedStyle(hWrap).display !== 'none');
+
+    side.style.setProperty('overflow','hidden','important');
+
+    if(showD && showH){
+      // two sections: use whole height with a balanced split
+      side.style.setProperty('display','grid','important');
+      side.style.setProperty('grid-template-rows','minmax(0,1.05fr) minmax(0,.95fr)','important');
+      side.style.setProperty('gap','8px','important');
+
+      if(dWrap){
+        dWrap.style.setProperty('display','grid','important');
+        dWrap.style.setProperty('grid-template-rows','36px 26px minmax(0,1fr)','important');
+        dWrap.style.setProperty('min-height','0','important');
+        dWrap.style.setProperty('overflow','hidden','important');
+      }
+      if(hWrap){
+        hWrap.style.setProperty('display','grid','important');
+        hWrap.style.setProperty('grid-template-rows','36px 26px minmax(0,1fr)','important');
+        hWrap.style.setProperty('min-height','0','important');
+        hWrap.style.setProperty('overflow','hidden','important');
+      }
+    } else if(showD || showH){
+      // only one section: fill the whole side area, no giant gaps
+      side.style.setProperty('display','grid','important');
+      side.style.setProperty('grid-template-rows','minmax(0,1fr)','important');
+      side.style.setProperty('gap','0','important');
+
+      var only = showD ? dWrap : hWrap;
+      if(only){
+        only.style.setProperty('display','grid','important');
+        only.style.setProperty('grid-template-rows','40px 28px minmax(0,1fr)','important');
+        only.style.setProperty('height','100%','important');
+        only.style.setProperty('min-height','0','important');
+        only.style.setProperty('overflow','hidden','important');
+      }
+    } else {
+      side.style.setProperty('display','none','important');
+    }
+
+    sizeRows(dRows, showD);
+    sizeRows(hRows, showH);
+  }
+
+  var t;
+  function schedule(){
+    clearTimeout(t);
+    t = setTimeout(fitSidePanel,50);
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    schedule();
+    ['desktopDovizRows','desktopHurdaRows','desktopSide'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el && window.MutationObserver){
+        new MutationObserver(schedule).observe(el,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
+      }
+    });
+  });
+  addEventListener('load',schedule);
+  addEventListener('resize',schedule);
+  addEventListener('focus',schedule);
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) schedule(); });
+
+  // periodic lightweight stabilization for remote option changes
+  setInterval(schedule,1200);
 })();
 </script>
 
