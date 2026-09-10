@@ -9,7 +9,7 @@
 (function(){
   try{
     if(new URLSearchParams(location.search).get('tv')==='1'){
-      location.replace('tv.html?v=92');
+      location.replace('tv.html?v=93');
     }
   }catch(e){}
 })();
@@ -1538,6 +1538,46 @@ body.light-mode .admin-inp{
 .admin-panel,.admin-modal,.overlay-card{contain:layout paint style}
 </style>
 
+
+<style id="egilmez-v93-mobile-extra-fix">
+@media (max-width:900px){
+  /* Mobil admin: ikinci kopya olan desktop side tamamen kapalı */
+  body.admin-route #desktopSide,
+  body.admin-route .desktop-side{
+    display:none!important;
+  }
+
+  /* Mobil admin ana fiyat ekranında Döviz/Hurda yalnızca bir kez */
+  body.admin-route #adminEkstra{
+    display:block!important;
+    margin:10px 12px 16px!important;
+  }
+  body.admin-route #adminEkstra .mobile-extra-card{
+    display:block!important;
+  }
+
+  /* Müşteri: seçime göre tek mobil blok görünür */
+  body:not(.admin-route) #desktopSide,
+  body:not(.admin-route) .desktop-side{
+    display:none!important;
+  }
+  body:not(.admin-route) #adminEkstra.customer-extra-visible{
+    display:block!important;
+  }
+  body:not(.admin-route) #adminEkstra:not(.customer-extra-visible){
+    display:none!important;
+  }
+  body:not(.admin-route) #adminEkstra .mobile-extra-card.customer-card-hidden{
+    display:none!important;
+  }
+}
+
+/* Admin ayar başlıklarını karıştırmamak için net ayır */
+.sec-title{
+  scroll-margin-top:12px;
+}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -1791,27 +1831,7 @@ body.light-mode .admin-inp{
       </div>
     </div>
 
-    
-    <div class="sec-title">TV Görünüm Ayarları</div>
-    <div class="admin-row">
-      <span class="row-label">Döviz Kurlarını Göster</span>
-      <label class="tv-opt-switch">
-        <input type="checkbox" id="aTvShowDoviz">
-        <span class="tv-opt-slider"></span>
-      </label>
-    </div>
-    <div class="admin-row">
-      <span class="row-label">Hurda Altını Göster</span>
-      <label class="tv-opt-switch">
-        <input type="checkbox" id="aTvShowHurda">
-        <span class="tv-opt-slider"></span>
-      </label>
-    </div>
-    <div class="hint-box" style="margin-bottom:4px">
-      TV ekranında istersen sadece altın fiyatlarını, istersen Döviz ve Hurda panelleriyle birlikte gösterebilirsin.
-    </div>
-
-    <div class="sec-title">Müşteri Ekranı Görünüm Ayarları</div>
+    <div class="sec-title">👥 Müşteri Ekranı Görünüm Ayarları</div>
     <div class="admin-row">
       <span class="row-label">Döviz Kurlarını Göster</span>
       <label class="tv-opt-switch">
@@ -1828,6 +1848,26 @@ body.light-mode .admin-inp{
     </div>
     <div class="hint-box" style="margin-bottom:4px">
       Müşteri ekranında Döviz ve Hurda bölümlerini ayrı ayrı açıp kapatabilirsin.
+    </div>
+
+    
+    <div class="sec-title">📺 TV Ekranı Görünüm Ayarları</div>
+    <div class="admin-row">
+      <span class="row-label">Döviz Kurlarını Göster</span>
+      <label class="tv-opt-switch">
+        <input type="checkbox" id="aTvShowDoviz">
+        <span class="tv-opt-slider"></span>
+      </label>
+    </div>
+    <div class="admin-row">
+      <span class="row-label">Hurda Altını Göster</span>
+      <label class="tv-opt-switch">
+        <input type="checkbox" id="aTvShowHurda">
+        <span class="tv-opt-slider"></span>
+      </label>
+    </div>
+    <div class="hint-box" style="margin-bottom:4px">
+      TV ekranında istersen sadece altın fiyatlarını, istersen Döviz ve Hurda panelleriyle birlikte gösterebilirsin.
     </div>
 
 <div class="sec-title">TV Ekranı Linki</div>
@@ -1941,6 +1981,7 @@ var FIREBASE_URL = 'https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebas
 var TV_CONFIG_URL = 'https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebasedatabase.app/tvDisplay.json';
 var CUSTOMER_CONFIG_URL = 'https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebasedatabase.app/customerDisplay.json';
 var customerDisplayConfig = { showDoviz:true, showHurda:true };
+var CUSTOMER_DISPLAY_CACHE_KEY = 'egilmez_customer_display_v93';
 
 var tvDisplayConfig = { showDoviz:true, showHurda:true };
 
@@ -2366,6 +2407,7 @@ function normalizeCustomerDisplay(data){
 }
 function applyCustomerDisplayToAdmin(data){
   customerDisplayConfig = normalizeCustomerDisplay(data);
+  try{ localStorage.setItem(CUSTOMER_DISPLAY_CACHE_KEY, JSON.stringify(customerDisplayConfig)); }catch(e){}
   var d=document.getElementById('aCustomerShowDoviz');
   var h=document.getElementById('aCustomerShowHurda');
   if(d)d.checked=customerDisplayConfig.showDoviz;
@@ -2374,12 +2416,23 @@ function applyCustomerDisplayToAdmin(data){
 }
 function loadCustomerDisplayConfig(cb){
   fetch(CUSTOMER_CONFIG_URL+'?v='+Date.now(),{cache:'no-store'})
-    .then(function(r){return r.ok?r.json():null})
-    .then(function(data){applyCustomerDisplayToAdmin(data);if(cb)cb(customerDisplayConfig)})
-    .catch(function(){if(cb)cb(customerDisplayConfig)});
+    .then(function(r){if(!r.ok)throw new Error('customer config');return r.json()})
+    .then(function(data){
+      if(data && typeof data==='object') applyCustomerDisplayToAdmin(data);
+      try{renderEkstraDoviz();renderEkstraHurda();renderDesktopPanel();}catch(e){}
+      applyCustomerDisplayLayout();
+      if(cb)cb(customerDisplayConfig);
+    })
+    .catch(function(){
+      applyCustomerDisplayLayout();
+      if(cb)cb(customerDisplayConfig);
+    });
 }
 function saveCustomerDisplayConfig(showDoviz,showHurda,cb){
   var payload={showDoviz:!!showDoviz,showHurda:!!showHurda,updatedAt:Date.now()};
+  customerDisplayConfig=normalizeCustomerDisplay(payload);
+  try{localStorage.setItem(CUSTOMER_DISPLAY_CACHE_KEY,JSON.stringify(customerDisplayConfig));}catch(e){}
+  applyCustomerDisplayLayout();
   fetch(CUSTOMER_CONFIG_URL,{
     method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)
   }).then(function(r){if(!r.ok)throw new Error('customer display save');return r.json()})
@@ -2497,7 +2550,7 @@ function updateCustomerLink() {
   var base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('customerLink').textContent = base;
   document.getElementById('customerLink').dataset.url = base;
-  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=92';
+  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=93';
   var tvEl = document.getElementById('tvLink');
   if (tvEl) {
     tvEl.textContent = tvUrl;
@@ -2847,7 +2900,7 @@ function shareWA() {
 
 function copyTVLink() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=92');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=93');
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
   } else {
@@ -2860,7 +2913,7 @@ function copyTVLink() {
 
 function openTVScreen() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=92');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=93');
   window.open(link, '_blank');
 }
 
@@ -4182,6 +4235,78 @@ function renderEkstraHurda() {
 
   addEventListener('resize',cheapLayout,{passive:true});
   addEventListener('orientationchange',cheapLayout,{passive:true});
+})();
+</script>
+
+
+<script id="egilmez-v93-customer-stable-boot">
+(function(){
+  function bootCustomerDisplay(){
+    try{
+      var raw=localStorage.getItem(CUSTOMER_DISPLAY_CACHE_KEY);
+      if(raw){
+        var cached=JSON.parse(raw);
+        if(cached&&typeof cached==='object'){
+          customerDisplayConfig=normalizeCustomerDisplay(cached);
+        }
+      }
+    }catch(e){}
+
+    try{
+      renderEkstraDoviz();
+      renderEkstraHurda();
+      renderDesktopPanel();
+    }catch(e){}
+
+    try{applyCustomerDisplayLayout();}catch(e){}
+
+    /* Bulut ayarını ilk 4 saniyeyi beklemeden hemen al */
+    try{loadCustomerDisplayConfig();}catch(e){}
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',bootCustomerDisplay,{once:true});
+  }else{
+    bootCustomerDisplay();
+  }
+})();
+</script>
+
+
+<script id="egilmez-v93-display-mapping-migration">
+(function(){
+  if(!document.body.classList.contains('admin-route')) return;
+  var FLAG='egilmez_display_mapping_v93_done';
+  if(localStorage.getItem(FLAG)==='1') return;
+
+  Promise.all([
+    fetch(TV_CONFIG_URL+'?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}),
+    fetch(CUSTOMER_CONFIG_URL+'?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null})
+  ]).then(function(res){
+    var tv=res[0], cu=res[1];
+    if(!tv || !cu || typeof tv!=='object' || typeof cu!=='object'){
+      localStorage.setItem(FLAG,'1');
+      return;
+    }
+
+    var tvN=normalizeTvDisplay(tv);
+    var cuN=normalizeCustomerDisplay(cu);
+
+    /* Sadece durumlar farklıysa geçmişte ters kaydedilmiş seçimleri düzelt. */
+    if(tvN.showDoviz!==cuN.showDoviz || tvN.showHurda!==cuN.showHurda){
+      return Promise.all([
+        fetch(TV_CONFIG_URL,{method:'PUT',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({showDoviz:cuN.showDoviz,showHurda:cuN.showHurda,updatedAt:Date.now()})}),
+        fetch(CUSTOMER_CONFIG_URL,{method:'PUT',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({showDoviz:tvN.showDoviz,showHurda:tvN.showHurda,updatedAt:Date.now()})})
+      ]).then(function(){
+        loadTvDisplayConfig();
+        loadCustomerDisplayConfig();
+      });
+    }
+  }).catch(function(){}).finally(function(){
+    try{localStorage.setItem(FLAG,'1');}catch(e){}
+  });
 })();
 </script>
 
