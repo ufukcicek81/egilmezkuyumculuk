@@ -9,7 +9,7 @@
 (function(){
   try{
     if(new URLSearchParams(location.search).get('tv')==='1'){
-      location.replace('tv.html?v=91');
+      location.replace('tv.html?v=92');
     }
   }catch(e){}
 })();
@@ -2497,7 +2497,7 @@ function updateCustomerLink() {
   var base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('customerLink').textContent = base;
   document.getElementById('customerLink').dataset.url = base;
-  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=91';
+  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=92';
   var tvEl = document.getElementById('tvLink');
   if (tvEl) {
     tvEl.textContent = tvUrl;
@@ -2847,7 +2847,7 @@ function shareWA() {
 
 function copyTVLink() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=91');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=92');
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
   } else {
@@ -2860,7 +2860,7 @@ function copyTVLink() {
 
 function openTVScreen() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=91');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=92');
   window.open(link, '_blank');
 }
 
