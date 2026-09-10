@@ -9,7 +9,7 @@
 (function(){
   try{
     if(new URLSearchParams(location.search).get('tv')==='1'){
-      location.replace('tv.html?v=81');
+      location.replace('tv.html?v=82');
     }
   }catch(e){}
 })();
@@ -2188,6 +2188,73 @@ body:not(.light-mode){
 }
 </style>
 
+
+<style id="egilmez-v82-white-theme">
+/* TÜM SAYFALAR — açık mod artık tamamen beyaz / nötr gri */
+body.light-mode{
+  --v8-bg:#ffffff!important;
+  --v8-card:#ffffff!important;
+  --v8-card2:#f4f7f9!important;
+  --v8-line:#d9e1e7!important;
+  --v8-text:#172235!important;
+  --v8-muted:#667788!important;
+  background:#ffffff!important;
+}
+body.light-mode .header,
+body.light-mode .market-status,
+body.light-mode .desktop-main,
+body.light-mode #desktopSide,
+body.light-mode .desktop-side,
+body.light-mode .top-switcher,
+body.light-mode #adminEkstra,
+body.light-mode .extra-section-title,
+body.light-mode .admin-panel,
+body.light-mode .modal,
+body.light-mode .modal-content,
+body.light-mode .admin-box,
+body.light-mode .admin-card,
+body.light-mode .overlay-card{
+  background:#ffffff!important;
+  color:#172235!important;
+}
+body.light-mode .table-header,
+body.light-mode .extra-columns,
+body.light-mode #desktopSide .desktop-extra-columns,
+body.light-mode .admin-row:nth-child(even){
+  background:#f4f7f9!important;
+}
+body.light-mode .price-row:nth-child(even),
+body.light-mode .extra-data-row:nth-child(even){
+  background:#f7f9fb!important;
+}
+body.light-mode .price-row:nth-child(odd),
+body.light-mode .extra-data-row:nth-child(odd){
+  background:#ffffff!important;
+}
+body.light-mode .admin-row,
+body.light-mode .sec-title,
+body.light-mode .hint-box{
+  background:#ffffff!important;
+  color:#172235!important;
+  border-color:#d9e1e7!important;
+}
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea,
+body.light-mode .admin-inp,
+body.light-mode .add-item-inp{
+  background:#ffffff!important;
+  color:#172235!important;
+  border-color:#cbd6df!important;
+}
+
+/* Üst Has renkleri her ekranda sabit */
+body.light-mode #statusHasA,
+body:not(.light-mode) #statusHasA{color:var(--v8-red)!important}
+body.light-mode #statusHasS,
+body:not(.light-mode) #statusHasS{color:var(--v8-green)!important}
+</style>
+
 </head>
 <body>
 <div id="premiumSplash" aria-hidden="true">
@@ -2561,6 +2628,9 @@ function parseHash() {
 
 // ── FIREBASE AYARLARI ─────────────────────────────────────────────────────────
 var FIREBASE_URL = 'https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebasedatabase.app/ayarlar.json';
+var TV_CONFIG_URL = 'https://egilmez-kuyumculuk-default-rtdb.europe-west1.firebasedatabase.app/tvDisplay.json';
+var tvDisplayConfig = { showDoviz:true, showHurda:true };
+
 
 // Admin şifresi — Firebase'den yüklenir
 var ADMIN_PASS = '1234';
@@ -2903,12 +2973,81 @@ function fetchPrices() {
 }
 
 // ── YÖNETİCİ ─────────────────────────────────────────────────────────────────
+
+function normalizeTvDisplay(data){
+  data = data && typeof data === 'object' ? data : {};
+  return {
+    showDoviz: data.showDoviz !== false,
+    showHurda: data.showHurda !== false
+  };
+}
+
+function applyTvDisplayToAdmin(data){
+  tvDisplayConfig = normalizeTvDisplay(data);
+  settings.tvShowDoviz = tvDisplayConfig.showDoviz;
+  settings.tvShowHurda = tvDisplayConfig.showHurda;
+
+  var d = document.getElementById('aTvShowDoviz');
+  var h = document.getElementById('aTvShowHurda');
+  if (d) d.checked = tvDisplayConfig.showDoviz;
+  if (h) h.checked = tvDisplayConfig.showHurda;
+}
+
+function loadTvDisplayConfig(cb){
+  fetch(TV_CONFIG_URL + '?v=' + Date.now(), {cache:'no-store'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(data){
+      applyTvDisplayToAdmin(data);
+      if(cb) cb(tvDisplayConfig);
+    })
+    .catch(function(){
+      if(cb) cb(tvDisplayConfig);
+    });
+}
+
+function saveTvDisplayConfig(showDoviz, showHurda, cb){
+  var payload = {
+    showDoviz: !!showDoviz,
+    showHurda: !!showHurda,
+    updatedAt: Date.now()
+  };
+  fetch(TV_CONFIG_URL, {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  }).then(function(r){
+    if(!r.ok) throw new Error('TV config save failed');
+    return r.json();
+  }).then(function(){
+    applyTvDisplayToAdmin(payload);
+    if(cb) cb(true);
+  }).catch(function(){
+    if(cb) cb(false);
+  });
+}
+
+/* TV seçenekleri değiştiği anda buluta yazılır.
+   Böylece farklı admin cihazları birbirinin eski ayarını ezmez. */
+function bindTvDisplayControls(){
+  var d = document.getElementById('aTvShowDoviz');
+  var h = document.getElementById('aTvShowHurda');
+  if(!d || !h || d.dataset.bound === '1') return;
+  d.dataset.bound = h.dataset.bound = '1';
+
+  function push(){
+    saveTvDisplayConfig(d.checked, h.checked, function(ok){
+      showToast(ok ? '✅ TV görünümü güncellendi' : '⚠ TV görünümü kaydedilemedi');
+    });
+  }
+  d.addEventListener('change', push);
+  h.addEventListener('change', push);
+}
+
 function openAdmin() {
+  loadTvDisplayConfig(function(){ bindTvDisplayControls(); });
   document.getElementById('aName').value  = settings.shopName;
   document.getElementById('aPhone').value = settings.shopPhone || '';
   var themeSel = document.getElementById('aTheme'); if (themeSel) themeSel.value = settings.theme || 'dark';
-  var tvD = document.getElementById('aTvShowDoviz'); if (tvD) tvD.checked = settings.tvShowDoviz !== false;
-  var tvH = document.getElementById('aTvShowHurda'); if (tvH) tvH.checked = settings.tvShowHurda !== false;
   document.getElementById('aKK').value    = (settings.kkOran || 0).toFixed(2);
   document.getElementById('aHasDuzA').value = settings.hasDuzA || 0;
   document.getElementById('aHasDuzS').value = settings.hasDuzS || 0;
@@ -2926,7 +3065,7 @@ function updateCustomerLink() {
   var base = window.location.href.split('?')[0].split('#')[0];
   document.getElementById('customerLink').textContent = base;
   document.getElementById('customerLink').dataset.url = base;
-  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=81';
+  var tvUrl = base.replace(/[^\/]*$/,'') + 'tv.html?v=82';
   var tvEl = document.getElementById('tvLink');
   if (tvEl) {
     tvEl.textContent = tvUrl;
@@ -3198,8 +3337,9 @@ function saveAdmin() {
   settings.hasDuzS   = parseFloat(document.getElementById('aHasDuzS').value) || 0;
   var tvD = document.getElementById('aTvShowDoviz');
   var tvH = document.getElementById('aTvShowHurda');
-  settings.tvShowDoviz = tvD ? !!tvD.checked : (settings.tvShowDoviz !== false);
-  settings.tvShowHurda = tvH ? !!tvH.checked : (settings.tvShowHurda !== false);
+  settings.tvShowDoviz = tvD ? !!tvD.checked : tvDisplayConfig.showDoviz;
+  settings.tvShowHurda = tvH ? !!tvH.checked : tvDisplayConfig.showHurda;
+  saveTvDisplayConfig(settings.tvShowDoviz, settings.tvShowHurda, function(){});
   // Şifre değiştir
   var p1 = document.getElementById('aNewPass').value;
   var p2 = document.getElementById('aNewPass2').value;
@@ -3275,7 +3415,7 @@ function shareWA() {
 
 function copyTVLink() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=81');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=82');
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link).then(function(){ showToast('✓ TV linki kopyalandı'); });
   } else {
@@ -3288,7 +3428,7 @@ function copyTVLink() {
 
 function openTVScreen() {
   var el = document.getElementById('tvLink');
-  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=81');
+  var link = (el && (el.dataset.url || el.textContent)) || (window.location.href.split('?')[0].split('#')[0].replace(/[^\/]*$/,'') + 'tv.html?v=82');
   window.open(link, '_blank');
 }
 
@@ -3699,6 +3839,8 @@ setInterval(function() {
 
     try {
       settings = data;
+      settings.tvShowDoviz = tvDisplayConfig.showDoviz;
+      settings.tvShowHurda = tvDisplayConfig.showHurda;
       try { localStorage.setItem('egilmez_settings_v1', JSON.stringify(settings)); } catch(e) {}
 
       if (data.adminPass) ADMIN_PASS = data.adminPass;
@@ -4616,6 +4758,36 @@ setInterval(function() {
     if(r&&window.MutationObserver)new MutationObserver(schedule).observe(r,{childList:true});
   });
   setTimeout(schedule,300);setTimeout(schedule,1000);
+})();
+</script>
+
+
+<script id="egilmez-v82-tv-config-live-sync">
+(function(){
+  var lastTvText='';
+  function pullTvConfig(){
+    if(typeof TV_CONFIG_URL==='undefined') return;
+    fetch(TV_CONFIG_URL+'?v='+Date.now(),{cache:'no-store'})
+      .then(function(r){return r.ok?r.text():''})
+      .then(function(txt){
+        if(!txt || txt===lastTvText) return;
+        lastTvText=txt;
+        var data=null;
+        try{data=JSON.parse(txt)}catch(e){}
+        if(data && typeof applyTvDisplayToAdmin==='function'){
+          applyTvDisplayToAdmin(data);
+        }
+      }).catch(function(){});
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    setTimeout(function(){
+      try{bindTvDisplayControls()}catch(e){}
+      pullTvConfig();
+    },200);
+  });
+  window.addEventListener('focus',pullTvConfig);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)pullTvConfig()});
+  setInterval(pullTvConfig,1500);
 })();
 </script>
 
